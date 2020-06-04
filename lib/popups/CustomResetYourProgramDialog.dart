@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
+import 'package:prankbros2/picker/Picker.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
@@ -8,8 +9,8 @@ import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/Strings.dart';
 
 class CustomResetYourProgramDialog extends StatefulWidget {
-
   CustomResetYourProgramDialog({this.title, this.value});
+
 // 0 for reset your program
   final String title;
   final int value;
@@ -17,9 +18,8 @@ class CustomResetYourProgramDialog extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     print('title is : $title  value is : $value');
-    return   _CustomResetYourProgramDialog(this.title, this.value);
+    return _CustomResetYourProgramDialog(this.title, this.value);
   }
-
 }
 
 class _CustomResetYourProgramDialog
@@ -172,6 +172,9 @@ class _CustomResetYourProgramDialog
     setState(() {
       // saprate login for different
       isLoading = isLoading ? false : true;
+
     });
   }
+
+
 }
