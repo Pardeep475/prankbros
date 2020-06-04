@@ -40,4 +40,6 @@ class Images {
   static const String POPUP_RED_BACK = 'assets/images/pop_up_red_back.png';
   static const String LANG_DEUTCH = 'assets/images/lang_deutch.png';
   static const String LANG_ENGLISH = 'assets/images/lang_english.png';
+  static const String ICON_DOWN_ARROW = 'assets/images/icon_down_arrow.png';
+  static const String ICON_ACTIVE_DAY = 'assets/images/icon_active_day.jpg';
 }

@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:prankbros2/app/dashboard/workouts/components/components.dart';
+
 class AppColors {
   static const primary_color = Color(0xFF000737);
 
@@ -23,4 +25,12 @@ class AppColors {
 
   // nutrition
   static const nutritionBackColor = Color(0xFFCED7E8);
+
+  //workout detail
+  static const blueGradientColor = Color(0xFF000737);
+  static const pinkGradientColor = Color(0xFF280452);
+
+  // calendar text color
+  static const calendarWeekNameColor = Color(0xFFCED7E8);
+  static const calendarDateNameColor = Color(0xFF8391B2);
 }

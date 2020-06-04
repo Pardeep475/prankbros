@@ -10,7 +10,7 @@ import 'package:prankbros2/utils/Strings.dart';
 class CustomResetYourProgramDialog extends StatefulWidget {
 
   CustomResetYourProgramDialog({this.title, this.value});
-
+// 0 for reset your program
   final String title;
   final int value;
 
