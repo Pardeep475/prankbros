@@ -18,8 +18,8 @@ class NutritionDetail extends StatefulWidget {
 
 class _NutritionDetail extends State<NutritionDetail> {
   int _selectedIndex = 2;
-  int _buttonClick = 0;
   bool _isItemClick = false;
+  int _buttonClick = 0;
   bool _likeClick = false;
   List<String> _methodList = new List<String>();
   List<String> _ingredientsList = new List<String>();

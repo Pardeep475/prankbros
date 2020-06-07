@@ -33,4 +33,7 @@ class AppColors {
   // calendar text color
   static const calendarWeekNameColor = Color(0xFFCED7E8);
   static const calendarDateNameColor = Color(0xFF8391B2);
+
+  // workout detail 2 back
+static const workoutDetail2BackColor = Color(0xFFF8F8F9);
 }

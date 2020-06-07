@@ -42,4 +42,6 @@ class Images {
   static const String LANG_ENGLISH = 'assets/images/lang_english.png';
   static const String ICON_DOWN_ARROW = 'assets/images/icon_down_arrow.png';
   static const String ICON_ACTIVE_DAY = 'assets/images/icon_active_day.jpg';
+  static const String COMING_UP_BACKGROUND = 'assets/images/coming_up_background.png';
+  static const String COMING_UP_NEXT_WORKOUT_BACKGROUND = 'assets/images/comming_up_next_workout.jpg';
 }

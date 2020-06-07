@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/workouts/WorkoutDetails2.dart';
 import 'package:prankbros2/popups/CustomChangeWeekDialog.dart';
 import 'package:prankbros2/popups/CustomResetRedDialog.dart';
 import 'package:prankbros2/popups/CustomResetYourProgramDialog.dart';
@@ -31,136 +32,151 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              colors: [
-                AppColors.blueGradientColor,
-                AppColors.pinkGradientColor
-              ],
-              begin: Alignment.bottomLeft,
-            )),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    InkWell(
-                      onTap: _backPressed,
-                      splashColor: AppColors.light_gray,
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                        child: Image.asset(
-                          Images.ArrowBackWhite,
-                          color: AppColors.white,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      'home Workout'.toUpperCase(),
-                      style: TextStyle(
-                          color: AppColors.white,
-                          fontFamily: Strings.EXO_FONT,
-                          fontSize: Dimens.FORTEEN,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    InkWell(
-                      onTap: _editButtonPressed,
-                      splashColor: AppColors.light_gray,
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                        child: Image.asset(
-                          Images.ICON_EDIT,
-                          color: AppColors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(
-                  height: 1,
-                  color: AppColors.white,
-                ),
-                SizedBox(
-                  height: 26,
-                ),
-                InkWell(
-                  onTap: _selectWeeksPressed,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        color: AppColors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                colors: [
+                  AppColors.blueGradientColor,
+                  AppColors.pinkGradientColor
+                ],
+                begin: Alignment.bottomLeft,
+              )),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
+                      InkWell(
+                        onTap: _backPressed,
+                        splashColor: AppColors.light_gray,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 15),
+                          child: Image.asset(
+                            Images.ArrowBackWhite,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
                       Text(
-                        'Week 1',
+                        'home Workout'.toUpperCase(),
                         style: TextStyle(
                             color: AppColors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: Dimens.TWENTY_SEVEN,
-                            fontFamily: Strings.EXO_FONT),
+                            fontFamily: Strings.EXO_FONT,
+                            fontSize: Dimens.FORTEEN,
+                            fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Image.asset(
-                        Images.ICON_DOWN_ARROW,
-                        height: 16,
-                        width: 16,
-                        color: AppColors.white,
+                      InkWell(
+                        onTap: _editButtonPressed,
+                        splashColor: AppColors.light_gray,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 15),
+                          child: Image.asset(
+                            Images.ICON_EDIT,
+                            color: AppColors.white,
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-              ],
+                  Divider(
+                    height: 1,
+                    color: AppColors.white,
+                  ),
+                  SizedBox(
+                    height: 26,
+                  ),
+                  InkWell(
+                    onTap: _selectWeeksPressed,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Week 1',
+                          style: TextStyle(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: Dimens.TWENTY_SEVEN,
+                              fontFamily: Strings.EXO_FONT),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Image.asset(
+                          Images.ICON_DOWN_ARROW,
+                          height: 16,
+                          width: 16,
+                          color: AppColors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 70,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                calendarItemUnselected('MO', '01'),
-                calendarItemUnselected('DI', '02'),
-                calendarItemUnselected('MI', '03'),
-                calendarItemSelected('DO', '04'),
-                calendarItemUnselected('FR', '05'),
-                calendarItemUnselected('SA', '06'),
-                calendarItemUnselected('SO', '07'),
-              ],
+            SizedBox(
+              height: 70,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  calendarItemUnselected('MO', '01'),
+                  calendarItemUnselected('DI', '02'),
+                  calendarItemUnselected('MI', '03'),
+                  calendarItemSelected('DO', '04'),
+                  calendarItemUnselected('FR', '05'),
+                  calendarItemUnselected('SA', '06'),
+                  calendarItemUnselected('SO', '07'),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text(
-              'Workouts this week'.toUpperCase(),
-              style: TextStyle(
-                  color: AppColors.black_text,
-                  fontSize: Dimens.EIGHTEEN,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: Strings.EXO_FONT),
+            SizedBox(
+              height: 8,
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-                padding: EdgeInsets.only(top: 15),
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return mainListItem();
-                }),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25),
+              child: Text(
+                'Workouts this week'.toUpperCase(),
+                style: TextStyle(
+                    color: AppColors.black_text,
+                    fontSize: Dimens.EIGHTEEN,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: Strings.EXO_FONT),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                  padding: EdgeInsets.only(top: 15),
+                  itemCount: 2,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        onTap: () {
+                          _mainItemClick(index);
+                        },
+                        child: mainListItem());
+                  }),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  void _mainItemClick(int index) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => WorkoutDetails2()));
   }
 
   Widget calendarItemSelected(String day, String date) {

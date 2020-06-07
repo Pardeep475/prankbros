@@ -181,6 +181,8 @@ class _CustomChangeWeekDialogState extends State<CustomChangeWeekDialog> {
                 end: 3,
               )
             ]),
+        columnPadding: EdgeInsets.symmetric(
+            horizontal: Dimens.TWENTY_FIVE),
             selectedTextStyle: TextStyle(
                 color: AppColors.black_text,
                 fontFamily: Strings.EXO_FONT,

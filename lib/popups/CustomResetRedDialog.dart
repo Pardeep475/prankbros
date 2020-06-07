@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
+import 'package:prankbros2/picker/Picker.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
@@ -112,6 +113,10 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
                         SizedBox(
                           height: Dimens.THIRTY,
                         ),
+                        showPickerNumberFormatValue(context),
+                        SizedBox(
+                          height: Dimens.THIRTY,
+                        ),
                         Container(
                           margin: EdgeInsets.symmetric(
                               horizontal: Dimens.TWENTY_FIVE),
@@ -167,4 +172,38 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
       isLoading = isLoading ? false : true;
     });
   }
+
+  Widget showPickerNumberFormatValue(BuildContext context) {
+    return Picker(
+        adapter: NumberPickerAdapter(data: [
+          NumberPickerColumn(
+            begin: 1,
+            end: 3,
+          )
+        ]),
+        columnPadding: EdgeInsets.symmetric(
+            horizontal: Dimens.TWENTY_FIVE),
+        selectedTextStyle: TextStyle(
+            color: AppColors.black_text,
+            fontFamily: Strings.EXO_FONT,
+            letterSpacing: 1.44,
+            fontWeight: FontWeight.w700,
+            fontSize: Dimens.EIGHTEEN),
+        textStyle: TextStyle(
+            color: AppColors.light_text,
+            fontFamily: Strings.EXO_FONT,
+            letterSpacing: 1.44,
+            fontWeight: FontWeight.w700,
+            fontSize: Dimens.EIGHTEEN),
+        onConfirm: (Picker picker, List value) {
+          print(value.toString());
+          print(picker.getSelectedValues());
+        },
+        onSelect: (Picker picker, int index, List<int> selecteds) {
+          print(selecteds.toString());
+          print(picker.getSelectedValues());
+        })
+        .makePicker();
+  }
+
 }
