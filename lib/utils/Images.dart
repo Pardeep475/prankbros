@@ -21,12 +21,15 @@ class Images {
   static const String ICON_CROSS = 'assets/images/icon_cross.png';
   static const String ICON_CUP_ACTIVE = 'assets/images/icon_cup_active.png';
   static const String ICON_DELETE = 'assets/images/icon_delete.png';
-  static const String ICON_DUMBBELL_ACTIVE = 'assets/images/icon_dumbbell_active.png';
-  static const String ICON_DUMBBELL_INACTIVE = 'assets/images/icon_dumbbell_inactive.png';
+  static const String ICON_DUMBBELL_ACTIVE =
+      'assets/images/icon_dumbbell_active.png';
+  static const String ICON_DUMBBELL_INACTIVE =
+      'assets/images/icon_dumbbell_inactive.png';
   static const String ICON_EDIT = 'assets/images/icon_edit.png';
   static const String ICON_HELP = 'assets/images/icon_help.png';
   static const String ICON_LIKE_ACTIVE = 'assets/images/icon_like_active.png';
-  static const String ICON_LIKE_INACTIVE = 'assets/images/icon_like_inactive.png';
+  static const String ICON_LIKE_INACTIVE =
+      'assets/images/icon_like_inactive.png';
   static const String ICON_PAUSE = 'assets/images/icon_pause.png';
   static const String ICON_PLAY = 'assets/images/icon_play.png';
   static const String ICON_PLAY_NEXT = 'assets/images/icon_play_next.png';
@@ -42,6 +45,9 @@ class Images {
   static const String LANG_ENGLISH = 'assets/images/lang_english.png';
   static const String ICON_DOWN_ARROW = 'assets/images/icon_down_arrow.png';
   static const String ICON_ACTIVE_DAY = 'assets/images/icon_active_day.jpg';
-  static const String COMING_UP_BACKGROUND = 'assets/images/coming_up_background.png';
-  static const String COMING_UP_NEXT_WORKOUT_BACKGROUND = 'assets/images/comming_up_next_workout.jpg';
+  static const String COMING_UP_BACKGROUND =
+      'assets/images/coming_up_background.png';
+  static const String COMING_UP_NEXT_WORKOUT_BACKGROUND =
+      'assets/images/comming_up_next_workout.jpg';
+  static const String GYM_WORK_BACKGROUND = 'assets/images/gym_work_back.png';
 }

@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:prankbros2/app/dashboard/workouts/components/components.dart';
 
 class AppColors {
   static const primary_color = Color(0xFF000737);

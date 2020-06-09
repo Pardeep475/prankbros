@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/workouts/WarmUpScreen.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
@@ -74,15 +75,18 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
                 SizedBox(
                   width: 15,
                 ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  elevation: 10,
-                  child: Image.asset(
-                    Images.COMING_UP_NEXT_WORKOUT_BACKGROUND,
-                    height: 152,
-                    width: 295,
+                GestureDetector(
+                  onTap: _openWorkoutDetailStepByStep,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    elevation: 10,
+                    child: Image.asset(
+                      Images.COMING_UP_NEXT_WORKOUT_BACKGROUND,
+                      height: 152,
+                      width: 295,
+                    ),
                   ),
                 ),
               ],
@@ -109,6 +113,11 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
         ),
       ),
     );
+  }
+
+  void _openWorkoutDetailStepByStep() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => WarmUpScreen()));
   }
 
   List<Widget> _getWords() {
