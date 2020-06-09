@@ -60,9 +60,9 @@ without losing your data''';
 
 
   // routes
-  static const String walkthrough_route = '/walkthrough';
-  static const String login_route = '/Login';
-  static const String forgot_password_route = '/ForgotPassword';
-  static const String send_email_route = '/SendMail';
-  static const String dashboard_route = '/Dashboard';
+  static const String INTRO_ROUTE = '/intro_route';
+  static const String LOGIN_ROUTE = '/login_route';
+  static const String FORGOT_PASSWORD_ROUTE = '/forgot_password_route';
+  static const String SEND_EMAIL_ROUTE = '/send_email_route';
+  static const String DASHBOARD_ROUTE = '/dashboard_route';
 }

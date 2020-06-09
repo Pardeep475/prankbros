@@ -64,7 +64,10 @@ class _ProfileState extends State<Profile> {
   }
 
   void _logout() {
-    showDialog(context: context, builder: (_) => CustomUpdateWeightDialog());
+    showDialog(
+        context: context,
+        builder: (_) => CustomResetYourProgramDialog(
+            title: "Are you sure want to logout?", value: 1));
   }
 
   void _resetMyProgram() {
@@ -382,7 +385,7 @@ class _ProfileState extends State<Profile> {
                     fontSize: Dimens.SIXTEEN,
                     color: AppColors.black_text),
               ),
-              controller: _firstNameController,
+              controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.done,
               onSubmitted: (_) => FocusScope.of(context).unfocus(),

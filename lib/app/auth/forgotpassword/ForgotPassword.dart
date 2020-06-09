@@ -41,8 +41,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   void _sendEmailPressed() {
     print('send email click');
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SendEmail()));
+    Navigator.pushReplacementNamed(context, Strings.SEND_EMAIL_ROUTE);
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => SendEmail()));
   }
 
   @override

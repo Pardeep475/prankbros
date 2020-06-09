@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:prankbros2/app/auth/forgotpassword/ForgotPassword.dart';
+import 'package:prankbros2/app/auth/forgotpassword/SendEmail.dart';
 import 'package:prankbros2/app/auth/intro/Intro.dart';
 import 'package:prankbros2/app/auth/login/Login.dart';
+import 'package:prankbros2/app/dashboard/Dashboard.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/SizeConfig.dart';
+import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Styling.dart';
 import 'package:prankbros2/utils/locale/AppLanguage.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
@@ -17,16 +21,25 @@ Future<void> main() async {
   sessionManager.isInstalledFirstTime().then((value) {
     print('value is ==>$value');
     if (value != null && value) {
-      runApp(MyApp(appLanguage, Login()));
+      sessionManager.isLogin().then((value) {
+        if (value != null && value) {
+          runApp(MyApp(appLanguage, Strings.DASHBOARD_ROUTE));
+        } else {
+          runApp(MyApp(appLanguage, Strings.LOGIN_ROUTE));
+        }
+      });
+//      runApp(MyApp(appLanguage, Login()));
     } else {
-      runApp(MyApp(appLanguage, Intro()));
+      runApp(MyApp(appLanguage, Strings.INTRO_ROUTE));
+//      runApp(MyApp(appLanguage, Intro()));
     }
   });
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  final Widget startingWidget;
+//  final Widget startingWidget;
+  final String startingWidget;
   final AppLanguage appLanguage;
 
   MyApp(this.appLanguage, this.startingWidget);
@@ -54,7 +67,8 @@ class MyApp extends StatelessWidget {
                   ],
                   title: "Prank bros",
                   debugShowCheckedModeBanner: false,
-                  home: this.startingWidget,
+                  initialRoute: this.startingWidget,
+                  routes: routes,
                   theme: appTheme,
                 );
               },
@@ -64,4 +78,13 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+
+  var routes = <String, WidgetBuilder>{
+    Strings.LOGIN_ROUTE: (BuildContext context) => new Login(),
+    Strings.INTRO_ROUTE: (BuildContext context) => new Intro(),
+    Strings.FORGOT_PASSWORD_ROUTE: (BuildContext context) =>
+        new ForgotPassword(),
+    Strings.SEND_EMAIL_ROUTE: (BuildContext context) => new SendEmail(),
+    Strings.DASHBOARD_ROUTE: (BuildContext context) => new Dashboard(),
+  };
 }

@@ -171,10 +171,26 @@ class _CustomResetYourProgramDialog
   void _yesButtonClick() {
     setState(() {
       // saprate login for different
+      switch (value) {
+        case 0:
+          {
+            // reset your program
+            _dismissLanguagePopUp(context);
+          }
+          break;
+        case 1:
+          {
+            // logout
+            Navigator.pushNamedAndRemoveUntil(
+                context, Strings.LOGIN_ROUTE, (route) => false);
+          }
+          break;
+        default:
+          {
+            _dismissLanguagePopUp(context);
+          }
+      }
       isLoading = isLoading ? false : true;
-
     });
   }
-
-
 }

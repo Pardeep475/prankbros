@@ -15,6 +15,7 @@ class Workouts extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
+        centerTitle: true,
         title: Text(
           AppLocalizations.of(context).translate(Strings.workouts),
           textAlign: TextAlign.center,

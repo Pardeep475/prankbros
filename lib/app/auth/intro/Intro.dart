@@ -119,8 +119,9 @@ class _IntoState extends State<Intro> {
 
   void _loginButtonPressed() {
     sessionManager.setInstalledFirstTime(true);
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Login()));
+    Navigator.pushReplacementNamed(context, Strings.LOGIN_ROUTE);
+//    Navigator.pushReplacement(
+//        context, MaterialPageRoute(builder: (context) => Login()));
   }
 
   String getImageFromIndex(int index) {

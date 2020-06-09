@@ -12,19 +12,27 @@ class SendEmail extends StatelessWidget {
 
   void _backPress(BuildContext context) {
     print('sldflkf');
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login()),ModalRoute.withName('/Login'));
+//    Navigator.pushAndRemoveUntil(
+//        context,
+//        MaterialPageRoute(builder: (context) => Login()),
+//        ModalRoute.withName('/Login'));
+
+    Navigator.pushNamedAndRemoveUntil(
+        context, Strings.LOGIN_ROUTE, (route) => false);
   }
 
   Future<bool> _onBackPressed(BuildContext context) {
     print('sldflkf');
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+//    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+    Navigator.pushNamedAndRemoveUntil(
+        context, Strings.LOGIN_ROUTE, (route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        _onBackPressed(context);
+        return _onBackPressed(context);
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -77,7 +85,7 @@ class SendEmail extends StatelessWidget {
               child: Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     _backPress(context);
                   },
                   child: Container(

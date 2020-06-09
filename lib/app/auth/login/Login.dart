@@ -8,6 +8,7 @@ import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Keys.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
@@ -66,15 +67,18 @@ class _LoginState extends State<Login> {
 //        Navigator.pushNamed(context, Strings.dashboard_route);
 //    }
     print('sldflkf');
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Dashboard()));
-
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => Dashboard()));
+    SessionManager().setIsLogin(true);
+    Navigator.pushNamedAndRemoveUntil(
+        context, Strings.DASHBOARD_ROUTE, (route) => false);
   }
 
   void _forgotPasswordPressed() {
     print('sldflkf');
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ForgotPassword()));
+    Navigator.pushNamed(context, Strings.FORGOT_PASSWORD_ROUTE);
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => ForgotPassword()));
   }
 
   @override
@@ -167,7 +171,8 @@ class _LoginState extends State<Login> {
                       TextField(
                         decoration: InputDecoration(
                           fillColor: Colors.red,
-                          hintText: AppLocalizations.of(context).translate(Strings.enter_your_email),
+                          hintText: AppLocalizations.of(context)
+                              .translate(Strings.enter_your_email),
                           border: InputBorder.none,
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
@@ -207,7 +212,8 @@ class _LoginState extends State<Login> {
                       TextField(
                         decoration: InputDecoration(
                           fillColor: Colors.red,
-                          hintText: AppLocalizations.of(context).translate(Strings.enter_your_password),
+                          hintText: AppLocalizations.of(context)
+                              .translate(Strings.enter_your_password),
                           border: InputBorder.none,
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
