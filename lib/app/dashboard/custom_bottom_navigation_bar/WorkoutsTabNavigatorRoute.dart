@@ -21,11 +21,17 @@ class WorkoutTabNavigator extends StatelessWidget {
 
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
     return {
-      WorkoutTabNavigatorRoutes.workout_root: (context) => Workouts(),
+      WorkoutTabNavigatorRoutes.workout_root: (context) => Workouts(
+            onPush: (value) => _pushWorkoutDetail(context),
+          ),
       WorkoutTabNavigatorRoutes.workout_detail_root: (context) =>
-          WorkoutDetails(),
+          WorkoutDetails(
+            onPush: (value) => _pushWorkoutDetail2(context),
+          ),
       WorkoutTabNavigatorRoutes.workout_detail2_root: (context) =>
-          WorkoutDetails2(),
+          WorkoutDetails2(
+            onPush: (value) => _pushComingUp(context),
+          ),
       WorkoutTabNavigatorRoutes.coming_up_root: (context) => ComingUp(),
     };
   }

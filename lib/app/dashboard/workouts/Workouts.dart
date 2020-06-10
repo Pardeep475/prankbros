@@ -8,6 +8,10 @@ import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class Workouts extends StatelessWidget {
+  Workouts({this.onPush});
+
+  final ValueChanged<String> onPush;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -130,12 +134,12 @@ class Workouts extends StatelessWidget {
   }
 
   void _homeWorkoutClick(BuildContext context) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text('top')));
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => WorkoutDetails()));
+    onPush('Home');
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => WorkoutDetails()));
   }
 
   void _gymWorkoutClick(BuildContext context) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text('bottom')));
+    onPush('gym');
   }
 }

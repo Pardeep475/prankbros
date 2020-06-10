@@ -1,66 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/BackgroundWidgetWithImage.dart';
-import 'package:prankbros2/app/dashboard/motivation/Motivation.dart';
-import 'package:prankbros2/app/dashboard/nutrition/Nutrition.dart';
-import 'package:prankbros2/app/dashboard/profile/Profile.dart';
 import 'package:prankbros2/app/dashboard/workouts/ComingUp.dart';
 import 'package:prankbros2/app/dashboard/workouts/ComingUpNextWorkout.dart';
-import 'package:prankbros2/app/dashboard/workouts/Workouts.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/Strings.dart';
-import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class WorkoutDetails2 extends StatefulWidget {
+  WorkoutDetails2({this.onPush});
+
+  final ValueChanged<int> onPush;
+
   @override
-  State<StatefulWidget> createState() => _WorkoutDetails2State();
+  State<StatefulWidget> createState() =>
+      _WorkoutDetails2State(onPush: this.onPush);
 }
 
 class _WorkoutDetails2State extends State<WorkoutDetails2> {
+  _WorkoutDetails2State({this.onPush});
+
+  final ValueChanged<int> onPush;
+
   static const Key downloadWorkoutButtonKey =
       Key(Keys.downloadWorkoutButtonKey);
-  int _selectedIndex = 0;
-  bool _isItemClick = false;
   bool _isLoading = false;
 
-  void _onItemTapped(int index) {
-    _isItemClick = true;
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  Widget _callPages(int index) {
-    switch (index) {
-      case 0:
-        {
-          return Workouts();
-        }
-        break;
-      case 1:
-        {
-          return Motivation();
-        }
-        break;
-      case 2:
-        {
-          return Nutrition();
-        }
-        break;
-      case 3:
-        {
-          return Profile();
-        }
-        break;
-      default:
-        {
-          return Workouts();
-        }
-        break;
+  NavigatorState getRootNavigator(BuildContext context) {
+    final NavigatorState state = Navigator.of(context);
+    try {
+      print('navigator ' + state.toString());
+      return getRootNavigator(state.context);
+    } catch (e) {
+      print('navigator catch   ' + e.toString());
+      return state;
     }
   }
 
@@ -72,18 +48,23 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
         SizedBox(
           height: 40,
         ),
-        Container(
-          margin: EdgeInsets.only(left: 15),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.all(Radius.circular(90)),
-          ),
-          child: Image.asset(
-            Images.ArrowBackWhite,
-            color: AppColors.black,
-            fit: BoxFit.none,
-            width: 35.0,
-            height: 35.0,
+        GestureDetector(
+          onTap: () {
+            getRootNavigator(context).maybePop();
+          },
+          child: Container(
+            margin: EdgeInsets.only(left: 15),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.all(Radius.circular(90)),
+            ),
+            child: Image.asset(
+              Images.ArrowBackWhite,
+              color: AppColors.black,
+              fit: BoxFit.none,
+              width: 35.0,
+              height: 35.0,
+            ),
           ),
         ),
         SizedBox(
@@ -180,8 +161,9 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
   }
 
   void _mainItemClick() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ComingUp()));
+    onPush(0);
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => ComingUp()));
   }
 
   Widget _mainItemBuilder(BuildContext context, int index) {
@@ -300,38 +282,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
         ),
         Scaffold(
           backgroundColor: AppColors.transparent,
-          body: _isItemClick
-              ? _callPages(_selectedIndex)
-              : _WorkoutDetails2Widget(),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            elevation: 10,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage(Images.IconWorkouts)),
-                title: Text(
-                  '',
-                ),
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage(Images.IconMotivation)),
-                title: Text(''),
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage(Images.IconNutrition)),
-                title: Text(''),
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage(Images.IconWorkouts)),
-                title: Text(''),
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: AppColors.pink,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            onTap: _onItemTapped,
-          ),
+          body: _WorkoutDetails2Widget(),
         ),
       ],
     );

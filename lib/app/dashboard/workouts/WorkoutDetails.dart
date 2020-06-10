@@ -3,21 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/workouts/WorkoutDetails2.dart';
 import 'package:prankbros2/popups/CustomChangeWeekDialog.dart';
 import 'package:prankbros2/popups/CustomResetRedDialog.dart';
-import 'package:prankbros2/popups/CustomResetYourProgramDialog.dart';
-import 'package:prankbros2/popups/CustomUpdateWeightDialog.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Strings.dart';
 
 class WorkoutDetails extends StatefulWidget {
+  WorkoutDetails({this.onPush});
+
+  final ValueChanged<int> onPush;
+
   @override
-  State<StatefulWidget> createState() => _WorkoutDetailsState();
+  State<StatefulWidget> createState() =>
+      _WorkoutDetailsState(onPush: this.onPush);
 }
 
 class _WorkoutDetailsState extends State<WorkoutDetails> {
+  _WorkoutDetailsState({this.onPush});
+
+  final ValueChanged<int> onPush;
+
   void _backPressed() {
     print('back button pressed');
+    getRootNavigator(context).maybePop();
+  }
+
+  NavigatorState getRootNavigator(BuildContext context) {
+    final NavigatorState state = Navigator.of(context);
+    try {
+      print('navigator ' + state.toString());
+      return getRootNavigator(state.context);
+    } catch (e) {
+      print('navigator catch   ' + e.toString());
+      return state;
+    }
   }
 
   void _editButtonPressed() {
@@ -175,8 +194,9 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   }
 
   void _mainItemClick(int index) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => WorkoutDetails2()));
+    onPush(index);
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => WorkoutDetails2()));
   }
 
   Widget calendarItemSelected(String day, String date) {

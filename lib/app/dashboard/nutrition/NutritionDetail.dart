@@ -46,8 +46,6 @@ class _NutritionDetail extends State<NutritionDetail> {
     _ingredientsList.add('2 cups basmati rice');
   }
 
-
-
   void _onButtonClick(int index) {
     setState(() {
       _buttonClick = index;
@@ -60,6 +58,21 @@ class _NutritionDetail extends State<NutritionDetail> {
     });
   }
 
+  void _onBackPressed() {
+//    Navigator.pop(context);
+    getRootNavigator(context).maybePop();
+  }
+
+  NavigatorState getRootNavigator(BuildContext context) {
+    final NavigatorState state = Navigator.of(context);
+    try {
+      print('navigator ' + state.toString());
+      return getRootNavigator(state.context);
+    } catch (e) {
+      print('navigator catch   ' + e.toString());
+      return state;
+    }
+  }
 
   Widget _nutritionDetailWidget() {
     return Column(
@@ -68,18 +81,21 @@ class _NutritionDetail extends State<NutritionDetail> {
         SizedBox(
           height: 40,
         ),
-        Container(
-          margin: EdgeInsets.only(left: 15),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.all(Radius.circular(90)),
-          ),
-          child: Image.asset(
-            Images.ArrowBackWhite,
-            color: AppColors.black,
-            fit: BoxFit.none,
-            width: 35.0,
-            height: 35.0,
+        GestureDetector(
+          onTap: _onBackPressed,
+          child: Container(
+            margin: EdgeInsets.only(left: 15),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.all(Radius.circular(90)),
+            ),
+            child: Image.asset(
+              Images.ArrowBackWhite,
+              color: AppColors.black,
+              fit: BoxFit.none,
+              width: 35.0,
+              height: 35.0,
+            ),
           ),
         ),
         SizedBox(
@@ -105,7 +121,9 @@ class _NutritionDetail extends State<NutritionDetail> {
             ),
             GestureDetector(
                 onTap: _onLikeClicked,
-                child: Image.asset(_likeClick ? Images.ICON_LIKE_ACTIVE : Images.ICON_LIKE_INACTIVE)),
+                child: Image.asset(_likeClick
+                    ? Images.ICON_LIKE_ACTIVE
+                    : Images.ICON_LIKE_INACTIVE)),
             SizedBox(
               width: 25,
             ),
@@ -290,7 +308,6 @@ class _NutritionDetail extends State<NutritionDetail> {
         Scaffold(
           backgroundColor: AppColors.transparent,
           body: _nutritionDetailWidget(),
-
         )
       ],
     );

@@ -46,9 +46,9 @@ class NutritionTabNavigator extends StatelessWidget {
       onGenerateRoute: (routeSettings) {
         return MaterialPageRoute(
           builder: (context) => routeBuilders[
-              routeSettings.name == null || routeSettings.name == '/'
-                  ? NutritionTabNavigatorRoutes.nutrition_root
-                  : routeSettings.name](context),
+          routeSettings.name == null || routeSettings.name == '/'
+              ? NutritionTabNavigatorRoutes.nutrition_root
+              : routeSettings.name](context),
         );
       },
     );
