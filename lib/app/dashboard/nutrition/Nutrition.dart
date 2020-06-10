@@ -9,12 +9,21 @@ import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class Nutrition extends StatefulWidget {
+  Nutrition({this.onPush});
+
+  final ValueChanged<int> onPush;
+
   @override
-  _NutritionState createState() => _NutritionState();
+  _NutritionState createState() => _NutritionState(onPush: this.onPush);
 }
 
 class _NutritionState extends State<Nutrition> {
 //  List<NutritionTitleModel> titleList = new List();
+
+  _NutritionState({this.onPush});
+
+  final ValueChanged<int> onPush;
+
   List<NutritionRecipeModel> recipeList = new List();
 
 //
@@ -176,13 +185,14 @@ class _NutritionState extends State<Nutrition> {
   }
 
   void _OnItemClick() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => NutritionDetail()));
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => NutritionDetail()));
+    onPush(0);
   }
 
   Widget _verticalGridView(int index) {
     return InkWell(
-      onTap: _OnItemClick,
+      onTap: () => _OnItemClick(),
       child: Container(
         child: Card(
           margin: EdgeInsets.all(Dimens.SEVEN),

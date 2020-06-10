@@ -13,6 +13,7 @@ import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Keys.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 import 'dart:math' as math;
@@ -36,6 +37,7 @@ class _ProfileState extends State<Profile> {
   static const Key resetMyProgramKey = Key(Keys.resetMyProgramKey);
 
   bool _saveButtonLoading = false;
+  SessionManager sessionManager = new SessionManager();
 
   List<WeightCurveModel> weightCurveList = new List<WeightCurveModel>();
 
@@ -67,14 +69,26 @@ class _ProfileState extends State<Profile> {
     showDialog(
         context: context,
         builder: (_) => CustomResetYourProgramDialog(
-            title: "Are you sure want to logout?", value: 1));
+              title: "Are you sure want to logout?",
+              value: 1,
+              yesPressed: () {
+                sessionManager.clearAllData();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Strings.LOGIN_ROUTE, (route) => false);
+              },
+            ));
   }
 
   void _resetMyProgram() {
     showDialog(
         context: context,
         builder: (_) => CustomResetYourProgramDialog(
-            title: "Are you sure want to reset program?", value: 0));
+              title: "Are you sure want to reset program?",
+              value: 0,
+              yesPressed: () {
+                Navigator.pop(context);
+              },
+            ));
   }
 
   void _languagePressed() {

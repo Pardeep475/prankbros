@@ -19,12 +19,17 @@ class SessionManager {
   void setInstalledFirstTime(bool isInstalledFirstTime) async {
     pref.then((value) {
       value.setBool(Keys.INSTALLED_FIRST_TIME, isInstalledFirstTime);
-
-    }
-    );
+    });
   }
 
   Future<bool> isInstalledFirstTime() {
     return pref.then((value) => value.getBool(Keys.INSTALLED_FIRST_TIME));
+  }
+
+  void clearAllData() {
+    pref.then((value) {
+      value.clear();
+      setInstalledFirstTime(true);
+    });
   }
 }

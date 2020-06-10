@@ -9,22 +9,26 @@ import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/Strings.dart';
 
 class CustomResetYourProgramDialog extends StatefulWidget {
-  CustomResetYourProgramDialog({this.title, this.value});
+  CustomResetYourProgramDialog({this.title, this.value, this.yesPressed});
 
 // 0 for reset your program
   final String title;
   final int value;
+  final VoidCallback yesPressed;
 
   @override
   State<StatefulWidget> createState() {
     print('title is : $title  value is : $value');
-    return _CustomResetYourProgramDialog(this.title, this.value);
+    return _CustomResetYourProgramDialog(
+        this.title, this.value, this.yesPressed);
   }
 }
 
 class _CustomResetYourProgramDialog
     extends State<CustomResetYourProgramDialog> {
-  _CustomResetYourProgramDialog(this.title, this.value);
+  final VoidCallback yesPressed;
+
+  _CustomResetYourProgramDialog(this.title, this.value, this.yesPressed);
 
   @override
   initState() {
@@ -150,7 +154,7 @@ class _CustomResetYourProgramDialog
         height: Dimens.FIFTY,
         width: MediaQuery.of(context).size.width,
         borderRadius: Dimens.THIRTY,
-        onPressed: _yesButtonClick,
+        onPressed: yesPressed,
         isGradient: true,
         loading: isLoading,
         textStyle: TextStyle(
@@ -181,8 +185,7 @@ class _CustomResetYourProgramDialog
         case 1:
           {
             // logout
-            Navigator.pushNamedAndRemoveUntil(
-                context, Strings.LOGIN_ROUTE, (route) => false);
+
           }
           break;
         default:

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prankbros2/app/auth/forgotpassword/ForgotPassword.dart';
 import 'package:prankbros2/app/dashboard/Dashboard.dart';
+import 'package:prankbros2/app/dashboard/custom_bottom_navigation_bar/CustomDashboardBottomNestedBar.dart';
+import 'package:prankbros2/app/dummy/demo_bottom_nested_bar.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
@@ -67,11 +69,13 @@ class _LoginState extends State<Login> {
 //        Navigator.pushNamed(context, Strings.dashboard_route);
 //    }
     print('sldflkf');
-//    Navigator.push(
-//        context, MaterialPageRoute(builder: (context) => Dashboard()));
-    SessionManager().setIsLogin(true);
-    Navigator.pushNamedAndRemoveUntil(
-        context, Strings.DASHBOARD_ROUTE, (route) => false);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CustomDashboardBottomNestedBar()));
+//    SessionManager().setIsLogin(true);
+//    Navigator.pushNamedAndRemoveUntil(
+//        context, Strings.DASHBOARD_ROUTE, (route) => false);
   }
 
   void _forgotPasswordPressed() {

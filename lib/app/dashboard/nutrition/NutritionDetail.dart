@@ -17,8 +17,6 @@ class NutritionDetail extends StatefulWidget {
 }
 
 class _NutritionDetail extends State<NutritionDetail> {
-  int _selectedIndex = 2;
-  bool _isItemClick = false;
   int _buttonClick = 0;
   bool _likeClick = false;
   List<String> _methodList = new List<String>();
@@ -48,12 +46,7 @@ class _NutritionDetail extends State<NutritionDetail> {
     _ingredientsList.add('2 cups basmati rice');
   }
 
-  void _onItemTapped(int index) {
-    _isItemClick = true;
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+
 
   void _onButtonClick(int index) {
     setState(() {
@@ -67,35 +60,6 @@ class _NutritionDetail extends State<NutritionDetail> {
     });
   }
 
-  Widget _callPages(int index) {
-    switch (index) {
-      case 0:
-        {
-          return Workouts();
-        }
-        break;
-      case 1:
-        {
-          return Motivation();
-        }
-        break;
-      case 2:
-        {
-          return Nutrition();
-        }
-        break;
-      case 3:
-        {
-          return Profile();
-        }
-        break;
-      default:
-        {
-          return Workouts();
-        }
-        break;
-    }
-  }
 
   Widget _nutritionDetailWidget() {
     return Column(
@@ -325,38 +289,8 @@ class _NutritionDetail extends State<NutritionDetail> {
         ),
         Scaffold(
           backgroundColor: AppColors.transparent,
-          body: _isItemClick
-              ? _callPages(_selectedIndex)
-              : _nutritionDetailWidget(),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            elevation: 10,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage(Images.IconWorkouts)),
-                title: Text(
-                  '',
-                ),
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage(Images.IconMotivation)),
-                title: Text(''),
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage(Images.IconNutrition)),
-                title: Text(''),
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage(Images.IconWorkouts)),
-                title: Text(''),
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: AppColors.pink,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            onTap: _onItemTapped,
-          ),
+          body: _nutritionDetailWidget(),
+
         )
       ],
     );
