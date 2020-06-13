@@ -23,7 +23,7 @@ class _ComingUpState extends State<ComingUp> {
   void _methodListInit() {
     for (int i = 0; i < 10; i++) {
       _methodList.add(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat');
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
     }
   }
 
@@ -44,24 +44,24 @@ class _ComingUpState extends State<ComingUp> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         SizedBox(
-          height: 40,
+          height: Dimens.forty,
         ),
         GestureDetector(
           onTap: () {
             getRootNavigator(context).maybePop();
           },
           child: Container(
-            margin: EdgeInsets.only(left: 15),
+            margin: EdgeInsets.only(left: Dimens.fifteen),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.all(Radius.circular(90)),
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
             ),
             child: Image.asset(
               Images.ArrowBackWhite,
               color: AppColors.black,
               fit: BoxFit.none,
-              width: 35.0,
-              height: 35.0,
+              width: Dimens.forty,
+              height: Dimens.forty,
             ),
           ),
         ),
@@ -69,16 +69,16 @@ class _ComingUpState extends State<ComingUp> {
           height: MediaQuery.of(context).size.height / 4.7,
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: EdgeInsets.symmetric(horizontal: Dimens.fifteen),
           width: MediaQuery.of(context).size.width,
           child: Card(
             color: AppColors.white,
-            elevation: 10,
+            elevation: Dimens.ten,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.fifteen)),
             ),
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(Dimens.twenty),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -86,19 +86,19 @@ class _ComingUpState extends State<ComingUp> {
                     'Inchworm',
                     style: TextStyle(
                         fontFamily: Strings.EXO_FONT,
-                        fontSize: Dimens.TWENTY_SIX,
+                        fontSize: Dimens.twentySix,
                         color: AppColors.black_text,
                         fontWeight: FontWeight.w700),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: Dimens.fifteen,
                   ),
                   Text(
                     'abdominals, clutes, \nhamstrings'.toUpperCase(),
                     style: TextStyle(
                         letterSpacing: 1.04,
                         fontFamily: Strings.EXO_FONT,
-                        fontSize: Dimens.THRTEEN,
+                        fontSize: Dimens.thrteen,
                         color: AppColors.light_text,
                         fontWeight: FontWeight.w600),
                   )
@@ -126,46 +126,46 @@ class _ComingUpState extends State<ComingUp> {
         Row(
           children: <Widget>[
             SizedBox(
-              width: 25,
+              width: Dimens.twentyFive,
             ),
             Container(
-              height: 30,
-              width: 30,
+              height: Dimens.thirty,
+              width: Dimens.thirty,
               decoration: BoxDecoration(
-                color: AppColors.nutritionBackColor,
-                borderRadius: BorderRadius.all(Radius.circular(90)),
+                color: AppColors.light_gray,
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
               ),
               child: Center(
                 child: Text(
                   (index + 1).toString(),
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: Dimens.FORTEEN,
+                      fontSize: Dimens.forteen,
                       fontFamily: Strings.EXO_FONT,
                       color: AppColors.black_text),
                 ),
               ),
             ),
             SizedBox(
-              width: 21,
+              width: Dimens.twentyOne,
             ),
             Expanded(
               child: Text(
                 _methodList[index],
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
-                    fontSize: Dimens.FORTEEN,
+                    fontSize: Dimens.forteen,
                     fontFamily: Strings.EXO_FONT,
                     color: AppColors.light_text),
               ),
             ),
             SizedBox(
-              width: 25,
+              width: Dimens.twentyFive,
             ),
           ],
         ),
         SizedBox(
-          height: 20,
+          height: Dimens.twenty,
         ),
       ],
     );
@@ -199,7 +199,3 @@ class _ComingUpState extends State<ComingUp> {
   }
 }
 
-/*
-*
-*
-* */

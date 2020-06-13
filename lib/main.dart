@@ -5,6 +5,7 @@ import 'package:prankbros2/app/auth/forgotpassword/SendEmail.dart';
 import 'package:prankbros2/app/auth/intro/Intro.dart';
 import 'package:prankbros2/app/auth/login/Login.dart';
 import 'package:prankbros2/app/dashboard/Dashboard.dart';
+import 'package:prankbros2/app/dashboard/workouts/WarmUpScreen.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/SizeConfig.dart';
 import 'package:prankbros2/utils/Strings.dart';
@@ -85,5 +86,6 @@ class MyApp extends StatelessWidget {
         new ForgotPassword(),
     Strings.SEND_EMAIL_ROUTE: (BuildContext context) => new SendEmail(),
     Strings.DASHBOARD_ROUTE: (BuildContext context) => new Dashboard(),
+    Strings.WARM_UP_ROUTE: (BuildContext context) => new WarmUpScreen(),
   };
 }

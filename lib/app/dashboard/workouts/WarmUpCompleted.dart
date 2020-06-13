@@ -25,19 +25,19 @@ class _WarmUpCompletedState extends State<WarmUpCompleted> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 37),
+        margin: EdgeInsets.symmetric(horizontal: Dimens.thirtySeven),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image.asset(Images.ICON_WARM_UP),
             SizedBox(
-              height: 35,
+              height: Dimens.thirtyFive,
             ),
             Text(
               'WARM UP',
               style: TextStyle(
-                  fontSize: Dimens.THIRTY_SEVEN,
+                  fontSize: Dimens.thirtySeven,
                   fontFamily: Strings.EXO_FONT,
                   letterSpacing: 2.88,
                   color: AppColors.black_text,
@@ -47,7 +47,7 @@ class _WarmUpCompletedState extends State<WarmUpCompleted> {
             Text(
               'ABGESCHLOSSEN!',
               style: TextStyle(
-                  fontSize: Dimens.TWENTY_SIX,
+                  fontSize: Dimens.twentySix,
                   fontFamily: Strings.EXO_FONT,
                   letterSpacing: 2.08,
                   color: AppColors.black_text,
@@ -55,22 +55,22 @@ class _WarmUpCompletedState extends State<WarmUpCompleted> {
                   fontWeight: FontWeight.w900),
             ),
             SizedBox(
-              height: 35,
+              height: Dimens.thirtyFive,
             ),
             Text(
               'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
               style: TextStyle(
-                  fontSize: Dimens.FORTEEN,
+                  fontSize: Dimens.forteen,
                   fontFamily: Strings.EXO_FONT,
                   color: AppColors.light_text,
                   fontWeight: FontWeight.w400),
             ),
             SizedBox(
-              height: 70,
+              height: Dimens.seventy,
             ),
             _gradientButton(),
             SizedBox(
-              height: 20,
+              height: Dimens.twenty,
             ),
             _grayButton()
           ],
@@ -94,7 +94,7 @@ class _WarmUpCompletedState extends State<WarmUpCompleted> {
         isGradient: true,
         loading: gradientLoading,
         textStyle: TextStyle(
-          fontSize: Dimens.FORTEEN,
+          fontSize: Dimens.forteen,
           letterSpacing: 1.12,
           color: AppColors.white,
           fontWeight: FontWeight.w700,
@@ -125,7 +125,7 @@ class _WarmUpCompletedState extends State<WarmUpCompleted> {
         isGradient: false,
         loading: grayLoading,
         textStyle: TextStyle(
-          fontSize: Dimens.FORTEEN,
+          fontSize: Dimens.forteen,
           letterSpacing: 1.12,
           color: AppColors.black_text,
           fontWeight: FontWeight.w700,

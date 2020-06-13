@@ -27,42 +27,42 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: 56,
+              height: Dimens.fiftySix,
             ),
             Text(
               'REST',
               style: TextStyle(
                   fontWeight: FontWeight.w700,
                   letterSpacing: 3.44,
-                  fontSize: Dimens.EIGHTY_SIX,
+                  fontSize: Dimens.eightySex,
                   color: AppColors.black_text,
                   fontFamily: Strings.EXO_FONT),
             ),
             SizedBox(
-              height: 20,
+              height: Dimens.twenty,
             ),
             Text(
               '00:56',
               style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  fontSize: Dimens.FIFTY_SIX,
+                  fontSize: Dimens.fiftySix,
                   letterSpacing: 2.24,
                   color: AppColors.black_text,
                   fontFamily: Strings.EXO_FONT),
             ),
             SizedBox(
-              height: 214,
+              height: Dimens.twoHundredForteen,
             ),
             Text(
               'Upright cable row',
               style: TextStyle(
                   fontWeight: FontWeight.w700,
                   color: AppColors.black_text,
-                  fontSize: Dimens.TWENTY_SIX,
+                  fontSize: Dimens.twentySix,
                   fontFamily: Strings.EXO_FONT),
             ),
             SizedBox(
-              height: 16,
+              height: Dimens.sixteen,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,19 +73,22 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
                   children: _getWords(),
                 ),
                 SizedBox(
-                  width: 15,
+                  width: Dimens.fifteen,
                 ),
                 GestureDetector(
                   onTap: _openWorkoutDetailStepByStep,
                   child: Card(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(Dimens.fifteen)),
                     ),
-                    elevation: 10,
+                    elevation: Dimens.ten,
                     child: Image.asset(
-                      Images.COMING_UP_NEXT_WORKOUT_BACKGROUND,
-                      height: 152,
-                      width: 295,
+                      Images.DUMMY_WORKOUT,
+                      fit: BoxFit.cover,
+                      height: Dimens.oneHundredFiftyTwo,
+                      width: Dimens.twoHundredNinetyFive,
                     ),
                   ),
                 ),
@@ -93,8 +96,11 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
             ),
             Expanded(
               child: Padding(
-                padding:
-                    EdgeInsets.only(top: 20, left: 20, right: 25, bottom: 35),
+                padding: EdgeInsets.only(
+                    top: Dimens.twenty,
+                    left: Dimens.twenty,
+                    right: Dimens.twentyFive,
+                    bottom: Dimens.thirtyFive),
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: Text(
@@ -102,7 +108,7 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
                     style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: AppColors.white,
-                        fontSize: Dimens.FORTEEN,
+                        fontSize: Dimens.forteen,
                         letterSpacing: 1.12,
                         fontFamily: Strings.EXO_FONT),
                   ),
@@ -116,8 +122,8 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
   }
 
   void _openWorkoutDetailStepByStep() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => WarmUpScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => WarmUpScreen()));
+//    Navigator.pushNamed(context, Strings.WARM_UP_ROUTE);
   }
 
   List<Widget> _getWords() {
@@ -130,7 +136,7 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
           child: Text(
             word + ' ',
             style: TextStyle(
-                fontSize: Dimens.THRTEEN,
+                fontSize: Dimens.thrteen,
                 fontFamily: Strings.EXO_FONT,
                 letterSpacing: 1.5,
                 fontWeight: FontWeight.w700,

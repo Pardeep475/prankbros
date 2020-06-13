@@ -68,7 +68,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
               child: Column(
                 children: <Widget>[
                   SizedBox(
-                    height: 40,
+                    height: Dimens.forty,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,7 +78,8 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                         splashColor: AppColors.light_gray,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 15),
+                              vertical: Dimens.twenty,
+                              horizontal: Dimens.fifteen),
                           child: Image.asset(
                             Images.ArrowBackWhite,
                             color: AppColors.white,
@@ -90,7 +91,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                         style: TextStyle(
                             color: AppColors.white,
                             fontFamily: Strings.EXO_FONT,
-                            fontSize: Dimens.FORTEEN,
+                            fontSize: Dimens.forteen,
                             fontWeight: FontWeight.w500),
                       ),
                       InkWell(
@@ -98,7 +99,8 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                         splashColor: AppColors.light_gray,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 15),
+                              vertical: Dimens.twenty,
+                              horizontal: Dimens.fifteen),
                           child: Image.asset(
                             Images.ICON_EDIT,
                             color: AppColors.white,
@@ -108,11 +110,11 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                     ],
                   ),
                   Divider(
-                    height: 1,
-                    color: AppColors.white,
+                    height: Dimens.one,
+                    color: AppColors.divider_color,
                   ),
                   SizedBox(
-                    height: 26,
+                    height: Dimens.twentySix,
                   ),
                   InkWell(
                     onTap: _selectWeeksPressed,
@@ -125,29 +127,29 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                           style: TextStyle(
                               color: AppColors.white,
                               fontWeight: FontWeight.w700,
-                              fontSize: Dimens.TWENTY_SEVEN,
+                              fontSize: Dimens.twentySeven,
                               fontFamily: Strings.EXO_FONT),
                         ),
                         SizedBox(
-                          width: 20,
+                          width: Dimens.twenty,
                         ),
                         Image.asset(
                           Images.ICON_DOWN_ARROW,
-                          height: 16,
-                          width: 16,
+                          height: Dimens.sixteen,
+                          width: Dimens.sixteen,
                           color: AppColors.white,
                         ),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: 40,
+                    height: Dimens.forty,
                   ),
                 ],
               ),
             ),
             SizedBox(
-              height: 70,
+              height: Dimens.hundred,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
@@ -162,22 +164,22 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
               ),
             ),
             SizedBox(
-              height: 8,
+              height: Dimens.eight,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25),
+              padding: EdgeInsets.symmetric(horizontal: Dimens.twentyFive),
               child: Text(
                 'Workouts this week'.toUpperCase(),
                 style: TextStyle(
                     color: AppColors.black_text,
-                    fontSize: Dimens.EIGHTEEN,
+                    fontSize: Dimens.eighteen,
                     fontWeight: FontWeight.w600,
                     fontFamily: Strings.EXO_FONT),
               ),
             ),
             Expanded(
               child: ListView.builder(
-                  padding: EdgeInsets.only(top: 15),
+                  padding: EdgeInsets.only(top: Dimens.fifteen),
                   itemCount: 2,
                   itemBuilder: (context, index) {
                     return GestureDetector(
@@ -204,8 +206,8 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
       decoration: BoxDecoration(
           color: AppColors.white,
           image: DecorationImage(
-              image: AssetImage(Images.ICON_ACTIVE_DAY), fit: BoxFit.cover)),
-      padding: EdgeInsets.symmetric(horizontal: 20),
+              image: AssetImage(Images.ICON_ACTIVE_DAY), )),
+      padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -217,10 +219,10 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 color: AppColors.calendarWeekNameColor,
                 fontFamily: Strings.EXO_FONT,
                 fontWeight: FontWeight.w500,
-                fontSize: Dimens.EIGHT),
+                fontSize: Dimens.eight),
           ),
           SizedBox(
-            height: 7,
+            height: Dimens.seven,
           ),
           Text(
             date,
@@ -228,7 +230,21 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 color: AppColors.calendarDateNameColor,
                 fontFamily: Strings.EXO_FONT,
                 fontWeight: FontWeight.w700,
-                fontSize: Dimens.THRTEEN),
+                fontSize: Dimens.thrteen),
+          ),
+          SizedBox(
+            height: Dimens.seven,
+          ),
+          Container(
+            height: Dimens.eight,
+            width: Dimens.eight,
+            decoration: BoxDecoration(
+              color: AppColors.pink_stroke,
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.twenty)),
+            ),
+          ),
+          SizedBox(
+            height: Dimens.seventeen,
           ),
         ],
       ),
@@ -238,7 +254,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   Widget calendarItemUnselected(String day, String date) {
     return Container(
       color: AppColors.white,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -250,10 +266,10 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 color: AppColors.calendarWeekNameColor,
                 fontFamily: Strings.EXO_FONT,
                 fontWeight: FontWeight.w500,
-                fontSize: Dimens.EIGHT),
+                fontSize: Dimens.eight),
           ),
           SizedBox(
-            height: 7,
+            height: Dimens.seven,
           ),
           Text(
             date,
@@ -261,7 +277,21 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 color: AppColors.calendarDateNameColor,
                 fontFamily: Strings.EXO_FONT,
                 fontWeight: FontWeight.w700,
-                fontSize: Dimens.THRTEEN),
+                fontSize: Dimens.thrteen),
+          ),
+          SizedBox(
+            height: Dimens.seven,
+          ),
+          Container(
+            height: Dimens.eight,
+            width: Dimens.eight,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.twenty)),
+            ),
+          ),
+          SizedBox(
+            height: Dimens.seventeen,
           ),
         ],
       ),
@@ -273,18 +303,19 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
       children: <Widget>[
         Card(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderRadius: BorderRadius.all(Radius.circular(Dimens.fifteen)),
           ),
           child: Container(
-            height: 185,
+            height: Dimens.oneHundredEightyFive,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.fifteen)),
                 image: DecorationImage(
-                  image: AssetImage(Images.DummyFood),
+                  image: AssetImage(Images.DUMMY_WORKOUT),
                   fit: BoxFit.cover,
                 )),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+              padding: EdgeInsets.symmetric(
+                  horizontal: Dimens.thirty, vertical: Dimens.twentyFive),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -295,7 +326,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                         color: AppColors.white,
                         fontFamily: Strings.EXO_FONT,
                         fontStyle: FontStyle.italic,
-                        fontSize: Dimens.TWENTY_SIX,
+                        fontSize: Dimens.twentySix,
                         letterSpacing: .75,
                         fontWeight: FontWeight.w900),
                   ),
@@ -308,12 +339,13 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                               Images.ICON_CALENDAR,
                             ),
                             SizedBox(
-                              width: 7,
+                              width: Dimens.seven,
                             ),
                             Text(
                               'Training 1',
                               style: TextStyle(
                                   color: AppColors.white,
+                                  fontSize: Dimens.forteen,
                                   fontWeight: FontWeight.w700,
                                   fontFamily: Strings.EXO_FONT),
                             )
@@ -327,12 +359,13 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                               Images.ICON_TIMER,
                             ),
                             SizedBox(
-                              width: 7,
+                              width: Dimens.seven,
                             ),
                             Text(
                               '30 min',
                               style: TextStyle(
                                   color: AppColors.white,
+                                  fontSize: Dimens.forteen,
                                   fontWeight: FontWeight.w700,
                                   fontFamily: Strings.EXO_FONT),
                             )
@@ -347,7 +380,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
           ),
         ),
         SizedBox(
-          height: 10,
+          height: Dimens.ten,
         ),
       ],
     );

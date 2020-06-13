@@ -41,33 +41,33 @@ class Dimens {
   static final THIRTY_THREE = 3.68 * SizeConfig.heightMultiplier;
   static final THIRTY_FOUR = 3.79 * SizeConfig.heightMultiplier;
   static final THIRTY_FIVE = 3.9 * SizeConfig.heightMultiplier;
-  static final THIRTY_SIX= 4.01 * SizeConfig.heightMultiplier;
-  static final THIRTY_SEVEN= 4.13 * SizeConfig.heightMultiplier;
-  static final THIRTY_EIGHT= 4.24 * SizeConfig.heightMultiplier;
+  static final THIRTY_SIX = 4.01 * SizeConfig.heightMultiplier;
+  static final THIRTY_SEVEN = 4.13 * SizeConfig.heightMultiplier;
+  static final THIRTY_EIGHT = 4.24 * SizeConfig.heightMultiplier;
   static final THIRTY_NINE = 4.35 * SizeConfig.heightMultiplier;
   static final FORTY = 4.46 * SizeConfig.heightMultiplier;
 
   static final FORTY_ONE = 4.58 * SizeConfig.heightMultiplier;
   static final FORTY_TWO = 4.68 * SizeConfig.heightMultiplier;
   static final FORTY_THREE = 4.8 * SizeConfig.heightMultiplier;
-  static final FORTY_FOUR= 4.91 * SizeConfig.heightMultiplier;
-  static final FORTY_FIVE= 5.02 * SizeConfig.heightMultiplier;
-  static final FORTY_SIX= 5.13 * SizeConfig.heightMultiplier;
-  static final FORTY_SEVEN= 5.25 * SizeConfig.heightMultiplier;
-  static final FORTY_EIGHT= 5.36 * SizeConfig.heightMultiplier;
-  static final FORTY_NINE= 5.47 * SizeConfig.heightMultiplier;
-  static final FIFTY= 5.58 * SizeConfig.heightMultiplier;
+  static final FORTY_FOUR = 4.91 * SizeConfig.heightMultiplier;
+  static final FORTY_FIVE = 5.02 * SizeConfig.heightMultiplier;
+  static final FORTY_SIX = 5.13 * SizeConfig.heightMultiplier;
+  static final FORTY_SEVEN = 5.25 * SizeConfig.heightMultiplier;
+  static final FORTY_EIGHT = 5.36 * SizeConfig.heightMultiplier;
+  static final FORTY_NINE = 5.47 * SizeConfig.heightMultiplier;
+  static final FIFTY = 5.58 * SizeConfig.heightMultiplier;
 
-  static final FIFTY_ONE= 5.69 * SizeConfig.heightMultiplier;
-  static final FIFTY_TWO= 5.80 * SizeConfig.heightMultiplier;
-  static final FIFTY_THREE= 5.91 * SizeConfig.heightMultiplier;
-  static final FIFTY_FOUR= 6.02 * SizeConfig.heightMultiplier;
-  static final FIFTY_FIVE= 6.14 * SizeConfig.heightMultiplier;
-  static final FIFTY_SIX= 6.25 * SizeConfig.heightMultiplier;
-  static final FIFTY_SEVEN= 6.36 * SizeConfig.heightMultiplier;
-  static final FIFTY_EIGHT= 6.47 * SizeConfig.heightMultiplier;
-  static final FIFTY_NINE= 6.58 * SizeConfig.heightMultiplier;
-  static final SIXTY= 6.7 * SizeConfig.heightMultiplier;
+  static final FIFTY_ONE = 5.69 * SizeConfig.heightMultiplier;
+  static final FIFTY_TWO = 5.80 * SizeConfig.heightMultiplier;
+  static final FIFTY_THREE = 5.91 * SizeConfig.heightMultiplier;
+  static final FIFTY_FOUR = 6.02 * SizeConfig.heightMultiplier;
+  static final FIFTY_FIVE = 6.14 * SizeConfig.heightMultiplier;
+  static final FIFTY_SIX = 6.25 * SizeConfig.heightMultiplier;
+  static final FIFTY_SEVEN = 6.36 * SizeConfig.heightMultiplier;
+  static final FIFTY_EIGHT = 6.47 * SizeConfig.heightMultiplier;
+  static final FIFTY_NINE = 6.58 * SizeConfig.heightMultiplier;
+  static final SIXTY = 6.7 * SizeConfig.heightMultiplier;
 
   static final SIXTY_ONE = 6.81 * SizeConfig.heightMultiplier;
   static final SIXTY_TWO = 6.92 * SizeConfig.heightMultiplier;
@@ -113,15 +113,10 @@ class Dimens {
   static final NINTY_NINE = 11.05 * SizeConfig.heightMultiplier;
   static final HUNDRUD = 11.16 * SizeConfig.heightMultiplier;
 
-
   static final ONE_ONE_FOUR = 12.7 * SizeConfig.heightMultiplier; // 114
   static final ONE_ONE_SEVEN = 13.1 * SizeConfig.heightMultiplier; // 117
   static final ONE_EIGHTY_THREE = 20.4 * SizeConfig.heightMultiplier; // 183
   static final ONE_TWO_FIVE = 13.96 * SizeConfig.heightMultiplier; // 125
-
-
-
-
 
 // divide dimens to 8.96 for responsive
   static final one = 0.11 * SizeConfig.heightMultiplier;
@@ -235,10 +230,13 @@ class Dimens {
   static final ninetyNine = 11.05 * SizeConfig.heightMultiplier;
   static final hundred = 11.16 * SizeConfig.heightMultiplier;
 
-  static final oneForty= 15.625 * SizeConfig.heightMultiplier;
-  static final twoHundredFive= 22.88 * SizeConfig.heightMultiplier;
-  static final oneHundredFortyFive= 16.183 * SizeConfig.heightMultiplier;
-  static final oneHundredFifty= 16.741 * SizeConfig.heightMultiplier;
+  static final oneForty = 15.625 * SizeConfig.heightMultiplier;
+  static final twoHundredFive = 22.88 * SizeConfig.heightMultiplier;
+  static final oneHundredFortyFive = 16.183 * SizeConfig.heightMultiplier;
+  static final oneHundredFifty = 16.741 * SizeConfig.heightMultiplier;
+  static final oneHundredEightyFive = 20.65 * SizeConfig.heightMultiplier;
+  static final twoHundredForteen = 23.88 * SizeConfig.heightMultiplier;
 
-
+  static final oneHundredFiftyTwo = 16.964 * SizeConfig.heightMultiplier;
+  static final twoHundredNinetyFive = 32.924 * SizeConfig.heightMultiplier;
 }

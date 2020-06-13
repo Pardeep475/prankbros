@@ -36,4 +36,5 @@ class AppColors {
   static const workoutDetail2BackColor = Color(0xFFF8F8F9);
 
   static const divider_color = Color(0xFF828282);
+  static const divider_color_2 = Color(0xFFEAF0FB);
 }

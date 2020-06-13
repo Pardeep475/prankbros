@@ -65,4 +65,5 @@ without losing your data''';
   static const String FORGOT_PASSWORD_ROUTE = '/forgot_password_route';
   static const String SEND_EMAIL_ROUTE = '/send_email_route';
   static const String DASHBOARD_ROUTE = '/dashboard_route';
+  static const String WARM_UP_ROUTE = '/warm_up_route';
 }

@@ -21,6 +21,13 @@ class _NutritionDetail extends State<NutritionDetail> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
     _methodListInit();
     _ingredientsListInit();
   }
