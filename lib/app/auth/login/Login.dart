@@ -199,7 +199,7 @@ class _LoginState extends State<Login> {
                         onSubmitted: (_) => FocusScope.of(context).nextFocus(),
                       ),
                       Divider(
-                        color: AppColors.light_gray,
+                        color: AppColors.divider_color,
                       ),
                       SizedBox(
                         height: Dimens.TWENTY,
@@ -240,7 +240,7 @@ class _LoginState extends State<Login> {
                         onSubmitted: (_) => FocusScope.of(context).unfocus(),
                       ),
                       Divider(
-                        color: AppColors.light_gray,
+                        color: AppColors.divider_color,
                       ),
                       SizedBox(
                         height: Dimens.FORTY,

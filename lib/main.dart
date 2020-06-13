@@ -31,7 +31,6 @@ Future<void> main() async {
 //      runApp(MyApp(appLanguage, Login()));
     } else {
       runApp(MyApp(appLanguage, Strings.INTRO_ROUTE));
-//      runApp(MyApp(appLanguage, Intro()));
     }
   });
 }

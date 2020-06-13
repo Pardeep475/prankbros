@@ -50,4 +50,7 @@ class Images {
   static const String COMING_UP_NEXT_WORKOUT_BACKGROUND =
       'assets/images/comming_up_next_workout.jpg';
   static const String GYM_WORK_BACKGROUND = 'assets/images/gym_work_back.png';
+  static const String ICON_PLUS = 'assets/images/icon_plus.png';
+  static const String ICON_MINUS = 'assets/images/icon_minus.png';
+  static const String DUMMY_MOTIVATION = 'assets/images/dummy_motivation.png';
 }

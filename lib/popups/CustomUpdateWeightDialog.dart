@@ -83,14 +83,26 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            SizedBox(
-                              height: Dimens.TWENTY_SIX,
-                              width: Dimens.TWENTY_SIX,
-                              child: CircleAvatar(
-                                  backgroundColor: AppColors.light_gray,
-                                  child: Text(
-                                    '-',
-                                  )),
+                            InkWell(
+                              onTap: () {
+                                _minusButtonClick();
+                              },
+                              borderRadius: BorderRadius.all(Radius.circular(Dimens.thirty)),
+                              child: Container(
+                                height: Dimens.twentyEight,
+                                width: Dimens.twentyEight,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(Dimens.thirty)),
+                                    color: AppColors.light_gray),
+                                child: Center(
+                                  child: Image.asset(
+                                    Images.ICON_MINUS,
+                                    height: Dimens.twelve,
+                                    width: Dimens.twelve,
+                                  ),
+                                ),
+                              ),
                             ),
                             SizedBox(
                               width: Dimens.FIFTY_ONE,
@@ -107,14 +119,26 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
                             SizedBox(
                               width: Dimens.FIFTY_ONE,
                             ),
-                            SizedBox(
-                              height: Dimens.TWENTY_SIX,
-                              width: Dimens.TWENTY_SIX,
-                              child: CircleAvatar(
-                                  backgroundColor: AppColors.light_gray,
-                                  child: Text(
-                                    '+',
-                                  )),
+                            InkWell(
+                              onTap: () {
+                                _plusButtonClick();
+                              },
+                              borderRadius: BorderRadius.all(Radius.circular(Dimens.thirty)),
+                              child: Container(
+                                height: Dimens.twentyEight,
+                                width: Dimens.twentyEight,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(Dimens.thirty)),
+                                    color: AppColors.light_gray),
+                                child: Center(
+                                  child: Image.asset(
+                                    Images.ICON_PLUS,
+                                    height: Dimens.twelve,
+                                    width: Dimens.twelve,
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -156,6 +180,14 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
 
   void _dismissLanguagePopUp(BuildContext context) {
     Navigator.pop(context);
+  }
+
+  void _plusButtonClick(){
+    debugPrint('plus icon click');
+  }
+
+  void _minusButtonClick(){
+    debugPrint('plus icon click');
   }
 
   Widget _updateWeightButton() {

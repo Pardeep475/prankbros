@@ -54,6 +54,7 @@ class CustomRaisedButton extends StatelessWidget {
       width: width,
       child: RaisedButton(
         padding: EdgeInsets.all(0),
+        elevation: 0,
         child: loading
             ? buildSpinner(context)
             : isGradient ? gradientWidget() : textWidget(),
@@ -106,7 +107,7 @@ class CustomSettingButton extends StatelessWidget {
         onTap: onPressed,
         child: Container(
           padding: EdgeInsets.symmetric(
-              vertical: Dimens.FIFTEEN, horizontal: Dimens.TWENTY),
+              vertical: Dimens.TWENTY, horizontal: Dimens.TWENTY),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -115,13 +116,14 @@ class CustomSettingButton extends StatelessWidget {
                 style: TextStyle(
                     letterSpacing: 1,
                     fontFamily: Strings.EXO_FONT,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                     fontSize: Dimens.SIXTEEN,
                     color: AppColors.black_text),
               ),
               Image.asset(
                 Images.ICON_NEXT_ARROW,
                 height: Dimens.SIXTEEN,
+                color: AppColors.black_text,
                 width: Dimens.SIXTEEN,
               )
             ],

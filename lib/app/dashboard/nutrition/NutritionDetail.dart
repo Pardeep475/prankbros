@@ -1,15 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prankbros2/BackgroundWidgetWithImage.dart';
-import 'package:prankbros2/app/dashboard/motivation/Motivation.dart';
-import 'package:prankbros2/app/dashboard/profile/Profile.dart';
-import 'package:prankbros2/app/dashboard/workouts/Workouts.dart';
+import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Strings.dart';
-
-import 'Nutrition.dart';
 
 class NutritionDetail extends StatefulWidget {
   @override

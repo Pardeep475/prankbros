@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prankbros2/BackgroundWidgetWithImage.dart';
-import 'package:prankbros2/app/dashboard/workouts/ComingUp.dart';
 import 'package:prankbros2/app/dashboard/workouts/ComingUpNextWorkout.dart';
+import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';

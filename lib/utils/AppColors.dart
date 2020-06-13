@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-
 class AppColors {
   static const primary_color = Color(0xFF000737);
 
@@ -34,5 +33,7 @@ class AppColors {
   static const calendarDateNameColor = Color(0xFF8391B2);
 
   // workout detail 2 back
-static const workoutDetail2BackColor = Color(0xFFF8F8F9);
+  static const workoutDetail2BackColor = Color(0xFFF8F8F9);
+
+  static const divider_color = Color(0xFF828282);
 }

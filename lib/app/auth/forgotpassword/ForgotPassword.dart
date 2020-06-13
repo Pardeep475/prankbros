@@ -95,7 +95,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             height: Dimens.TWENTY,
           ),
           Divider(
-            color: AppColors.light_gray,
+            color: AppColors.divider_color,
           ),
           SizedBox(
             height: Dimens.FORTY,
@@ -116,7 +116,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   TextField(
                     decoration: InputDecoration(
                       fillColor: Colors.red,
-                      hintText: Strings.enter_your_email,
+                      hintText: AppLocalizations.of(context)
+                          .translate(Strings.enter_your_email),
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -135,11 +136,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    onSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => FocusScope.of(context).unfocus(),
                   ),
                   Divider(
-                    color: AppColors.light_gray,
+                    color: AppColors.divider_color,
                   ),
                 ],
               )),

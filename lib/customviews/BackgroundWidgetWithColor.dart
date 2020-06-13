@@ -1,17 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/utils/AppColors.dart';
 
 class BackgroundWidgetWithColor extends StatelessWidget {
-  Color backgroundColor;
   Color curveColor;
 
-  BackgroundWidgetWithColor({this.backgroundColor, this.curveColor});
+  BackgroundWidgetWithColor({this.curveColor});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      color: backgroundColor,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.blueGradientColor,
+              AppColors.pinkGradientColor
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.topRight
+          )
+      ),
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: CustomPaint(

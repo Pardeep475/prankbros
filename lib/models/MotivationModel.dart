@@ -4,5 +4,4 @@ class MotivationModel {
 
   MotivationModel(this.count, this.title);
 
-
 }
