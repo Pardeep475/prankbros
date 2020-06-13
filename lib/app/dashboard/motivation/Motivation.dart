@@ -152,7 +152,7 @@ class _MotivationState extends State<Motivation> {
                               fontSize: Dimens.eighteen),
                         ),
                         SizedBox(
-                          height: Dimens.FIVE,
+                          height: Dimens.five,
                         ),
                         Text(
                           AppLocalizations.of(context)

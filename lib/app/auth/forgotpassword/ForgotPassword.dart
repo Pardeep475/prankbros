@@ -163,7 +163,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       builder: (context) => CustomRaisedButton(
         key: forgotPasswordKey,
         text:
-            AppLocalizations.of(context).translate(Strings.reset_your_password),
+            AppLocalizations.of(context).translate(Strings.reset_your_password).toUpperCase(),
         backgroundColor: AppColors.pink_stroke,
         height: Dimens.SIXTY,
         width: MediaQuery.of(context).size.width - 100,

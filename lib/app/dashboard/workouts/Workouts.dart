@@ -23,7 +23,8 @@ class Workouts extends StatelessWidget {
         title: Text(
           AppLocalizations.of(context).translate(Strings.workouts),
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 27, color: AppColors.black_text),
+          style: TextStyle(
+              fontSize: Dimens.twentySeven, color: AppColors.black_text),
         ),
       ),
       body: Stack(
@@ -37,8 +38,8 @@ class Workouts extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 50,
-            top: 205,
+            left: Dimens.fifty,
+            top: Dimens.twoHundredFive,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -47,7 +48,7 @@ class Workouts extends StatelessWidget {
                   style: TextStyle(
                       letterSpacing: 3.2,
                       color: AppColors.white,
-                      fontSize: Dimens.FORTY,
+                      fontSize: Dimens.forty,
                       fontStyle: FontStyle.italic,
                       fontFamily: Strings.EXO_FONT,
                       fontWeight: FontWeight.w900),
@@ -59,7 +60,7 @@ class Workouts extends StatelessWidget {
                   'Workout',
                   style: TextStyle(
                       color: AppColors.white,
-                      fontSize: Dimens.EIGHTEEN,
+                      fontSize: Dimens.eighteen,
                       fontFamily: Strings.EXO_FONT,
                       fontWeight: FontWeight.w700),
                 ),
@@ -67,8 +68,8 @@ class Workouts extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 50,
-            bottom: 145,
+            right: Dimens.fifty,
+            bottom: Dimens.oneHundredFifty,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -77,19 +78,19 @@ class Workouts extends StatelessWidget {
                   style: TextStyle(
                       letterSpacing: 3.2,
                       color: AppColors.white,
-                      fontSize: Dimens.FORTY,
+                      fontSize: Dimens.forty,
                       fontStyle: FontStyle.italic,
                       fontFamily: Strings.EXO_FONT,
                       fontWeight: FontWeight.w900),
                 ),
                 SizedBox(
-                  height: Dimens.TEN,
+                  height: Dimens.ten,
                 ),
                 Text(
                   'Workout',
                   style: TextStyle(
                       color: AppColors.white,
-                      fontSize: Dimens.EIGHTEEN,
+                      fontSize: Dimens.eighteen,
                       fontFamily: Strings.EXO_FONT,
                       fontWeight: FontWeight.w700),
                 ),
@@ -99,7 +100,7 @@ class Workouts extends StatelessWidget {
           Column(
             children: <Widget>[
               SizedBox(
-                height: Dimens.HUNDRUD,
+                height: Dimens.hundred,
               ),
               Expanded(
                 child: GestureDetector(
@@ -124,7 +125,7 @@ class Workouts extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: Dimens.SEVENTY,
+                height: Dimens.seventy,
               ),
             ],
           ),

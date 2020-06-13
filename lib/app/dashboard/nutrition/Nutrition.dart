@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/nutrition/NutritionDetail.dart';
+import 'package:prankbros2/customviews/BackgroundWidgetWithColor.dart';
 import 'package:prankbros2/models/NutritionRecipeModel.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
@@ -18,27 +19,14 @@ class Nutrition extends StatefulWidget {
 }
 
 class _NutritionState extends State<Nutrition> {
-//  List<NutritionTitleModel> titleList = new List();
-
   _NutritionState({this.onPush});
 
   final ValueChanged<int> onPush;
-
   List<NutritionRecipeModel> recipeList = new List();
 
-//
-  @override
-  void initState() {
-    print('init state');
-    super.initState();
-  }
-
-//
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print('didChangeDependencies');
-//    this.getTitleList(0);
     this._recipeList();
   }
 
@@ -56,126 +44,125 @@ class _NutritionState extends State<Nutrition> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4, // Added
-      initialIndex: 0,
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(MediaQuery.of(context).size.height),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: Image.asset(
-                  Images.TopBg,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: Dimens.SIXTY,
-                    ),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(
-                          left: Dimens.EIGHTEEN, right: Dimens.EIGHTEEN),
-                      child: Text(
-                        'Nutrition',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: AppColors.white,
-                            fontFamily: Strings.EXO_FONT,
-                            fontWeight: FontWeight.w700,
-                            fontSize: Dimens.TWENTY_SEVEN),
-                      ),
-                    ),
-                    SizedBox(
-                      height: Dimens.TWENTY_FIVE,
-                    ),
-                    Divider(
-                      color: AppColors.light_gray,
-                    ),
-                    SizedBox(
-                      height: Dimens.TWENTY_FIVE,
-                    ),
-                    TabBar(
-                      isScrollable: true,
-                      unselectedLabelColor: Colors.white,
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      labelColor: AppColors.pink,
-                      indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(Dimens.FIFTY),
-                          border: Border.all(
-                              color: AppColors.pink_stroke, width: Dimens.ONE)),
-                      tabs: <Widget>[
-                        Tab(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(AppLocalizations.of(context)
-                                .translate(Strings.Alle)),
-                          ),
-                        ),
-                        Tab(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(AppLocalizations.of(context)
-                                .translate(Strings.MixedDiet)),
-                          ),
-                        ),
-                        Tab(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(AppLocalizations.of(context)
-                                .translate(Strings.Vegetarian)),
-                          ),
-                        ),
-                        Tab(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(AppLocalizations.of(context)
-                                .translate(Strings.Favorites)),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: Dimens.FORTY,
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        children: <Widget>[
-                          _motivationWidget(),
-                          _motivationWidget(),
-                          _motivationWidget(),
-                          _motivationWidget(),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+    return Scaffold(
+      backgroundColor: AppColors.transparent,
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: BackgroundWidgetWithColor(
+              curveColor: AppColors.workoutDetail2BackColor,
+            ),
           ),
-        ),
+          Container(
+            margin: EdgeInsets.only(
+                top: Dimens.eighty,
+                left: Dimens.twentyFive,
+                right: Dimens.twentyFive),
+            child: DefaultTabController(
+              length: 4, // Added
+              initialIndex: 0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Nutrition',
+                    style: TextStyle(
+                        color: AppColors.white,
+                        fontFamily: Strings.EXO_FONT,
+                        fontWeight: FontWeight.w700,
+                        fontSize: Dimens.twentySeven),
+                  ),
+                  SizedBox(
+                    height: Dimens.thirtyFive,
+                  ),
+                  Divider(
+                    height: Dimens.one,
+                    color: AppColors.divider_color,
+                  ),
+                  SizedBox(
+                    height: Dimens.thirtyFive,
+                  ),
+                  _tabBarWidget(),
+                  _tabBarViewWidget()
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _motivationWidget() {
+  Widget _tabBarWidget() {
+    return TabBar(
+      isScrollable: true,
+      unselectedLabelColor: Colors.white,
+      indicatorSize: TabBarIndicatorSize.tab,
+      labelColor: AppColors.pink,
+      indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(Dimens.FIFTY),
+          border: Border.all(color: AppColors.pink_stroke, width: Dimens.ONE)),
+      tabs: <Widget>[
+        Tab(
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(AppLocalizations.of(context).translate(Strings.Alle)),
+          ),
+        ),
+        Tab(
+          child: Align(
+            alignment: Alignment.center,
+            child:
+                Text(AppLocalizations.of(context).translate(Strings.MixedDiet)),
+          ),
+        ),
+        Tab(
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(
+                AppLocalizations.of(context).translate(Strings.Vegetarian)),
+          ),
+        ),
+        Tab(
+          child: Align(
+            alignment: Alignment.center,
+            child:
+                Text(AppLocalizations.of(context).translate(Strings.Favorites)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _tabBarViewWidget() {
+    return Expanded(
+      child: TabBarView(
+        children: <Widget>[
+          _nutritionWidget(0),
+          _nutritionWidget(1),
+          _nutritionWidget(2),
+          _nutritionWidget(3),
+        ],
+      ),
+    );
+  }
+
+  Widget _nutritionWidget(int index) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
+      margin: EdgeInsets.only(top: Dimens.sixty),
       child: GridView.builder(
-        padding: EdgeInsets.only(top: Dimens.TEN),
+        padding:
+            EdgeInsets.only(top: 0, left: 0, right: 0, bottom: Dimens.twenty),
         itemBuilder: (context, position) {
           return _verticalGridView(position);
         },
         itemCount: recipeList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.7,
+          childAspectRatio: 0.73,
         ),
         shrinkWrap: true,
         // todo comment this out and check the result
@@ -193,114 +180,100 @@ class _NutritionState extends State<Nutrition> {
   Widget _verticalGridView(int index) {
     return InkWell(
       onTap: () => _OnItemClick(),
-      child: Container(
-        child: Card(
-          margin: EdgeInsets.all(Dimens.SEVEN),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Dimens.FIFTEEN),
-          ),
-          elevation: Dimens.FIVE,
-          child: Column(
-            children: <Widget>[
-              ClipRRect(
-//              topLeft: Dimens.FIFTEEN,topRight: Dimens.FIFTEEN
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(Dimens.FIFTEEN),
-                    topRight: Radius.circular(Dimens.FIFTEEN)),
-                child: Image.asset(
-                  Images.DummyFood,
-                  fit: BoxFit.cover,
-                  width: MediaQuery.of(context).size.width,
-                  height: Dimens.ONE_ONE_FOUR,
-                ),
+      child: Card(
+        margin: EdgeInsets.all(Dimens.seven),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Dimens.fifteen),
+        ),
+        elevation: Dimens.five,
+        child: Column(
+          children: <Widget>[
+            Image.asset(
+              Images.DummyFood,
+              fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width,
+              height: Dimens.ONE_TWO_FIVE,
+            ),
+            SizedBox(
+              height: Dimens.fifteen,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
+              alignment: Alignment.topLeft,
+              height: Dimens.thirtyEight,
+              child: Text(
+                recipeList[index].title,
+                maxLines: 2,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: Dimens.SIXTEEN,
+                    color: AppColors.black_text,
+                    fontFamily: Strings.EXO_FONT,
+                    fontWeight: FontWeight.w600),
               ),
-              SizedBox(
-                height: Dimens.FIFTEEN,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
-                alignment: Alignment.topLeft,
-                height: Dimens.THIRTY_EIGHT,
-                child: Text(
-                  recipeList[index].title,
-                  maxLines: 2,
-                  style: TextStyle(
-                      fontSize: Dimens.SIXTEEN,
-                      color: AppColors.black_text,
-                      fontFamily: Strings.EXO_FONT,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-              SizedBox(
-                height: Dimens.TWENTY,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            '927 kcal',
-                            style: TextStyle(
-                                fontSize: Dimens.ELEVEN,
-                                fontFamily: Strings.EXO_FONT,
-                                color: AppColors.black_text,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            'Energie',
-                            style: TextStyle(
-                                fontSize: Dimens.EIGHT,
-                                fontFamily: Strings.EXO_FONT,
-                                color: AppColors.light_text,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: Dimens.TEN),
-                      child: Container(
-                        height: Dimens.TWENTY_FIVE,
-                        width: Dimens.ONE,
-                        color: AppColors.light_gray,
+            ),
+            SizedBox(
+              height: Dimens.fifteen,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: Dimens.twenty),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '927 kcal',
+                        style: TextStyle(
+                            fontSize: Dimens.twelve,
+                            fontFamily: Strings.EXO_FONT,
+                            color: AppColors.black_text,
+                            fontWeight: FontWeight.w700),
                       ),
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            '15 min',
-                            style: TextStyle(
-                                fontSize: Dimens.ELEVEN,
-                                fontFamily: Strings.EXO_FONT,
-                                color: AppColors.black_text,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            'Time',
-                            style: TextStyle(
-                                fontSize: Dimens.EIGHT,
-                                fontFamily: Strings.EXO_FONT,
-                                color: AppColors.light_text,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                      Text(
+                        'Energie',
+                        style: TextStyle(
+                            fontSize: Dimens.ten,
+                            fontFamily: Strings.EXO_FONT,
+                            color: AppColors.light_text,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: Dimens.twentyFive,
+                    width: Dimens.one,
+                    color: AppColors.divider_color,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '15 min',
+                        style: TextStyle(
+                            fontSize: Dimens.twelve,
+                            fontFamily: Strings.EXO_FONT,
+                            color: AppColors.black_text,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      Text(
+                        'Time',
+                        style: TextStyle(
+                            fontSize: Dimens.ten,
+                            fontFamily: Strings.EXO_FONT,
+                            color: AppColors.light_text,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  )
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

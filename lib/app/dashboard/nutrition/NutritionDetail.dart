@@ -28,7 +28,7 @@ class _NutritionDetail extends State<NutritionDetail> {
   void _methodListInit() {
     for (int i = 0; i < 10; i++) {
       _methodList.add(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat');
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
     }
   }
 
@@ -74,45 +74,46 @@ class _NutritionDetail extends State<NutritionDetail> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SizedBox(
-          height: 40,
+          height: Dimens.forty,
         ),
         GestureDetector(
           onTap: _onBackPressed,
           child: Container(
-            margin: EdgeInsets.only(left: 15),
+            margin: EdgeInsets.only(left: Dimens.fifteen),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.all(Radius.circular(90)),
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
             ),
             child: Image.asset(
               Images.ArrowBackWhite,
               color: AppColors.black,
               fit: BoxFit.none,
-              width: 35.0,
-              height: 35.0,
+              width: Dimens.thirtyFive,
+              height: Dimens.thirtyFive,
             ),
           ),
         ),
         SizedBox(
-          height: 240,
+          height: 210,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             SizedBox(
-              width: 25,
+              width: Dimens.twentyFive,
             ),
             Expanded(
               child: Text(
                 'Green peas with Basmati Pilaf',
                 style: TextStyle(
                     fontWeight: FontWeight.w700,
-                    fontSize: Dimens.TWENTY_SIX,
+                    fontSize: Dimens.twentySix,
+                    color: AppColors.black_text,
                     fontFamily: Strings.EXO_FONT),
               ),
             ),
             SizedBox(
-              width: 20,
+              width: Dimens.twenty,
             ),
             GestureDetector(
                 onTap: _onLikeClicked,
@@ -120,17 +121,17 @@ class _NutritionDetail extends State<NutritionDetail> {
                     ? Images.ICON_LIKE_ACTIVE
                     : Images.ICON_LIKE_INACTIVE)),
             SizedBox(
-              width: 25,
+              width: Dimens.twentyFive,
             ),
           ],
         ),
         SizedBox(
-          height: 33,
+          height: Dimens.thirtyThree,
         ),
         Row(
           children: <Widget>[
             SizedBox(
-              width: 25,
+              width: Dimens.twentyFive,
             ),
             GestureDetector(
               onTap: () {
@@ -149,7 +150,7 @@ class _NutritionDetail extends State<NutritionDetail> {
               ),
             ),
             SizedBox(
-              width: 10,
+              width: Dimens.ten,
             ),
             GestureDetector(
               onTap: () {
@@ -162,26 +163,27 @@ class _NutritionDetail extends State<NutritionDetail> {
                     color: _buttonClick == 1
                         ? AppColors.pink_stroke
                         : AppColors.light_text,
-                    fontSize: Dimens.THRTEEN,
+                    fontSize: Dimens.thrteen,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1.04),
               ),
             ),
             SizedBox(
-              width: 25,
+              width: Dimens.twentyFive,
             ),
           ],
         ),
         SizedBox(
-          height: 20,
+          height: Dimens.twenty,
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY_FIVE),
-          color: AppColors.light_gray,
+          margin: EdgeInsets.symmetric(horizontal: Dimens.twentyFive),
+          color: AppColors.divider_color,
           height: 1,
         ),
         Expanded(
           child: ListView.builder(
+            padding: EdgeInsets.only(top: Dimens.twenty),
             shrinkWrap: true,
             itemCount: _buttonClick == 0
                 ? _methodList.length
@@ -205,46 +207,46 @@ class _NutritionDetail extends State<NutritionDetail> {
         Row(
           children: <Widget>[
             SizedBox(
-              width: 25,
+              width: Dimens.twentyFive,
             ),
             Container(
-              height: 30,
-              width: 30,
+              height: Dimens.thirty,
+              width: Dimens.thirty,
               decoration: BoxDecoration(
-                color: AppColors.nutritionBackColor,
-                borderRadius: BorderRadius.all(Radius.circular(90)),
+                color: AppColors.light_gray,
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
               ),
               child: Center(
                 child: Text(
                   (index + 1).toString(),
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: Dimens.FORTEEN,
+                      fontSize: Dimens.forteen,
                       fontFamily: Strings.EXO_FONT,
                       color: AppColors.black_text),
                 ),
               ),
             ),
             SizedBox(
-              width: 21,
+              width: Dimens.twentyOne,
             ),
             Expanded(
               child: Text(
                 _methodList[index],
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
-                    fontSize: Dimens.FORTEEN,
+                    fontSize: Dimens.forteen,
                     fontFamily: Strings.EXO_FONT,
                     color: AppColors.light_text),
               ),
             ),
             SizedBox(
-              width: 25,
+              width: Dimens.twentyFive,
             ),
           ],
         ),
         SizedBox(
-          height: 20,
+          height: Dimens.twenty,
         ),
       ],
     );
@@ -256,36 +258,36 @@ class _NutritionDetail extends State<NutritionDetail> {
         Row(
           children: <Widget>[
             SizedBox(
-              width: 25,
+              width: Dimens.twentyFive,
             ),
             Container(
-              height: 3,
-              width: 3,
+              height: Dimens.three,
+              width: Dimens.three,
               decoration: BoxDecoration(
                 color: AppColors.nutritionBackColor,
-                borderRadius: BorderRadius.all(Radius.circular(90)),
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
               ),
             ),
             SizedBox(
-              width: 21,
+              width: Dimens.twentyOne,
             ),
             Expanded(
               child: Text(
                 _ingredientsList[index],
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
-                    fontSize: Dimens.FORTEEN,
+                    fontSize: Dimens.forteen,
                     fontFamily: Strings.EXO_FONT,
                     color: AppColors.light_text),
               ),
             ),
             SizedBox(
-              width: 25,
+              width: Dimens.twentyOne,
             ),
           ],
         ),
         SizedBox(
-          height: 10,
+          height: Dimens.ten,
         ),
       ],
     );
