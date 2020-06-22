@@ -1,6 +1,8 @@
 class Strings {
   Strings._();
 
+  static const String BASE_URL = 'http://3.126.201.210:8088/admin/api/';
+
   static const String login = 'login';
   static const String empty = '';
   static const String prankbros = 'prankbros';
@@ -42,22 +44,21 @@ class Strings {
   static const String RESET_MY_PROGRAM = 'reset_my_program';
 
   static const String enter_your_email = 'enter_your_email';
-  static const String enter_your_password= 'enter_your_password';
-  static const String motivation= 'motivation';
-  static const String history= 'history';
-  static const String week= 'week';
-  static const String enter_your_first_name= 'enter_your_first_name';
-  static const String enter_your_last_name= 'enter_your_last_name';
-  static const String changeYourCurrentWeek= '''Want to change your current
+  static const String enter_your_password = 'enter_your_password';
+  static const String motivation = 'motivation';
+  static const String history = 'history';
+  static const String week = 'week';
+  static const String enter_your_first_name = 'enter_your_first_name';
+  static const String enter_your_last_name = 'enter_your_last_name';
+  static const String please_enter_your_email = 'Please enter your email';
+  static const String please_enter_your_password = 'Please enter your password';
+  static const String please_check_your_internet_connection = 'Please check your internet connection.';
+  static const String changeYourCurrentWeek = '''Want to change your current
 week?''';
-  static const String go_back_a_week= '''You can now go back a week
+  static const String go_back_a_week = '''You can now go back a week
 without losing your data''';
 
-
-
-
   static const String EXO_FONT = 'Exo 2';
-
 
   // routes
   static const String INTRO_ROUTE = '/intro_route';

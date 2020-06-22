@@ -55,4 +55,5 @@ class Images {
   static const String DUMMY_MOTIVATION = 'assets/images/dummy_motivation.png';
   static const String DUMMY_WORKOUT = 'assets/images/dummy_workout.png';
   static const String ICON_WORKOUT_HALF = 'assets/images/icon_workout_half.png';
+  static const String ICON_PROFILE = 'assets/images/icon_profile.png';
 }

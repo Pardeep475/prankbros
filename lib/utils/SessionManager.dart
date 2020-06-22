@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/utils/Keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,6 +27,22 @@ class SessionManager {
 
   Future<bool> isInstalledFirstTime() {
     return pref.then((value) => value.getBool(Keys.INSTALLED_FIRST_TIME));
+  }
+
+  void setUserModel(UserData userModel) async {
+    pref.then((value) {
+      value.setString(Keys.USER_MODEL, json.encode(userModel));
+    });
+  }
+
+  Future<Map<String, dynamic>> getUserModel() {
+    return pref.then((value) {
+      if (value.getString(Keys.USER_MODEL) == null) {
+        return null;
+      } else {
+        return json.decode(value.getString(Keys.USER_MODEL));
+      }
+    });
   }
 
   void clearAllData() {

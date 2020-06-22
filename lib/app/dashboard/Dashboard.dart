@@ -78,7 +78,7 @@ class _BottomNavigationBarItem extends State<Dashboard> {
             title: Text(''),
           ),
           BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage(Images.IconWorkouts)),
+            icon: ImageIcon(AssetImage(Images.ICON_PROFILE)),
             title: Text(''),
           ),
         ],

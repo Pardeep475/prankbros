@@ -16,15 +16,23 @@ class Workouts extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
-          AppLocalizations.of(context).translate(Strings.workouts),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: Dimens.twentySeven, color: AppColors.black_text),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(Dimens.eighty),
+        child: Container(
+          color: AppColors.white,
+          padding: EdgeInsets.only(bottom: Dimens.fifteen),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Text(
+              AppLocalizations.of(context).translate(Strings.workouts),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: Dimens.twentySeven,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: Strings.EXO_FONT,
+                  color: AppColors.black_text),
+            ),
+          ),
         ),
       ),
       body: Stack(

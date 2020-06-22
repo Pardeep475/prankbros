@@ -6,7 +6,6 @@ import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/Strings.dart';
-import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class WarmUpCompleted extends StatefulWidget {
   @override

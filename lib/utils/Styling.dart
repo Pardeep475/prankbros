@@ -3,7 +3,7 @@ import 'package:prankbros2/utils/AppColors.dart';
 
 
 ThemeData appTheme = new ThemeData(
-    hintColor: AppColors.light_gray,
+    hintColor: AppColors.pink_stroke,
     accentColor: AppColors.blue,
     backgroundColor: AppColors.white,
     primaryColor: AppColors.primary_color);

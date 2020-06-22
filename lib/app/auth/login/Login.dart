@@ -1,17 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:prankbros2/app/auth/forgotpassword/ForgotPassword.dart';
-import 'package:prankbros2/app/dashboard/Dashboard.dart';
+import 'package:prankbros2/app/auth/login/LoginBloc.dart';
 import 'package:prankbros2/app/dashboard/custom_bottom_navigation_bar/CustomDashboardBottomNestedBar.dart';
-import 'package:prankbros2/app/dummy/demo_bottom_nested_bar.dart';
+import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Keys.dart';
-import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class Login extends StatefulWidget {
@@ -24,9 +23,11 @@ class _LoginState extends State<Login> {
   TextEditingController _emailController;
   TextEditingController _passwordController;
   bool isLoading = false;
+  LoginBloc _loginBloc;
 
   void initState() {
     super.initState();
+    _loginBloc = new LoginBloc();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
   }
@@ -37,52 +38,37 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
+
   bool _validation(BuildContext context) {
-    if (_emailController.text == null || _emailController.text.isEmpty) {
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Please enter your email.')));
+    if (Utils.checkNullOrEmpty(_emailController.text)) {
+      Utils.showSnackBar(Strings.please_enter_your_email, context);
       return false;
-    } else if (_passwordController.text == null ||
-        _passwordController.text.isEmpty) {
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Please enter your password.')));
+    } else if (Utils.checkNullOrEmpty(_passwordController.text)) {
+      Utils.showSnackBar(Strings.please_enter_your_password, context);
       return false;
     }
     return true;
   }
 
-//  _loginButtonPressed() {
-//    setState(() {
-//      print('isloading----->  $isLoading');
-//      isLoading = isLoading ? false : true;
-//    });
-//  }
-
   _loginButtonPressed(BuildContext context) {
-    print(
-        'Email is :- ${_emailController.text}  Password is :-  ${_passwordController.text}');
-    SnackBar(content: Text('Snack bar is working'));
-    setState(() {
-      isLoading = isLoading ? false : true;
+    debugPrint('login button pressed');
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        if (_validation(context)) {
+          _loginBloc.doLogin(
+              _emailController.text, _passwordController.text, context);
+//          _loginBloc.getUserDetails('1', context);
+        }
+      } else {
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
     });
-//    if (_validation(context)) {
-//        Navigator.pushNamed(context, Strings.dashboard_route);
-//    }
-    print('sldflkf');
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CustomDashboardBottomNestedBar()));
-//    SessionManager().setIsLogin(true);
-//    Navigator.pushNamedAndRemoveUntil(
-//        context, Strings.DASHBOARD_ROUTE, (route) => false);
   }
 
   void _forgotPasswordPressed() {
     print('sldflkf');
     Navigator.pushNamed(context, Strings.FORGOT_PASSWORD_ROUTE);
-//    Navigator.push(
-//        context, MaterialPageRoute(builder: (context) => ForgotPassword()));
   }
 
   @override
@@ -287,20 +273,13 @@ class _LoginState extends State<Login> {
             ),
           ),
         ),
-      ],
-    );
-
-    /**/
-
-    Stack(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Images.Login),
-              fit: BoxFit.cover,
-            ),
-          ),
+        StreamBuilder<bool>(
+          stream: _loginBloc.progressStream,
+          builder: (context, snapshot) {
+            return Center(
+                child: CommonProgressIndicator(
+                    snapshot.hasData ? snapshot.data : false));
+          },
         ),
       ],
     );
@@ -310,7 +289,8 @@ class _LoginState extends State<Login> {
     return Builder(
       builder: (context) => CustomRaisedButton(
         key: loginButtonKey,
-        text: AppLocalizations.of(context).translate(Strings.login).toUpperCase(),
+        text:
+            AppLocalizations.of(context).translate(Strings.login).toUpperCase(),
         backgroundColor: AppColors.pink_stroke,
         height: Dimens.SIXTY,
         width: MediaQuery.of(context).size.width,

@@ -66,7 +66,7 @@ class BottomBarNavigation extends StatelessWidget {
       case 3:
         {
           icon = ImageIcon(
-            AssetImage(Images.IconWorkouts),
+            AssetImage(Images.ICON_PROFILE),
             color: currentTab == tabItem ? AppColors.pink : Colors.grey,
           );
         }

@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:prankbros2/app/auth/forgotpassword/SendEmail.dart';
+import 'package:prankbros2/app/auth/forgotpassword/ForgotPasswordBloc.dart';
+import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -19,9 +21,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   static const Key forgotPasswordKey = Key(Keys.forgotPasswordKey);
   TextEditingController _emailController;
   bool isLoading = false;
+  ForgotPasswordBloc _forgotPasswordBloc;
 
   void initState() {
     super.initState();
+    _forgotPasswordBloc = new ForgotPasswordBloc();
     _emailController = TextEditingController();
   }
 
@@ -31,7 +35,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   bool _validation(BuildContext context) {
-    if (_emailController.text == null || _emailController.text.isEmpty) {
+    if (Utils.checkNullOrEmpty(_emailController.text)) {
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('Please enter your email.')));
       return false;
@@ -39,11 +43,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return true;
   }
 
-  void _sendEmailPressed() {
+  void _sendEmailPressed(BuildContext context) {
     print('send email click');
-    Navigator.pushReplacementNamed(context, Strings.SEND_EMAIL_ROUTE);
-//    Navigator.push(
-//        context, MaterialPageRoute(builder: (context) => SendEmail()));
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        if (_validation(context)) {
+          _forgotPasswordBloc.doForgotPassword(_emailController.text, context);
+        }
+      } else {
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
+    });
   }
 
   @override
@@ -59,100 +70,116 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
         children: <Widget>[
-          InkWell(
-            onTap: _backPressed,
-            child: Container(
-              width: Dimens.FORTY_FIVE,
-              height: Dimens.FORTY_FIVE,
-              margin: EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
-              child: Container(
-                alignment: Alignment.topLeft,
-                decoration: BoxDecoration(
-                  color: AppColors.light_gray,
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-                ),
-                child: Center(
-                    child: Image.asset(Images.ArrowBackWhite,
-                        color: AppColors.black)),
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: Dimens.TWENTY, left: Dimens.TWENTY),
-            child: Text(
-              AppLocalizations.of(context).translate(Strings.password_reset),
-              style: TextStyle(
-                  fontFamily: "Exo 2",
-                  color: AppColors.black_text,
-                  fontSize: Dimens.THIRTY),
-            ),
-          ),
-          SizedBox(
-            height: Dimens.TWENTY,
-          ),
-          Divider(
-            color: AppColors.divider_color,
-          ),
-          SizedBox(
-            height: Dimens.FORTY,
-          ),
-          Container(
-              margin: EdgeInsets.symmetric(horizontal: Dimens.FIFTY),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    AppLocalizations.of(context).translate(Strings.email),
-                    style: TextStyle(
-                        letterSpacing: 1,
-                        fontFamily: Strings.EXO_FONT,
-                        fontSize: Dimens.THRTEEN,
-                        color: AppColors.light_text),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                      fillColor: Colors.red,
-                      hintText: AppLocalizations.of(context)
-                          .translate(Strings.enter_your_email),
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      hintStyle: TextStyle(
-                          fontFamily: Strings.EXO_FONT,
-                          fontWeight: FontWeight.w600,
-                          fontSize: Dimens.SIXTEEN,
-                          color: AppColors.light_text),
-                      labelStyle: TextStyle(
-                          fontFamily: Strings.EXO_FONT,
-                          fontWeight: FontWeight.w600,
-                          fontSize: Dimens.SIXTEEN,
-                          color: AppColors.black_text),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              InkWell(
+                onTap: _backPressed,
+                child: Container(
+                  width: Dimens.FORTY_FIVE,
+                  height: Dimens.FORTY_FIVE,
+                  margin:
+                      EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
+                  child: Container(
+                    alignment: Alignment.topLeft,
+                    decoration: BoxDecoration(
+                      color: AppColors.light_gray,
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(Dimens.THIRTY)),
                     ),
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => FocusScope.of(context).unfocus(),
+                    child: Center(
+                        child: Image.asset(Images.ArrowBackWhite,
+                            color: AppColors.black)),
                   ),
-                  Divider(
-                    color: AppColors.divider_color,
-                  ),
-                ],
-              )),
-          Expanded(
-            child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: _resetPasswordButton(),
-            ),
+                ),
+              ),
+              Container(
+                margin:
+                    EdgeInsets.only(top: Dimens.TWENTY, left: Dimens.TWENTY),
+                child: Text(
+                  AppLocalizations.of(context)
+                      .translate(Strings.password_reset),
+                  style: TextStyle(
+                      fontFamily: Strings.EXO_FONT,
+                      color: AppColors.black_text,
+                      fontWeight: FontWeight.w700,
+                      fontSize: Dimens.thirty),
+                ),
+              ),
+              SizedBox(
+                height: Dimens.twenty,
+              ),
+              Divider(
+                color: AppColors.divider_color,
+              ),
+              SizedBox(
+                height: Dimens.forty,
+              ),
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: Dimens.FIFTY),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        AppLocalizations.of(context).translate(Strings.email),
+                        style: TextStyle(
+                            letterSpacing: 1,
+                            fontFamily: Strings.EXO_FONT,
+                            fontSize: Dimens.thrteen,
+                            color: AppColors.light_text),
+                      ),
+                      TextField(
+                        decoration: InputDecoration(
+                          fillColor: Colors.red,
+                          hintText: AppLocalizations.of(context)
+                              .translate(Strings.enter_your_email),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          hintStyle: TextStyle(
+                              fontFamily: Strings.EXO_FONT,
+                              fontWeight: FontWeight.w600,
+                              fontSize: Dimens.sixteen,
+                              color: AppColors.light_text),
+                          labelStyle: TextStyle(
+                              fontFamily: Strings.EXO_FONT,
+                              fontWeight: FontWeight.w600,
+                              fontSize: Dimens.sixteen,
+                              color: AppColors.black_text),
+                        ),
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.done,
+                        onSubmitted: (_) => FocusScope.of(context).unfocus(),
+                      ),
+                      Divider(
+                        color: AppColors.divider_color,
+                      ),
+                    ],
+                  )),
+              Expanded(
+                child: Align(
+                  alignment: FractionalOffset.bottomCenter,
+                  child: _resetPasswordButton(),
+                ),
+              ),
+              SizedBox(
+                height: Dimens.forty,
+              )
+            ],
           ),
-          SizedBox(
-            height: Dimens.FORTY,
-          )
+          StreamBuilder<bool>(
+            stream: _forgotPasswordBloc.progressStream,
+            builder: (context, snapshot) {
+              return Center(
+                  child: CommonProgressIndicator(
+                      snapshot.hasData ? snapshot.data : false));
+            },
+          ),
         ],
       ),
     );
@@ -162,17 +189,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return Builder(
       builder: (context) => CustomRaisedButton(
         key: forgotPasswordKey,
-        text:
-            AppLocalizations.of(context).translate(Strings.reset_your_password).toUpperCase(),
+        text: AppLocalizations.of(context)
+            .translate(Strings.reset_your_password)
+            .toUpperCase(),
         backgroundColor: AppColors.pink_stroke,
         height: Dimens.SIXTY,
         width: MediaQuery.of(context).size.width - 100,
         borderRadius: Dimens.THIRTY,
-        onPressed: _sendEmailPressed,
+        onPressed: () {
+          _sendEmailPressed(context);
+        },
         isGradient: true,
         loading: isLoading,
         textStyle: TextStyle(
-          fontSize: Dimens.FORTEEN,
+          fontSize: Dimens.forteen,
           letterSpacing: 1.12,
           color: AppColors.white,
           fontWeight: FontWeight.w700,

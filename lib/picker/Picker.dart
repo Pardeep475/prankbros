@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as Dialog;
 import 'dart:async';
 
+import 'package:prankbros2/utils/AppColors.dart';
+
 const bool __printDebug = false;
 
 /// Picker selected callback.
@@ -289,7 +291,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
     if (scrollController.length == 0) {
       for (int i = 0; i < picker._maxLevel; i++) {
         scrollController
-            .add(FixedExtentScrollController(initialItem: picker.selecteds[i]));
+            .add(FixedExtentScrollController(initialItem: picker.selecteds[i]),);
         _keys.add(GlobalKey(debugLabel: i.toString()));
       }
     }
@@ -359,7 +361,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
       var _decoration = BoxDecoration(
         color: picker.containerColor == null
             ? theme.dialogBackgroundColor
-            : picker.containerColor,
+            : AppColors.pink_stroke,
       );
 
       for (int i = 0; i < picker._maxLevel; i++) {

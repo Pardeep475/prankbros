@@ -180,6 +180,7 @@ class _CustomChangeWeekDialogState extends State<CustomChangeWeekDialog> {
                 begin: 1,
                 end: 3,
               )
+
             ]),
         columnPadding: EdgeInsets.symmetric(
             horizontal: Dimens.TWENTY_FIVE),
