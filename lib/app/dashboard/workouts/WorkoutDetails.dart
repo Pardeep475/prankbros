@@ -149,7 +149,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
               ),
             ),
             SizedBox(
-              height: Dimens.hundred,
+              height: Dimens.eighty,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
@@ -203,48 +203,59 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
 
   Widget calendarItemSelected(String day, String date) {
     return Container(
-      decoration: BoxDecoration(
-          color: AppColors.white,
-          image: DecorationImage(
-              image: AssetImage(Images.ICON_ACTIVE_DAY), )),
-      padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+      width: MediaQuery.of(context).size.width/7,
+      height: MediaQuery.of(context).size.height,
+      child: Stack(
         children: <Widget>[
-          Text(
-            day,
-            style: TextStyle(
-                letterSpacing: 1.43,
-                color: AppColors.calendarWeekNameColor,
-                fontFamily: Strings.EXO_FONT,
-                fontWeight: FontWeight.w500,
-                fontSize: Dimens.eight),
+          Image.asset(
+            Images.ICON_ACTIVE_DAY,
+            fit: BoxFit.fitHeight,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
           ),
-          SizedBox(
-            height: Dimens.seven,
-          ),
-          Text(
-            date,
-            style: TextStyle(
-                color: AppColors.calendarDateNameColor,
-                fontFamily: Strings.EXO_FONT,
-                fontWeight: FontWeight.w700,
-                fontSize: Dimens.thrteen),
-          ),
-          SizedBox(
-            height: Dimens.seven,
-          ),
-          Container(
-            height: Dimens.eight,
-            width: Dimens.eight,
-            decoration: BoxDecoration(
-              color: AppColors.pink_stroke,
-              borderRadius: BorderRadius.all(Radius.circular(Dimens.twenty)),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  day,
+                  style: TextStyle(
+                      letterSpacing: 1.43,
+                      color: AppColors.white,
+                      fontFamily: Strings.EXO_FONT,
+                      fontWeight: FontWeight.w500,
+                      fontSize: Dimens.eight),
+                ),
+                SizedBox(
+                  height: Dimens.seven,
+                ),
+                Text(
+                  date,
+                  style: TextStyle(
+                      color: AppColors.white,
+                      fontFamily: Strings.EXO_FONT,
+                      fontWeight: FontWeight.w700,
+                      fontSize: Dimens.thrteen),
+                ),
+                SizedBox(
+                  height: Dimens.seven,
+                ),
+                Container(
+                  height: Dimens.eight,
+                  width: Dimens.eight,
+                  decoration: BoxDecoration(
+                    color: AppColors.pink_stroke,
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(Dimens.twenty)),
+                  ),
+                ),
+                SizedBox(
+                  height: Dimens.seventeen,
+                ),
+              ],
             ),
-          ),
-          SizedBox(
-            height: Dimens.seventeen,
           ),
         ],
       ),
@@ -253,6 +264,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
 
   Widget calendarItemUnselected(String day, String date) {
     return Container(
+      width: MediaQuery.of(context).size.width/7,
       color: AppColors.white,
       padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
       child: Column(

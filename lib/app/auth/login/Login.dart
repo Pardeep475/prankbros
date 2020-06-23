@@ -52,7 +52,9 @@ class _LoginState extends State<Login> {
 
   _loginButtonPressed(BuildContext context) {
     debugPrint('login button pressed');
-    Utils.checkConnectivity().then((value) {
+    Navigator.pushNamedAndRemoveUntil(
+        context, Strings.DASHBOARD_ROUTE, (route) => false);
+   /* Utils.checkConnectivity().then((value) {
       if (value) {
         if (_validation(context)) {
           _loginBloc.doLogin(
@@ -63,7 +65,7 @@ class _LoginState extends State<Login> {
         Utils.showSnackBar(
             Strings.please_check_your_internet_connection, context);
       }
-    });
+    });*/
   }
 
   void _forgotPasswordPressed() {
@@ -244,7 +246,7 @@ class _LoginState extends State<Login> {
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: Dimens.THIRTY,
-                                  vertical: Dimens.ELEVEN),
+                                  vertical: Dimens.twelve),
                               child: Text(
                                 AppLocalizations.of(context)
                                     .translate(Strings.forgot_password),
