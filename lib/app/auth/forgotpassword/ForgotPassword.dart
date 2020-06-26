@@ -91,6 +91,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                     child: Center(
                         child: Image.asset(Images.ArrowBackWhite,
+                            height: Dimens.fifteen,
+                            width: Dimens.twenty,
                             color: AppColors.black)),
                   ),
                 ),
@@ -127,12 +129,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         style: TextStyle(
                             letterSpacing: 1,
                             fontFamily: Strings.EXO_FONT,
-                            fontSize: Dimens.thrteen,
+                            fontSize: Dimens.fifteen,
+                            fontWeight: FontWeight.w600,
                             color: AppColors.light_text),
                       ),
                       TextField(
                         decoration: InputDecoration(
-                          fillColor: Colors.red,
                           hintText: AppLocalizations.of(context)
                               .translate(Strings.enter_your_email),
                           border: InputBorder.none,
@@ -145,12 +147,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               fontWeight: FontWeight.w600,
                               fontSize: Dimens.sixteen,
                               color: AppColors.light_text),
-                          labelStyle: TextStyle(
-                              fontFamily: Strings.EXO_FONT,
-                              fontWeight: FontWeight.w600,
-                              fontSize: Dimens.sixteen,
-                              color: AppColors.black_text),
                         ),
+                        style: TextStyle(
+                            fontFamily: Strings.EXO_FONT,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Dimens.sixteen,
+                            color: AppColors.black_text),
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.done,
@@ -193,8 +195,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             .translate(Strings.reset_your_password)
             .toUpperCase(),
         backgroundColor: AppColors.pink_stroke,
-        height: Dimens.SIXTY,
-        width: MediaQuery.of(context).size.width - 100,
+        height: Dimens.fiftyThree,
+        width: MediaQuery.of(context).size.width - Dimens.eighty,
         borderRadius: Dimens.THIRTY,
         onPressed: () {
           _sendEmailPressed(context);

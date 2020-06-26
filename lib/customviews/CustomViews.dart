@@ -84,7 +84,7 @@ class CustomRaisedButton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
         gradient: LinearGradient(
-          colors: [AppColors.pink, AppColors.blue],
+          colors: [AppColors.blue, AppColors.pink],
           begin: Alignment.bottomLeft,
         ),
       ),
@@ -106,8 +106,8 @@ class CustomSettingButton extends StatelessWidget {
       child: InkWell(
         onTap: onPressed,
         child: Container(
-          padding: EdgeInsets.symmetric(
-              vertical: Dimens.TWENTY, horizontal: Dimens.TWENTY),
+          padding: EdgeInsets.only(
+              top: Dimens.seventeen,bottom: Dimens.seventeen, left: Dimens.twenty,right: Dimens.thirty),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -117,14 +117,14 @@ class CustomSettingButton extends StatelessWidget {
                     letterSpacing: 1,
                     fontFamily: Strings.EXO_FONT,
                     fontWeight: FontWeight.w700,
-                    fontSize: Dimens.SIXTEEN,
+                    fontSize: Dimens.sixteen,
                     color: AppColors.black_text),
               ),
               Image.asset(
                 Images.ICON_NEXT_ARROW,
-                height: Dimens.SIXTEEN,
+                height: Dimens.sixteen,
                 color: AppColors.black_text,
-                width: Dimens.SIXTEEN,
+                width: Dimens.sixteen,
               )
             ],
           ),

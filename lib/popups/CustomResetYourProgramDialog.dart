@@ -79,14 +79,17 @@ class _CustomResetYourProgramDialog
                   SizedBox(
                     height: Dimens.TWENTY_FIVE,
                   ),
-                  Text(
-                    this.title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: AppColors.black_text,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: Strings.EXO_FONT,
-                        fontSize: Dimens.TWENTY_SIX),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
+                    child: Text(
+                      this.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: AppColors.black_text,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: Strings.EXO_FONT,
+                          fontSize: Dimens.TWENTY_SIX),
+                    ),
                   ),
                   SizedBox(
                     height: Dimens.THIRTY,

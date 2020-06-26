@@ -102,7 +102,7 @@ class _IntoState extends State<Intro> {
       key: loginIntroKey,
       text: AppLocalizations.of(context).translate(Strings.login).toUpperCase(),
       backgroundColor: AppColors.white,
-      height: Dimens.SIXTY,
+      height: Dimens.fiftyThree,
       width: MediaQuery.of(context).size.width,
       borderRadius: Dimens.THIRTY,
       onPressed: _loginButtonPressed,

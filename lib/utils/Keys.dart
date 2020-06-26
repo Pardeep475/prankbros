@@ -3,6 +3,7 @@ class Keys {
   static const String loginButtonKey = 'loginButtonKey';
   static const String profileSaveKey = 'profileSaveKey';
   static const String forgotPasswordKey = 'forgotPasswordKey';
+  static const String sendEmailKey = 'sendEmailkey';
   static const String languageKey = 'languageKey';
   static const String supportKey = 'supportKey';
   static const String dataProtectionKey = 'dataProtectionKey';

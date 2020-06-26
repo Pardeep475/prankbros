@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prankbros2/app/auth/login/LoginBloc.dart';
-import 'package:prankbros2/app/dashboard/custom_bottom_navigation_bar/CustomDashboardBottomNestedBar.dart';
 import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -38,7 +37,6 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-
   bool _validation(BuildContext context) {
     if (Utils.checkNullOrEmpty(_emailController.text)) {
       Utils.showSnackBar(Strings.please_enter_your_email, context);
@@ -54,7 +52,7 @@ class _LoginState extends State<Login> {
     debugPrint('login button pressed');
     Navigator.pushNamedAndRemoveUntil(
         context, Strings.DASHBOARD_ROUTE, (route) => false);
-   /* Utils.checkConnectivity().then((value) {
+    /* Utils.checkConnectivity().then((value) {
       if (value) {
         if (_validation(context)) {
           _loginBloc.doLogin(
@@ -138,7 +136,12 @@ class _LoginState extends State<Login> {
                       ),
                       Container(
                         margin: EdgeInsets.only(right: Dimens.TWELVE),
-                        child: Center(child: Image.asset(Images.CircleCropped)),
+                        child: Center(
+                            child: Image.asset(
+                          Images.CircleCropped,
+                          height: Dimens.sixty,
+                          width: Dimens.sixty,
+                        )),
                       ),
                     ],
                   ),
@@ -157,12 +160,12 @@ class _LoginState extends State<Login> {
                         style: TextStyle(
                             letterSpacing: 1,
                             fontFamily: Strings.EXO_FONT,
-                            fontSize: Dimens.THRTEEN,
+                            fontSize: Dimens.fifteen,
+                            fontWeight: FontWeight.w600,
                             color: AppColors.light_text),
                       ),
                       TextField(
                         decoration: InputDecoration(
-                          fillColor: Colors.red,
                           hintText: AppLocalizations.of(context)
                               .translate(Strings.enter_your_email),
                           border: InputBorder.none,
@@ -175,12 +178,12 @@ class _LoginState extends State<Login> {
                               fontWeight: FontWeight.w600,
                               fontSize: Dimens.SIXTEEN,
                               color: AppColors.light_text),
-                          labelStyle: TextStyle(
-                              fontFamily: Strings.EXO_FONT,
-                              fontWeight: FontWeight.w600,
-                              fontSize: Dimens.SIXTEEN,
-                              color: AppColors.black_text),
                         ),
+                        style: TextStyle(
+                            fontFamily: Strings.EXO_FONT,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Dimens.SIXTEEN,
+                            color: AppColors.black_text),
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
@@ -198,12 +201,12 @@ class _LoginState extends State<Login> {
                         style: TextStyle(
                             letterSpacing: 1,
                             fontFamily: Strings.EXO_FONT,
-                            fontSize: Dimens.THRTEEN,
+                            fontSize: Dimens.fifteen,
+                            fontWeight: FontWeight.w600,
                             color: AppColors.light_text),
                       ),
                       TextField(
                         decoration: InputDecoration(
-                          fillColor: Colors.red,
                           hintText: AppLocalizations.of(context)
                               .translate(Strings.enter_your_password),
                           border: InputBorder.none,
@@ -216,12 +219,12 @@ class _LoginState extends State<Login> {
                               fontWeight: FontWeight.w600,
                               fontSize: Dimens.SIXTEEN,
                               color: AppColors.light_text),
-                          labelStyle: TextStyle(
-                              fontFamily: Strings.EXO_FONT,
-                              fontWeight: FontWeight.w600,
-                              fontSize: Dimens.SIXTEEN,
-                              color: AppColors.black_text),
                         ),
+                        style: TextStyle(
+                            fontFamily: Strings.EXO_FONT,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Dimens.SIXTEEN,
+                            color: AppColors.black_text),
                         obscureText: true,
                         controller: _passwordController,
                         textInputAction: TextInputAction.done,
@@ -246,7 +249,7 @@ class _LoginState extends State<Login> {
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: Dimens.THIRTY,
-                                  vertical: Dimens.twelve),
+                                  vertical: Dimens.thrteen),
                               child: Text(
                                 AppLocalizations.of(context)
                                     .translate(Strings.forgot_password),
@@ -254,7 +257,7 @@ class _LoginState extends State<Login> {
                                     letterSpacing: 1,
                                     fontFamily: Strings.EXO_FONT,
                                     fontWeight: FontWeight.w700,
-                                    fontSize: Dimens.THRTEEN,
+                                    fontSize: Dimens.forteen,
                                     color: AppColors.light_text),
                               ),
                             ),
@@ -268,7 +271,7 @@ class _LoginState extends State<Login> {
                   ),
                   _loginButton(),
                   SizedBox(
-                    height: 20,
+                    height: Dimens.twenty,
                   )
                 ],
               ),
@@ -294,7 +297,7 @@ class _LoginState extends State<Login> {
         text:
             AppLocalizations.of(context).translate(Strings.login).toUpperCase(),
         backgroundColor: AppColors.pink_stroke,
-        height: Dimens.SIXTY,
+        height: Dimens.fiftyThree,
         width: MediaQuery.of(context).size.width,
         borderRadius: Dimens.THIRTY,
         onPressed: () {
@@ -303,7 +306,7 @@ class _LoginState extends State<Login> {
         isGradient: true,
         loading: isLoading,
         textStyle: TextStyle(
-          fontSize: Dimens.FORTEEN,
+          fontSize: Dimens.fifteen,
           letterSpacing: 1.12,
           color: AppColors.white,
           fontWeight: FontWeight.w700,

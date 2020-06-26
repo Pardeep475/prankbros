@@ -47,7 +47,7 @@ class Workouts extends StatelessWidget {
           ),
           Positioned(
             left: Dimens.fifty,
-            top: Dimens.twoHundredFive,
+            top: Dimens.oneNinety,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

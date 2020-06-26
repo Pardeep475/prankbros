@@ -6,7 +6,7 @@ class Images {
   static const String Three = 'assets/images/3.png';
   static const String Four = 'assets/images/4.png';
   static const String ArrowBackWhite = 'assets/images/arrow_back_white.png';
-  static const String Login = 'assets/images/login.jpg';
+  static const String Login = 'assets/images/login.png';
   static const String Logo = 'assets/images/logo.png';
   static const String IconLoginHelp = 'assets/images/icon_login_help.png';
   static const String CircleCropped = 'assets/images/circle_cropped.png';
@@ -15,7 +15,7 @@ class Images {
   static const String IconMotivation = 'assets/images/icon_motivation.png';
   static const String IconNutrition = 'assets/images/icon_nutrition.png';
   static const String Cup = 'assets/images/cup.png';
-  static const String TopBg = 'assets/images/top_bg.png';
+  static const String TopBg = 'assets/images/top_bg.jpg';
   static const String DummyFood = 'assets/images/dummy_food.png';
   static const String ICON_CALENDAR = 'assets/images/icon_calendar.png';
   static const String ICON_CROSS = 'assets/images/icon_cross.png';
@@ -38,7 +38,7 @@ class Images {
   static const String ICON_WARM_UP = 'assets/images/icon_warmup.png';
   static const String ICON_WINNER = 'assets/images/icon_winner.png';
   static const String ICON_NEXT_ARROW = 'assets/images/icon_next_arrow.png';
-  static const String WORKOUTS_BACKGROUND = 'assets/images/workouts_bg.jpg';
+  static const String WORKOUTS_BACKGROUND = 'assets/images/workouts_bg.png';
   static const String POPUP_GRAY_BACK = 'assets/images/pop_up_gray_back.png';
   static const String POPUP_RED_BACK = 'assets/images/pop_up_red_back.png';
   static const String LANG_DEUTCH = 'assets/images/lang_deutch.png';

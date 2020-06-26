@@ -10,8 +10,12 @@ import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
-class SettingsWidget extends StatelessWidget {
-  static const Key profileSaveKey = Key(Keys.profileSaveKey);
+class SettingsWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _SettingsWidgetState();
+}
+
+class _SettingsWidgetState extends State<SettingsWidget> {
   static const Key languageKey = Key(Keys.languageKey);
   static const Key supportKey = Key(Keys.supportKey);
   static const Key dataProtectionKey = Key(Keys.dataProtectionKey);

@@ -37,145 +37,135 @@ class _ProfileWidgetState extends State<ProfileWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverToBoxAdapter(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: Dimens.sixtyFive,
-                ),
-                Text(
-                  AppLocalizations.of(context).translate(Strings.FullName),
-                  style: TextStyle(
-                      letterSpacing: 1,
-                      fontFamily: Strings.EXO_FONT,
-                      fontWeight: FontWeight.w700,
-                      fontSize: Dimens.fifteen,
-                      color: AppColors.light_text),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    fillColor: Colors.red,
-                    hintText: AppLocalizations.of(context)
-                        .translate(Strings.enter_your_first_name),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    hintStyle: TextStyle(
-                        fontFamily: Strings.EXO_FONT,
-                        fontWeight: FontWeight.w700,
-                        fontSize: Dimens.SIXTEEN,
-                        color: AppColors.light_text),
-                    labelStyle: TextStyle(
-                        fontFamily: Strings.EXO_FONT,
-                        fontWeight: FontWeight.w700,
-                        fontSize: Dimens.SIXTEEN,
-                        color: AppColors.black_text),
-                  ),
-                  controller: _firstNameController,
-                  textInputAction: TextInputAction.next,
-                  onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-                ),
-                Divider(
-                  color: AppColors.divider_color,
-                ),
-                SizedBox(
-                  height: Dimens.FIFTEEN,
-                ),
-                Text(
-                  AppLocalizations.of(context).translate(Strings.LastName),
-                  style: TextStyle(
-                      letterSpacing: 1,
-                      fontFamily: Strings.EXO_FONT,
-                      fontWeight: FontWeight.w700,
-                      fontSize: Dimens.fifteen,
-                      color: AppColors.light_text),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    fillColor: Colors.red,
-                    hintText: AppLocalizations.of(context)
-                        .translate(Strings.enter_your_last_name),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    hintStyle: TextStyle(
-                        fontFamily: Strings.EXO_FONT,
-                        fontWeight: FontWeight.w700,
-                        fontSize: Dimens.SIXTEEN,
-                        color: AppColors.light_text),
-                    labelStyle: TextStyle(
-                        fontFamily: Strings.EXO_FONT,
-                        fontWeight: FontWeight.w700,
-                        fontSize: Dimens.SIXTEEN,
-                        color: AppColors.black_text),
-                  ),
-                  controller: _lastNameController,
-                  textInputAction: TextInputAction.next,
-                  onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-                ),
-                Divider(
-                  color: AppColors.divider_color,
-                ),
-                SizedBox(
-                  height: Dimens.FIFTEEN,
-                ),
-                Text(
-                  AppLocalizations.of(context).translate(Strings.E_Mail),
-                  style: TextStyle(
-                      letterSpacing: 1,
-                      fontFamily: Strings.EXO_FONT,
-                      fontWeight: FontWeight.w700,
-                      fontSize: Dimens.fifteen,
-                      color: AppColors.light_text),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    fillColor: Colors.red,
-                    hintText: AppLocalizations.of(context)
-                        .translate(Strings.enter_your_email),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    hintStyle: TextStyle(
-                        fontFamily: Strings.EXO_FONT,
-                        fontWeight: FontWeight.w700,
-                        fontSize: Dimens.SIXTEEN,
-                        color: AppColors.light_text),
-                    labelStyle: TextStyle(
-                        fontFamily: Strings.EXO_FONT,
-                        fontWeight: FontWeight.w700,
-                        fontSize: Dimens.SIXTEEN,
-                        color: AppColors.black_text),
-                  ),
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.done,
-                  onSubmitted: (_) => FocusScope.of(context).unfocus(),
-                ),
-                Divider(
-                  color: AppColors.divider_color,
-                ),
-                SizedBox(
-                  height: Dimens.HUNDRUD,
-                ),
-                _saveButton(),
-              ],
-            ),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: Dimens.sixtyFive,
           ),
-        ),
-      ],
+          Text(
+            AppLocalizations.of(context).translate(Strings.FullName),
+            style: TextStyle(
+                letterSpacing: 1,
+                fontFamily: Strings.EXO_FONT,
+                fontWeight: FontWeight.w700,
+                fontSize: Dimens.fifteen,
+                color: AppColors.light_text),
+          ),
+          TextField(
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)
+                  .translate(Strings.enter_your_first_name),
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              hintStyle: TextStyle(
+                  fontFamily: Strings.EXO_FONT,
+                  fontWeight: FontWeight.w700,
+                  fontSize: Dimens.SIXTEEN,
+                  color: AppColors.light_text),
+              labelStyle: TextStyle(
+                  fontFamily: Strings.EXO_FONT,
+                  fontWeight: FontWeight.w700,
+                  fontSize: Dimens.SIXTEEN,
+                  color: AppColors.black_text),
+            ),
+            controller: _firstNameController,
+            textInputAction: TextInputAction.next,
+            onSubmitted: (_) => FocusScope.of(context).nextFocus(),
+          ),
+          Divider(
+            color: AppColors.divider_color,
+          ),
+          SizedBox(
+            height: Dimens.FIFTEEN,
+          ),
+          Text(
+            AppLocalizations.of(context).translate(Strings.LastName),
+            style: TextStyle(
+                letterSpacing: 1,
+                fontFamily: Strings.EXO_FONT,
+                fontWeight: FontWeight.w700,
+                fontSize: Dimens.fifteen,
+                color: AppColors.light_text),
+          ),
+          TextField(
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)
+                  .translate(Strings.enter_your_last_name),
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              hintStyle: TextStyle(
+                  fontFamily: Strings.EXO_FONT,
+                  fontWeight: FontWeight.w700,
+                  fontSize: Dimens.SIXTEEN,
+                  color: AppColors.light_text),
+              labelStyle: TextStyle(
+                  fontFamily: Strings.EXO_FONT,
+                  fontWeight: FontWeight.w700,
+                  fontSize: Dimens.SIXTEEN,
+                  color: AppColors.black_text),
+            ),
+            controller: _lastNameController,
+            textInputAction: TextInputAction.next,
+            onSubmitted: (_) => FocusScope.of(context).nextFocus(),
+          ),
+          Divider(
+            color: AppColors.divider_color,
+          ),
+          SizedBox(
+            height: Dimens.FIFTEEN,
+          ),
+          Text(
+            AppLocalizations.of(context).translate(Strings.E_Mail),
+            style: TextStyle(
+                letterSpacing: 1,
+                fontFamily: Strings.EXO_FONT,
+                fontWeight: FontWeight.w700,
+                fontSize: Dimens.fifteen,
+                color: AppColors.light_text),
+          ),
+          TextField(
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)
+                  .translate(Strings.enter_your_email),
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              hintStyle: TextStyle(
+                  fontFamily: Strings.EXO_FONT,
+                  fontWeight: FontWeight.w700,
+                  fontSize: Dimens.SIXTEEN,
+                  color: AppColors.light_text),
+              labelStyle: TextStyle(
+                  fontFamily: Strings.EXO_FONT,
+                  fontWeight: FontWeight.w700,
+                  fontSize: Dimens.SIXTEEN,
+                  color: AppColors.black_text),
+            ),
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.done,
+            onSubmitted: (_) => FocusScope.of(context).unfocus(),
+          ),
+          Divider(
+            color: AppColors.divider_color,
+          ),
+          SizedBox(
+            height: Dimens.HUNDRUD,
+          ),
+          _saveButton(),
+        ],
+      ),
     );
   }
 
