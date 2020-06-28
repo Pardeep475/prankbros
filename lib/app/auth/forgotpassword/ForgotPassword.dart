@@ -36,8 +36,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   bool _validation(BuildContext context) {
     if (Utils.checkNullOrEmpty(_emailController.text)) {
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Please enter your email.')));
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Please enter your email.')));
       return false;
     }
     return true;

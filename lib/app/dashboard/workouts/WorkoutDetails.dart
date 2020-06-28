@@ -79,10 +79,12 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: Dimens.twenty,
-                              horizontal: Dimens.fifteen),
+                              horizontal: Dimens.twenty),
                           child: Image.asset(
                             Images.ArrowBackWhite,
                             color: AppColors.white,
+                            height: Dimens.fifteen,
+
                           ),
                         ),
                       ),
@@ -196,9 +198,9 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   }
 
   void _mainItemClick(int index) {
-    onPush(index);
-//    Navigator.push(
-//        context, MaterialPageRoute(builder: (context) => WorkoutDetails2()));
+//    onPush(index);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => WorkoutDetails2()));
   }
 
   Widget calendarItemSelected(String day, String date) {

@@ -40,4 +40,17 @@ class ApiRepository {
     Map<String, dynamic> data = jsonDecode(response);
     return LoginResponse.fromJson(data);
   }
+
+  Future<LoginResponse> resetYourProgram(
+      String userId,
+      String trainingWeek,
+      ) async {
+    var value = {'userId': userId, 'trainingWeek': trainingWeek};
+    var response = await apiHelper.postJson(
+        apiUrl: Strings.BASE_URL + ApiEndPoints.resetYourProgram, formData: value);
+    Map<String, dynamic> data = jsonDecode(response);
+    return LoginResponse.fromJson(data);
+  }
+
 }
+

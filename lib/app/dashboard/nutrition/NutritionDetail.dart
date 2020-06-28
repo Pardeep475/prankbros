@@ -61,8 +61,8 @@ class _NutritionDetail extends State<NutritionDetail> {
   }
 
   void _onBackPressed() {
-//    Navigator.pop(context);
-    getRootNavigator(context).maybePop();
+    Navigator.pop(context);
+
   }
 
   NavigatorState getRootNavigator(BuildContext context) {
@@ -81,22 +81,27 @@ class _NutritionDetail extends State<NutritionDetail> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SizedBox(
-          height: Dimens.forty,
+          height: Dimens.ten,
         ),
-        GestureDetector(
+        InkWell(
           onTap: _onBackPressed,
           child: Container(
-            margin: EdgeInsets.only(left: Dimens.fifteen),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
-            ),
-            child: Image.asset(
-              Images.ArrowBackWhite,
-              color: AppColors.black,
-              fit: BoxFit.none,
-              width: Dimens.thirtyFive,
-              height: Dimens.thirtyFive,
+            width: Dimens.FORTY_FIVE,
+            height: Dimens.FORTY_FIVE,
+            margin:
+            EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
+            child: Container(
+              alignment: Alignment.topLeft,
+              decoration: BoxDecoration(
+                color: AppColors.light_gray,
+                borderRadius:
+                BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+              ),
+              child: Center(
+                  child: Image.asset(Images.ArrowBackWhite,
+                      height: Dimens.fifteen,
+                      width: Dimens.twenty,
+                      color: AppColors.black)),
             ),
           ),
         ),

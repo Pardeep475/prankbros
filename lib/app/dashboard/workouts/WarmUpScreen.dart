@@ -44,16 +44,28 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
           ),
           Positioned(
             top: 35,
-            left: 5,
-            child: GestureDetector(
-              onTap: () => debugPrint('back button pressed'),
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Image.asset(
-                  Images.ArrowBackWhite,
-                  fit: BoxFit.none,
-                  width: 35.0,
-                  height: 35.0,
+            left: 1,
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                width: Dimens.FORTY_FIVE,
+                height: Dimens.FORTY_FIVE,
+                margin:
+                    EdgeInsets.only(top: Dimens.twenty, left: Dimens.ten),
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  decoration: BoxDecoration(
+                    color: AppColors.transparent,
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+                  ),
+                  child: Center(
+                      child: Image.asset(Images.ArrowBackWhite,
+                          height: Dimens.fifteen,
+                          width: Dimens.twenty,
+                          color: AppColors.white)),
                 ),
               ),
             ),

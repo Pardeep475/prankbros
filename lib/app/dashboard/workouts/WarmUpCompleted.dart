@@ -107,6 +107,7 @@ class _WarmUpCompletedState extends State<WarmUpCompleted> {
     setState(() {
       gradientLoading = gradientLoading ? false : true;
     });
+    Navigator.pop(context);
   }
 
   Widget _grayButton() {
@@ -138,5 +139,6 @@ class _WarmUpCompletedState extends State<WarmUpCompleted> {
     setState(() {
       grayLoading = grayLoading ? false : true;
     });
+    Navigator.pop(context);
   }
 }

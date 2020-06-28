@@ -4,13 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:prankbros2/app/dashboard/profile/PictureWidget.dart';
 import 'package:prankbros2/app/dashboard/profile/ProfileWidget.dart';
 import 'package:prankbros2/app/dashboard/profile/SettingsWidget.dart';
-import 'package:prankbros2/customviews/BackgroundWidgetWithColor.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
-
+import '../../../utils/AppColors.dart';
+import 'PictureWidget.dart';
+import 'SettingsWidget.dart';
 import 'WeightCurveWidget.dart';
 
 class Profile extends StatefulWidget {
@@ -37,13 +38,72 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarBrightness: Brightness.dark,
     ));
 
-    return Stack(
+    return  Scaffold(
+      backgroundColor: AppColors.white,
+      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset : false,
+      body: SingleChildScrollView(
+
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: 300,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(Images.TopBg),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+            Container(
+//            margin: EdgeInsets.symmetric(horizontal: Dimens.FORTY),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: Dimens.seventyFive,
+                  ),
+                  _topUserProfile(),
+                  SizedBox(
+                    height: Dimens.twentyFive,
+                  ),
+                  Divider(
+                    height: Dimens.one,
+                    color: AppColors.divider_color,
+                  ),
+                  SizedBox(
+                    height: Dimens.twentyFive,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: Dimens.twentyFive,right: 0,),
+                    width: MediaQuery.of(context).size.width,
+                    height: Dimens.forty,
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _titleList.length,
+                        itemBuilder: (BuildContext conntext, int pos) {
+                          return _customTextWidget(_titleList[pos], pos);
+                        }),
+                  ),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: openSpecificTab(itemPos)),
+                ],
+              ),
+            ),
+
+          ],
+        ),
+      ),
+    )
+
+    /*Stack(
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
@@ -57,47 +117,45 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           resizeToAvoidBottomPadding: false,
           resizeToAvoidBottomInset : false,
           backgroundColor: AppColors.transparent,
-          body: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: Dimens.FORTY),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: Dimens.seventyFive,
-                  ),
-                  _topUserProfile(),
-                  SizedBox(
-                    height: Dimens.thirty,
-                  ),
-                  Divider(
-                    height: Dimens.one,
-                    color: AppColors.divider_color,
-                  ),
-                  SizedBox(
-                    height: Dimens.twentyFive,
-                  ),
-                  SizedBox(
+          body: Container(
+            margin: EdgeInsets.symmetric(horizontal: Dimens.FORTY),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: Dimens.seventyFive,
+                ),
+                _topUserProfile(),
+                SizedBox(
+                  height: Dimens.thirty,
+                ),
+                Divider(
+                  height: Dimens.one,
+                  color: AppColors.divider_color,
+                ),
+                SizedBox(
+                  height: Dimens.twentyFive,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: Dimens.fifty,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                      itemCount: _titleList.length,
+                      itemBuilder: (BuildContext conntext, int pos) {
+                        return _customTextWidget(_titleList[pos], pos);
+                      }),
+                ),
+                SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: Dimens.fifty,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                        itemCount: _titleList.length,
-                        itemBuilder: (BuildContext conntext, int pos) {
-                          return _customTextWidget(_titleList[pos], pos);
-                        }),
-                  ),
-                  SizedBox(
-                      height: 500,
-                      width: MediaQuery.of(context).size.width,
-                      child: openSpecificTab(itemPos)),
-                ],
-              ),
+                    child: openSpecificTab(itemPos)),
+              ],
             ),
           ),
         ),
       ],
-    );
+    )*/
+    ;
   }
 
   Widget openSpecificTab(int pos) {
@@ -175,12 +233,13 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 
   Widget _topUserProfile() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-            margin:
-                EdgeInsets.only(left: Dimens.TWENTY_FIVE, right: Dimens.TWENTY),
-            width: Dimens.FIFTY_SIX,
-            height: Dimens.FIFTY_SIX,
+            margin: EdgeInsets.only(left: Dimens.TWENTY_FIVE, right: Dimens.TWENTY),
+            width: Dimens.sixty,
+            height: Dimens.sixty,
             decoration: new BoxDecoration(
                 shape: BoxShape.circle,
                 image: new DecorationImage(
@@ -226,23 +285,24 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         });
       },
       child: Container(
-        margin: EdgeInsets.only(left: Dimens.twenty),
-        width: MediaQuery.of(context).size.width / 4,
+
         decoration: BoxDecoration(
             border: Border.all(
                 color: itemPos == pos
                     ? AppColors.pink_stroke
                     : AppColors.transparent),
             borderRadius: BorderRadius.all(Radius.circular(Dimens.twenty))),
-        padding: EdgeInsets.symmetric(vertical: Dimens.ten),
-        child: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: itemPos == pos ? AppColors.pink : AppColors.white,
-              fontFamily: Strings.EXO_FONT,
-              fontWeight: FontWeight.w700,
-              fontSize: Dimens.thrteen),
+        padding: EdgeInsets.symmetric(vertical: Dimens.ten,horizontal: Dimens.twenty),
+        child: Center(
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: itemPos == pos ? AppColors.pink : AppColors.white,
+                fontFamily: Strings.EXO_FONT,
+                fontWeight: FontWeight.w700,
+                fontSize: Dimens.thrteen),
+          ),
         ),
       ),
     );

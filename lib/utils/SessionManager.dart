@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/utils/Keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +32,9 @@ class SessionManager {
 
   void setUserModel(UserData userModel) async {
     pref.then((value) {
-      value.setString(Keys.USER_MODEL, json.encode(userModel));
+      value.setString(Keys.USER_MODEL, json.encode(userModel)).then((value) {
+        debugPrint('saving value  $value');
+      });
     });
   }
 

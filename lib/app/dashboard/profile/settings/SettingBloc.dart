@@ -8,7 +8,7 @@ import 'package:prankbros2/utils/network/ApiRepository.dart';
 import 'package:prankbros2/utils/network/AppConstantHelper.dart';
 import 'package:rxdart/rxdart.dart';
 
-class LoginBloc {
+class SettingBloc {
   Stream get progressStream => progressController.stream;
 
   final BehaviorSubject progressController = BehaviorSubject<bool>();
@@ -17,20 +17,14 @@ class LoginBloc {
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
 
-  void doLogin(String email, String password, BuildContext context) {
+  void resetYourProgram(
+      String userId, String trainingWeek, BuildContext context) {
     progressSink.add(true);
-    debugPrint('email  :-- $email    password:--   $password');
-    apiRepository.login(email, password).then((onResponse) {
+    debugPrint('userId  :-- $userId    trainingWeek:--   $trainingWeek');
+    apiRepository.resetYourProgram(userId, trainingWeek).then((onResponse) {
       if (onResponse.status == 1) {
-        debugPrint("Here is user email   :        ${password}");
-        SessionManager sessionManager = new SessionManager();
-        sessionManager.setUserModel(onResponse.userDetails);
-        sessionManager.getUserModel().then((value) {
-          debugPrint('userid is at login:--   ${value}');
-        });
-        sessionManager.setIsLogin(true);
-        Navigator.pushNamedAndRemoveUntil(
-            context, Strings.DASHBOARD_ROUTE, (route) => false);
+        debugPrint("Here is user email   :        ${onResponse.message}");
+        Utils.showSnackBar(onResponse.message, context);
       } else {
         print("Error From Server  " + onResponse.message);
         Utils.showSnackBar(onResponse.message, context);

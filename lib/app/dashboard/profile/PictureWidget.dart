@@ -19,6 +19,7 @@ class _PictureWidgetState extends State<PictureWidget> {
 
   Widget _picturesWidget() {
     return Container(
+      margin: EdgeInsets.only(top: 100),
       child: Center(
         child: Material(
           child: InkWell(
@@ -27,6 +28,7 @@ class _PictureWidgetState extends State<PictureWidget> {
             },
             borderRadius: BorderRadius.all(Radius.circular(Dimens.fifty)),
             child: Container(
+
               height: Dimens.seventyFour,
               width: Dimens.seventyFour,
               decoration: BoxDecoration(

@@ -172,9 +172,9 @@ class _NutritionState extends State<Nutrition> {
   }
 
   void _OnItemClick() {
-//    Navigator.push(
-//        context, MaterialPageRoute(builder: (context) => NutritionDetail()));
-    onPush(0);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => NutritionDetail()));
+//    onPush(0);
   }
 
   Widget _verticalGridView(int index) {

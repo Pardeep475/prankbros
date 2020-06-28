@@ -17,7 +17,6 @@ class WorkoutScreen extends StatefulWidget {
 class _WorkoutScreen extends State<WorkoutScreen> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
 //    return Scaffold(
 //      body: Stack(
 //        children: <Widget>[

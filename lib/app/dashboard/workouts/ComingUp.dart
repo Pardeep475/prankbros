@@ -15,7 +15,6 @@ class _ComingUpState extends State<ComingUp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _methodListInit();
   }
@@ -46,27 +45,30 @@ class _ComingUpState extends State<ComingUp> {
         SizedBox(
           height: Dimens.forty,
         ),
-        GestureDetector(
+        InkWell(
           onTap: () {
-            getRootNavigator(context).maybePop();
+            Navigator.pop(context);
           },
           child: Container(
-            margin: EdgeInsets.only(left: Dimens.fifteen),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
-            ),
-            child: Image.asset(
-              Images.ArrowBackWhite,
-              color: AppColors.black,
-              fit: BoxFit.none,
-              width: Dimens.forty,
-              height: Dimens.forty,
+            width: Dimens.FORTY_FIVE,
+            height: Dimens.FORTY_FIVE,
+            margin: EdgeInsets.only(top: Dimens.twenty, left: Dimens.TWENTY),
+            child: Container(
+              alignment: Alignment.topLeft,
+              decoration: BoxDecoration(
+                color: AppColors.light_gray,
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+              ),
+              child: Center(
+                  child: Image.asset(Images.ArrowBackWhite,
+                      height: Dimens.fifteen,
+                      width: Dimens.twenty,
+                      color: AppColors.black)),
             ),
           ),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height / 4.7,
+          height: MediaQuery.of(context).size.height / 5.5,
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: Dimens.fifteen),
@@ -198,4 +200,3 @@ class _ComingUpState extends State<ComingUp> {
     );
   }
 }
-

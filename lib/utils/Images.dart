@@ -15,7 +15,7 @@ class Images {
   static const String IconMotivation = 'assets/images/icon_motivation.png';
   static const String IconNutrition = 'assets/images/icon_nutrition.png';
   static const String Cup = 'assets/images/cup.png';
-  static const String TopBg = 'assets/images/top_bg.jpg';
+  static const String TopBg = 'assets/images/top_bg.png';
   static const String DummyFood = 'assets/images/dummy_food.png';
   static const String ICON_CALENDAR = 'assets/images/icon_calendar.png';
   static const String ICON_CROSS = 'assets/images/icon_cross.png';

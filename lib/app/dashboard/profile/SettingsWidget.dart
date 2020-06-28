@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/profile/settings/SettingBloc.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/popups/CustomLanguageDialog.dart';
 import 'package:prankbros2/popups/CustomResetYourProgramDialog.dart';
@@ -8,6 +9,7 @@ import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class SettingsWidget extends StatefulWidget {
@@ -24,9 +26,29 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   static const Key logoutKey = Key(Keys.logoutKey);
   static const Key resetMyProgramKey = Key(Keys.resetMyProgramKey);
 
+  SettingBloc _settingBloc;
+  SessionManager _sessionManager;
+  String userId = '';
+  String trainingWeek = "1";
+
+  @override
+  void initState() {
+    super.initState();
+    _settingBloc = new SettingBloc();
+    _sessionManager = new SessionManager();
+
+    _sessionManager.getUserModel().then((value){
+      debugPrint('userid-0-0-0-0>     ${value}');
+          /*if (value != null && value.id != null) {
+            userId = value.id.toString();
+
+            debugPrint('sessionmanger userID: -  $userId   ${value.id.toString()}');
+          }*/
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -41,28 +63,28 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 onPressed: () {
                   _languagePressed(context);
                 }),
-            DividerWidget(),
+            _dividerWidget(),
             CustomSettingButton(
                 key: supportKey,
                 text: AppLocalizations.of(context).translate(Strings.SUPPORT),
                 onPressed: _supportPressed),
-            DividerWidget(),
+            _dividerWidget(),
             CustomSettingButton(
                 key: dataProtectionKey,
                 text: AppLocalizations.of(context)
                     .translate(Strings.DATA_PROTECTION),
                 onPressed: _dataProtectionPressed),
-            DividerWidget(),
+            _dividerWidget(),
             CustomSettingButton(
                 key: impressumKey,
                 text: AppLocalizations.of(context).translate(Strings.IMPRESSUM),
                 onPressed: _impressumPressed),
-            DividerWidget(),
+            _dividerWidget(),
             CustomSettingButton(
                 key: agbKey,
                 text: AppLocalizations.of(context).translate(Strings.AGB),
                 onPressed: _agbPressed),
-            DividerWidget(),
+            _dividerWidget(),
             SizedBox(
               height: Dimens.SIXTY,
             ),
@@ -88,7 +110,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     );
   }
 
-  Widget DividerWidget() {
+  Widget _dividerWidget() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Dimens.TEN),
       child: Divider(
@@ -171,8 +193,31 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               value: 0,
               yesPressed: () {
                 Navigator.pop(context);
+                _resetMyProgramApi(context);
               },
             ));
+  }
+
+  void _resetMyProgramApi(BuildContext context) {
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        if (_validation(context)) {
+          _settingBloc.resetYourProgram(userId, trainingWeek, context);
+//          _loginBloc.getUserDetails('1', context);
+        }
+      } else {
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
+    });
+  }
+
+  bool _validation(BuildContext context) {
+    debugPrint('userid is ===>   $userId');
+    if (userId == null && userId.isEmpty) {
+      Utils.showSnackBar('Something went wrong', context);
+    }
+    return true;
   }
 
   void _languagePressed(BuildContext context) {

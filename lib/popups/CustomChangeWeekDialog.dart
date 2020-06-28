@@ -175,10 +175,14 @@ class _CustomChangeWeekDialogState extends State<CustomChangeWeekDialog> {
 
   Widget showPickerNumberFormatValue(BuildContext context) {
     return Picker(
+
             adapter: NumberPickerAdapter(data: [
+
               NumberPickerColumn(
+
                 begin: 1,
                 end: 3,
+
               )
 
             ]),

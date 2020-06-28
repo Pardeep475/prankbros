@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/workouts/ComingUp.dart';
 import 'package:prankbros2/app/dashboard/workouts/ComingUpNextWorkout.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
@@ -36,7 +37,6 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     _workoutListInit();
   }
@@ -85,12 +85,10 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
         WorkoutDetails2Model(warmUpList: warmUpList, workoutList: workoutList));
 
     for (int i = 0; i < _workoutList[0].workoutList.length; i++) {
-      debugPrint(
-          'workoutlist :  ${_workoutList[0].workoutList[i].title} ');
+      debugPrint('workoutlist :  ${_workoutList[0].workoutList[i].title} ');
     }
     for (int i = 0; i < _workoutList[0].warmUpList.length; i++) {
-      debugPrint(
-          'warmuplist :  ${_workoutList[0].warmUpList[i].title}');
+      debugPrint('warmuplist :  ${_workoutList[0].warmUpList[i].title}');
     }
   }
 
@@ -113,22 +111,25 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
         SizedBox(
           height: Dimens.forty,
         ),
-        GestureDetector(
+        InkWell(
           onTap: () {
-            getRootNavigator(context).maybePop();
+            Navigator.pop(context);
           },
           child: Container(
-            margin: EdgeInsets.only(left: Dimens.fifteen),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
-            ),
-            child: Image.asset(
-              Images.ArrowBackWhite,
-              color: AppColors.black,
-              fit: BoxFit.none,
-              width: Dimens.forty,
-              height: Dimens.forty,
+            width: Dimens.FORTY_FIVE,
+            height: Dimens.FORTY_FIVE,
+            margin: EdgeInsets.only(top: Dimens.twenty, left: Dimens.TWENTY),
+            child: Container(
+              alignment: Alignment.topLeft,
+              decoration: BoxDecoration(
+                color: AppColors.light_gray,
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+              ),
+              child: Center(
+                  child: Image.asset(Images.ArrowBackWhite,
+                      height: Dimens.fifteen,
+                      width: Dimens.twenty,
+                      color: AppColors.black)),
             ),
           ),
         ),
@@ -230,7 +231,6 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-
                       return _mainItemBuilder(
                           context,
                           index,
@@ -261,9 +261,8 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
   }
 
   void _mainItemClick() {
-    onPush(0);
-//    Navigator.push(
-//        context, MaterialPageRoute(builder: (context) => ComingUp()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ComingUp()));
   }
 
   Widget _mainItemBuilder(BuildContext context, int index,
@@ -283,15 +282,19 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(
-                child: dailyWorkoutModel.mainTitle =='' ? Text(
-                  dailyWorkoutModel.mainTitle.toUpperCase(),
-                  style: TextStyle(
-                      letterSpacing: 1.04,
-                      fontWeight: FontWeight.w600,
-                      fontSize: Dimens.fifteen,
-                      color: AppColors.unSelectedTextRadioColor,
-                      fontFamily: Strings.EXO_FONT),
-                ) :SizedBox(height: 0,) ,
+                child: dailyWorkoutModel.mainTitle == ''
+                    ? Text(
+                        dailyWorkoutModel.mainTitle.toUpperCase(),
+                        style: TextStyle(
+                            letterSpacing: 1.04,
+                            fontWeight: FontWeight.w600,
+                            fontSize: Dimens.fifteen,
+                            color: AppColors.unSelectedTextRadioColor,
+                            fontFamily: Strings.EXO_FONT),
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
               ),
               SizedBox(
                 height: Dimens.eight,
@@ -427,7 +430,6 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Stack(
       children: <Widget>[
         BackgroundWidgetWithImage(
