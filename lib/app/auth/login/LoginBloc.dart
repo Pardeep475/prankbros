@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
@@ -22,11 +23,15 @@ class LoginBloc {
     debugPrint('email  :-- $email    password:--   $password');
     apiRepository.login(email, password).then((onResponse) {
       if (onResponse.status == 1) {
-        debugPrint("Here is user email   :        ${password}");
+        debugPrint("Here is user email   :        ${onResponse.userDetails.id}");
         SessionManager sessionManager = new SessionManager();
         sessionManager.setUserModel(onResponse.userDetails);
         sessionManager.getUserModel().then((value) {
-          debugPrint('userid is at login:--   ${value}');
+          debugPrint("userdata   :        ${value}");
+          if (value != null) {
+            UserDetails userData = UserDetails.fromJson(value);
+            debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
+          }
         });
         sessionManager.setIsLogin(true);
         Navigator.pushNamedAndRemoveUntil(

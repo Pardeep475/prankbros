@@ -30,11 +30,9 @@ class SessionManager {
     return pref.then((value) => value.getBool(Keys.INSTALLED_FIRST_TIME));
   }
 
-  void setUserModel(UserData userModel) async {
+  void setUserModel(UserDetails userModel) async {
     pref.then((value) {
-      value.setString(Keys.USER_MODEL, json.encode(userModel)).then((value) {
-        debugPrint('saving value  $value');
-      });
+      value.setString(Keys.USER_MODEL, json.encode(userModel));
     });
   }
 

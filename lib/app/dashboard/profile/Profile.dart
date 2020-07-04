@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:prankbros2/app/dashboard/profile/PictureWidget.dart';
 import 'package:prankbros2/app/dashboard/profile/ProfileWidget.dart';
 import 'package:prankbros2/app/dashboard/profile/SettingsWidget.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 import '../../../utils/AppColors.dart';
@@ -48,11 +50,10 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset : false,
       body: SingleChildScrollView(
-
         child: Stack(
           children: <Widget>[
             Container(
-              height: 300,
+              height: Dimens.threeHundred,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(Images.TopBg),

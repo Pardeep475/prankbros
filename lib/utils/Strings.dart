@@ -1,7 +1,7 @@
 class Strings {
   Strings._();
 
-  static const String BASE_URL = 'http://3.126.201.210:8088/admin/api/';
+  static const String BASE_URL = 'http://18.158.43.100/fitness/api/';
 
   static const String login = 'login';
   static const String empty = '';

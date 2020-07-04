@@ -240,4 +240,5 @@ class Dimens {
 
   static final oneHundredFiftyTwo = 16.964 * SizeConfig.heightMultiplier;
   static final twoHundredNinetyFive = 32.924 * SizeConfig.heightMultiplier;
+  static final threeHundred = 33.49 * SizeConfig.heightMultiplier;
 }

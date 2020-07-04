@@ -49,6 +49,10 @@ class _LoginState extends State<Login> {
   }
 
   _loginButtonPressed(BuildContext context) {
+
+//    Navigator.pushNamedAndRemoveUntil(
+//        context, Strings.DASHBOARD_ROUTE, (route) => false);
+
      Utils.checkConnectivity().then((value) {
       if (value) {
         if (_validation(context)) {

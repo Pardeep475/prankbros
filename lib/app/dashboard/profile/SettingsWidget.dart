@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/profile/settings/SettingBloc.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/popups/CustomLanguageDialog.dart';
 import 'package:prankbros2/popups/CustomResetYourProgramDialog.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -37,14 +38,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     _settingBloc = new SettingBloc();
     _sessionManager = new SessionManager();
 
-    _sessionManager.getUserModel().then((value){
-      debugPrint('userid-0-0-0-0>     ${value}');
-          /*if (value != null && value.id != null) {
-            userId = value.id.toString();
-
-            debugPrint('sessionmanger userID: -  $userId   ${value.id.toString()}');
-          }*/
-        });
+    _sessionManager.getUserModel().then((value) {
+      debugPrint("userdata   :        ${value}");
+      if (value != null) {
+        UserDetails userData = UserDetails.fromJson(value);
+        debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
+        userId = userData.id.toString();
+      }
+    });
   }
 
   @override
