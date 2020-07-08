@@ -19,14 +19,12 @@ class _NutritionDetail extends State<NutritionDetail> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     _methodListInit();
     _ingredientsListInit();
@@ -106,7 +104,7 @@ class _NutritionDetail extends State<NutritionDetail> {
           ),
         ),
         SizedBox(
-          height: 210,
+          height: Dimens.twoHundredForteen,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,7 +154,7 @@ class _NutritionDetail extends State<NutritionDetail> {
                     color: _buttonClick == 0
                         ? AppColors.pink_stroke
                         : AppColors.light_text,
-                    fontSize: Dimens.THRTEEN,
+                    fontSize: Dimens.fifteen,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1.04),
               ),
@@ -175,7 +173,7 @@ class _NutritionDetail extends State<NutritionDetail> {
                     color: _buttonClick == 1
                         ? AppColors.pink_stroke
                         : AppColors.light_text,
-                    fontSize: Dimens.thrteen,
+                    fontSize: Dimens.fifteen,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1.04),
               ),
@@ -195,7 +193,7 @@ class _NutritionDetail extends State<NutritionDetail> {
         ),
         Expanded(
           child: ListView.builder(
-            padding: EdgeInsets.only(top: Dimens.twenty),
+            padding: EdgeInsets.only(top: Dimens.thirty),
             shrinkWrap: true,
             itemCount: _buttonClick == 0
                 ? _methodList.length
@@ -222,8 +220,8 @@ class _NutritionDetail extends State<NutritionDetail> {
               width: Dimens.twentyFive,
             ),
             Container(
-              height: Dimens.thirty,
-              width: Dimens.thirty,
+              height: Dimens.forty,
+              width: Dimens.forty,
               decoration: BoxDecoration(
                 color: AppColors.light_gray,
                 borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
@@ -233,7 +231,7 @@ class _NutritionDetail extends State<NutritionDetail> {
                   (index + 1).toString(),
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: Dimens.forteen,
+                      fontSize: Dimens.seventeen,
                       fontFamily: Strings.EXO_FONT,
                       color: AppColors.black_text),
                 ),
@@ -247,7 +245,7 @@ class _NutritionDetail extends State<NutritionDetail> {
                 _methodList[index],
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
-                    fontSize: Dimens.forteen,
+                    fontSize: Dimens.sixteen,
                     fontFamily: Strings.EXO_FONT,
                     color: AppColors.light_text),
               ),

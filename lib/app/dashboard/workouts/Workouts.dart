@@ -47,7 +47,7 @@ class Workouts extends StatelessWidget {
           ),
           Positioned(
             left: Dimens.fifty,
-            top: Dimens.oneNinety,
+            top: Dimens.homePosition,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -56,7 +56,7 @@ class Workouts extends StatelessWidget {
                   style: TextStyle(
                       letterSpacing: 3.2,
                       color: AppColors.white,
-                      fontSize: Dimens.forty,
+                      fontSize: Dimens.fortyFive,
                       fontStyle: FontStyle.italic,
                       fontFamily: Strings.EXO_FONT,
                       fontWeight: FontWeight.w900),
@@ -68,7 +68,7 @@ class Workouts extends StatelessWidget {
                   'Workout',
                   style: TextStyle(
                       color: AppColors.white,
-                      fontSize: Dimens.eighteen,
+                      fontSize: Dimens.twenty,
                       fontFamily: Strings.EXO_FONT,
                       fontWeight: FontWeight.w700),
                 ),
@@ -79,14 +79,15 @@ class Workouts extends StatelessWidget {
             right: Dimens.fifty,
             bottom: Dimens.oneHundredFifty,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
                   'GYM',
                   style: TextStyle(
                       letterSpacing: 3.2,
                       color: AppColors.white,
-                      fontSize: Dimens.forty,
+                      fontSize: Dimens.fortyFive,
                       fontStyle: FontStyle.italic,
                       fontFamily: Strings.EXO_FONT,
                       fontWeight: FontWeight.w900),
@@ -98,7 +99,7 @@ class Workouts extends StatelessWidget {
                   'Workout',
                   style: TextStyle(
                       color: AppColors.white,
-                      fontSize: Dimens.eighteen,
+                      fontSize: Dimens.twenty,
                       fontFamily: Strings.EXO_FONT,
                       fontWeight: FontWeight.w700),
                 ),

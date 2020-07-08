@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:prankbros2/models/CommonResponse.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/network/AppConstantHelper.dart';
 
 import '../Strings.dart';
@@ -10,60 +14,98 @@ import 'LoggingInterceptor.dart';
 class ApiHelper {
   Dio _dio;
   BaseOptions options;
+  String authTOKEN;
 
   ApiHelper() {
     options = BaseOptions(
       connectTimeout: 50000,
       receiveTimeout: 50000,
     );
-    String authTOKEN;
+     setAuthToken().then((value){
+       if(value != null){
+         authTOKEN=value;
+       }
+     });
     _dio = Dio(options);
-    LocalStorage.getUserAuthToken().then((value) {
-      authTOKEN = "" + value;
-      print("authTOKEN $authTOKEN");
-    });
 
     options.baseUrl = Strings.BASE_URL;
     _dio.options.headers['content-Type'] = 'application/json';
+//    _dio.options.headers["authToken"] = 'uSFnprTQMxQyi5LqM5dg9A==';
+    if (authTOKEN != null) {
+      _dio.options.headers["authToken"] = "$authTOKEN";
+    }
 
     _dio.interceptors.add(LoggingInterceptor());
 //    var token = isIos ? StringResourse.ios_jwt : StringResourse.android_jwt;
   }
 
-  dynamic post({String apiUrl, FormData formData}) async {
+  Future<String> setAuthToken() async {
+    SessionManager _sessionManager = new SessionManager();
+    await _sessionManager.getUserModel().then((value) {
+      debugPrint("userdata   :        ${value}");
+      if (value != null) {
+        UserDetails userData = UserDetails.fromJson(value);
+        debugPrint('userdata:   :-  ${userData.accessToken}');
+        return userData.accessToken.toString();
+      } else
+        return null;
+    });
+  }
+
+  dynamic post(
+      {String apiUrl, FormData formData, bool afterLogin = true}) async {
     try {
+      if (authTOKEN != null) {
+        _dio.options.headers["authToken"] = "$authTOKEN";
+      } else {
+        setAuthToken().then((value) {
+          if(value != null){
+            authTOKEN = value;
+            _dio.options.headers["authToken"] = "$authTOKEN";
+          }
+        });
+      }
+
       Response res = await _dio.post(apiUrl, data: formData);
       print("statusCode${res.statusCode}");
       return res.data;
     } on DioError catch (e) {
       _handleError(e);
-
       throw Exception("Something wrong");
     }
   }
 
-
-  dynamic postJson({String apiUrl, dynamic formData}) async {
+  dynamic postJson(
+      {String apiUrl, dynamic formData}) async {
     try {
+      _dio.options.headers['accessToken'] = 'uSFnprTQMxQyi5LqM5dg9A==';
       Response res = await _dio.post(apiUrl, data: formData);
       print("statusCode${res.statusCode}");
+      print("headers----> ${res.headers}");
       return res.data;
     } on DioError catch (e) {
       _handleError(e);
-
       throw Exception("Something wrong");
     }
   }
 
-
-  dynamic get({String apiUrl, FormData formData, String authToken}) async {
+  dynamic get(
+      {String apiUrl, FormData formData, bool afterLogin = true}) async {
     print("ApiUrl  $apiUrl");
 
-    if (authToken != null) {
-      _dio.options.headers["Authorization"] = "Bearer $authToken";
-    }
-
     try {
+      if (authTOKEN != null) {
+        _dio.options.headers["authToken"] = "$authTOKEN";
+      } else {
+        setAuthToken().then((value) {
+          if(value != null){
+            authTOKEN = value;
+            debugPrint('authToken---------------3   $authTOKEN');
+            _dio.options.headers["authToken"] = "$authTOKEN";
+          }
+        });
+      }
+
       Response res = await _dio.get(
         apiUrl,
       );

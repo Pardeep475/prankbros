@@ -67,13 +67,15 @@ class _NutritionState extends State<Nutrition> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    'Nutrition',
-                    style: TextStyle(
-                        color: AppColors.white,
-                        fontFamily: Strings.EXO_FONT,
-                        fontWeight: FontWeight.w700,
-                        fontSize: Dimens.twentySeven),
+                  Container(
+                    child: Text(
+                      'Nutrition',
+                      style: TextStyle(
+                          color: AppColors.white,
+                          fontFamily: Strings.EXO_FONT,
+                          fontWeight: FontWeight.w700,
+                          fontSize: Dimens.thirty),
+                    ),
                   ),
                   SizedBox(
                     height: Dimens.thirtyFive,

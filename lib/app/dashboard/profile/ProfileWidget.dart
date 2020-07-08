@@ -54,8 +54,15 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 fontSize: Dimens.fifteen,
                 color: AppColors.light_text),
           ),
+          SizedBox(
+            height: Dimens.five,
+          ),
           TextField(
+            minLines: 1,
+            maxLines: 1,
             decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(0.0),
+              isDense: true,
               hintText: AppLocalizations.of(context)
                   .translate(Strings.enter_your_first_name),
               border: InputBorder.none,
@@ -78,6 +85,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             textInputAction: TextInputAction.next,
             onSubmitted: (_) => FocusScope.of(context).nextFocus(),
           ),
+          SizedBox(
+            height: Dimens.five,
+          ),
           Divider(
             color: AppColors.divider_color,
           ),
@@ -93,8 +103,15 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 fontSize: Dimens.fifteen,
                 color: AppColors.light_text),
           ),
+          SizedBox(
+            height: Dimens.five,
+          ),
           TextField(
+            minLines: 1,
+            maxLines: 1,
             decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(0.0),
+              isDense: true,
               hintText: AppLocalizations.of(context)
                   .translate(Strings.enter_your_last_name),
               border: InputBorder.none,
@@ -117,6 +134,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             textInputAction: TextInputAction.next,
             onSubmitted: (_) => FocusScope.of(context).nextFocus(),
           ),
+          SizedBox(
+            height: Dimens.five,
+          ),
           Divider(
             color: AppColors.divider_color,
           ),
@@ -132,8 +152,15 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 fontSize: Dimens.fifteen,
                 color: AppColors.light_text),
           ),
+          SizedBox(
+            height: Dimens.five,
+          ),
           TextField(
+            minLines: 1,
+            maxLines: 1,
             decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(0.0),
+              isDense: true,
               hintText: AppLocalizations.of(context)
                   .translate(Strings.enter_your_email),
               border: InputBorder.none,
@@ -156,6 +183,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.done,
             onSubmitted: (_) => FocusScope.of(context).unfocus(),
+          ),
+          SizedBox(
+            height: Dimens.five,
           ),
           Divider(
             color: AppColors.divider_color,
