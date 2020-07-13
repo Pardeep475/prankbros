@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
 import 'package:prankbros2/utils/network/ApiEndPoints.dart';
 import '../Strings.dart';
 import 'ApiHelper.dart';
@@ -50,6 +51,17 @@ class ApiRepository {
         apiUrl: Strings.BASE_URL + ApiEndPoints.resetYourProgram, formData: value);
     Map<String, dynamic> data = jsonDecode(response);
     return LoginResponse.fromJson(data);
+  }
+
+  Future<NutritionsApiResponse> getAllNutrition(
+      String userId,
+      ) async {
+    var response = await apiHelper.get(
+      apiUrl:
+      Strings.BASE_URL + ApiEndPoints.getAllNutritions + '?userId=$userId',
+    );
+    Map<String, dynamic> data = jsonDecode(response);
+    return NutritionsApiResponse.fromJson(data);
   }
 
 }

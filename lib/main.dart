@@ -6,6 +6,7 @@ import 'package:prankbros2/app/auth/intro/Intro.dart';
 import 'package:prankbros2/app/auth/login/Login.dart';
 import 'package:prankbros2/app/dashboard/Dashboard.dart';
 import 'package:prankbros2/app/dashboard/custom_bottom_navigation_bar/CustomDashboardBottomNestedBar.dart';
+import 'package:prankbros2/app/dashboard/nutrition/NutritionDetail.dart';
 import 'package:prankbros2/app/dashboard/workouts/WarmUpScreen.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/SizeConfig.dart';
@@ -88,5 +89,6 @@ class MyApp extends StatelessWidget {
     Strings.DASHBOARD_ROUTE: (BuildContext context) => new Dashboard(),
     Strings.CUSTOM_DASHBOARD_ROUTE: (BuildContext context) => new CustomDashboardBottomNestedBar(),
     Strings.WARM_UP_ROUTE: (BuildContext context) => new WarmUpScreen(),
+    Strings.NUTRITION_DETAIL_ROUTE: (BuildContext context) => new NutritionDetail(),
   };
 }

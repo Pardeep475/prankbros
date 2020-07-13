@@ -15,24 +15,24 @@ class ApiHelper {
   Dio _dio;
   BaseOptions options;
   String authTOKEN;
-
+  SessionManager _sessionManager;
   ApiHelper() {
     options = BaseOptions(
       connectTimeout: 50000,
       receiveTimeout: 50000,
     );
-     setAuthToken().then((value){
-       if(value != null){
-         authTOKEN=value;
-       }
-     });
+    setAuthToken().then((value) {
+      if (value != null) {
+        authTOKEN = value;
+      }
+    });
     _dio = Dio(options);
-
+    _sessionManager = new SessionManager();
     options.baseUrl = Strings.BASE_URL;
     _dio.options.headers['content-Type'] = 'application/json';
-//    _dio.options.headers["authToken"] = 'uSFnprTQMxQyi5LqM5dg9A==';
+    _dio.options.headers["accessToken"] = 'uSFnprTQMxQyi5LqM5dg9A==';
     if (authTOKEN != null) {
-      _dio.options.headers["authToken"] = "$authTOKEN";
+      _dio.options.headers["accessToken"] = "$authTOKEN";
     }
 
     _dio.interceptors.add(LoggingInterceptor());
@@ -56,12 +56,12 @@ class ApiHelper {
       {String apiUrl, FormData formData, bool afterLogin = true}) async {
     try {
       if (authTOKEN != null) {
-        _dio.options.headers["authToken"] = "$authTOKEN";
+        _dio.options.headers["accessToken"] = "$authTOKEN";
       } else {
         setAuthToken().then((value) {
-          if(value != null){
+          if (value != null) {
             authTOKEN = value;
-            _dio.options.headers["authToken"] = "$authTOKEN";
+            _dio.options.headers["accessToken"] = "$authTOKEN";
           }
         });
       }
@@ -75,10 +75,25 @@ class ApiHelper {
     }
   }
 
-  dynamic postJson(
-      {String apiUrl, dynamic formData}) async {
+  dynamic postJson({String apiUrl, dynamic formData}) async {
     try {
-      _dio.options.headers['accessToken'] = 'uSFnprTQMxQyi5LqM5dg9A==';
+      if (authTOKEN != null) {
+        _dio.options.headers["accessToken"] = "$authTOKEN";
+      } else {
+        setAuthToken().then((value) {
+          if(value != null){
+            authTOKEN = value;
+            debugPrint('authToken---------------3   $authTOKEN');
+            _dio.options.headers["accessToken"] = "$authTOKEN";
+          }
+        });
+      }
+      Future<String> accessToken = setAuthToken();
+      accessToken.then((value) {
+        authTOKEN = value;
+      });
+      _dio.options.headers['accessToken'] = "EuojzdIMwy01oScz/pn9kQ==";
+      print("headers----> $authTOKEN");
       Response res = await _dio.post(apiUrl, data: formData);
       print("statusCode${res.statusCode}");
       print("headers----> ${res.headers}");
@@ -90,26 +105,16 @@ class ApiHelper {
   }
 
   dynamic get(
-      {String apiUrl, FormData formData, bool afterLogin = true}) async {
+      {String apiUrl}) async {
     print("ApiUrl  $apiUrl");
 
     try {
-      if (authTOKEN != null) {
-        _dio.options.headers["authToken"] = "$authTOKEN";
-      } else {
-        setAuthToken().then((value) {
-          if(value != null){
-            authTOKEN = value;
-            debugPrint('authToken---------------3   $authTOKEN');
-            _dio.options.headers["authToken"] = "$authTOKEN";
-          }
-        });
-      }
+      _dio.options.headers['accessToken'] = "EuojzdIMwy01oScz/pn9kQ==";
+      print("headers----> $authTOKEN");
 
       Response res = await _dio.get(
         apiUrl,
       );
-
       print("statusCode${res.statusCode}");
       print("REPPPPP${json.decoder}");
       return res.data;

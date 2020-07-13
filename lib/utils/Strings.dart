@@ -1,7 +1,7 @@
 class Strings {
   Strings._();
 
-  static const String BASE_URL = 'http://18.158.43.100/fitness/api/';
+  static const String BASE_URL = 'http://3.126.93.234/admin/api/';
 
   static const String login = 'login';
   static const String empty = '';
@@ -68,4 +68,5 @@ without losing your data''';
   static const String DASHBOARD_ROUTE = '/dashboard_route';
   static const String CUSTOM_DASHBOARD_ROUTE = '/custom_dashboard_route';
   static const String WARM_UP_ROUTE = '/warm_up_route';
+  static const String NUTRITION_DETAIL_ROUTE = '/nutrition_detail_route';
 }

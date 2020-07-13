@@ -27,7 +27,8 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _loginBloc = new LoginBloc();
-    _emailController = TextEditingController(text: 'pardeepsharma475@yopmail.com');
+    _emailController =
+        TextEditingController(text: 'pardeepsharma475@yopmail.com');
     _passwordController = TextEditingController(text: '12345');
   }
 
@@ -49,22 +50,21 @@ class _LoginState extends State<Login> {
   }
 
   _loginButtonPressed(BuildContext context) {
+//    Navigator.pushNamedAndRemoveUntil(
+//        context, Strings.DASHBOARD_ROUTE, (route) => false);
 
-    Navigator.pushNamedAndRemoveUntil(
-        context, Strings.DASHBOARD_ROUTE, (route) => false);
-
-//     Utils.checkConnectivity().then((value) {
-//      if (value) {
-//        if (_validation(context)) {
-//          _loginBloc.doLogin(
-//              _emailController.text, _passwordController.text, context);
-////          _loginBloc.getUserDetails('1', context);
-//        }
-//      } else {
-//        Utils.showSnackBar(
-//            Strings.please_check_your_internet_connection, context);
-//      }
-//    });
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        if (_validation(context)) {
+          _loginBloc.doLogin(
+              _emailController.text, _passwordController.text, context);
+//          _loginBloc.getUserDetails('1', context);
+        }
+      } else {
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
+    });
   }
 
   void _forgotPasswordPressed() {

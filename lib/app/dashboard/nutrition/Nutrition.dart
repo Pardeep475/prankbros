@@ -1,12 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/nutrition/NutritionBloc.dart';
 import 'package:prankbros2/app/dashboard/nutrition/NutritionDetail.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithColor.dart';
 import 'package:prankbros2/models/NutritionRecipeModel.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class Nutrition extends StatefulWidget {
@@ -23,11 +28,40 @@ class _NutritionState extends State<Nutrition> {
 
   final ValueChanged<int> onPush;
   List<NutritionRecipeModel> recipeList = new List();
+  NutritionBloc _nutritionBloc;
+  SessionManager _sessionManager;
+  String userId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _nutritionBloc = new NutritionBloc();
+    _sessionManager = new SessionManager();
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    this._recipeList();
+    _sessionManager.getUserModel().then((value) {
+      debugPrint("userdata   :        ${value}");
+      if (value != null) {
+        UserDetails userData = UserDetails.fromJson(value);
+        debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
+        userId = userData.id.toString();
+        _getNutrition(context);
+      }
+    });
+  }
+
+  void _getNutrition(BuildContext context) {
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        _nutritionBloc.getNutritions(userId, context);
+      } else {
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
+    });
   }
 
   void _recipeList() {
@@ -141,47 +175,114 @@ class _NutritionState extends State<Nutrition> {
 
   Widget _tabBarViewWidget() {
     return Expanded(
-      child: TabBarView(
-        children: <Widget>[
-          _nutritionWidget(0),
-          _nutritionWidget(1),
-          _nutritionWidget(2),
-          _nutritionWidget(3),
-        ],
+      child: StreamBuilder<List<AllNutritions>>(
+        initialData: null,
+          stream: _nutritionBloc.nutritionStream,
+          builder: (context, snapshot) {
+            if (snapshot != null &&
+                snapshot.data != null &&
+                snapshot.data.length > 0) {
+              debugPrint('value is ----->    ${snapshot.data.length}');
+              return TabBarView(
+                children: <Widget>[
+                  _nutritionWidget(0, snapshot.data),
+                  _nutritionWidget(1, snapshot.data),
+                  _nutritionWidget(2, snapshot.data),
+                  _nutritionWidget(3, snapshot.data),
+                ],
+              );
+            } else {
+              debugPrint('value is ----->    else');
+              return TabBarView(
+                children: <Widget>[
+                  _errorWidget(),
+                  _errorWidget(),
+                  _errorWidget(),
+                  _errorWidget(),
+                ],
+              );
+            }
+          }),
+    );
+  }
+
+  Widget _errorWidget() {
+    return Container(
+      child: Center(
+        child: Text(
+          'No data found',
+          style: TextStyle(
+              color: AppColors.white,
+              fontFamily: Strings.EXO_FONT,
+              fontWeight: FontWeight.w700,
+              fontSize: Dimens.thirty),
+        ),
       ),
     );
   }
 
-  Widget _nutritionWidget(int index) {
+  Widget _nutritionWidget(int index, List<AllNutritions> list) {
+    List<AllNutritions> _nutritionList = new List();
+    for (int i = 0; i < list.length; i++) {
+      switch (index) {
+        case 0:
+          {
+            if (list[i].category.compareTo('Mixed_Diet') == 0) {
+              _nutritionList.add(list[i]);
+            }
+          }
+          break;
+        case 1:
+          {
+            if (list[i].category.compareTo('Vegetarian') == 0) {
+              _nutritionList.add(list[i]);
+            }
+          }
+          break;
+        case 2:
+          {
+            if (list[i].category.compareTo('Mixed_Diet') == 0) {
+              _nutritionList.add(list[i]);
+            }
+          }
+          break;
+        case 3:
+          {
+            if (list[i].category.compareTo('Vegetarian') == 0) {
+              _nutritionList.add(list[i]);
+            }
+          }
+          break;
+      }
+    }
     return Container(
       margin: EdgeInsets.only(top: Dimens.sixty),
       child: GridView.builder(
         padding:
             EdgeInsets.only(top: 0, left: 0, right: 0, bottom: Dimens.twenty),
         itemBuilder: (context, position) {
-          return _verticalGridView(position);
+          return _verticalGridView(position, _nutritionList[position]);
         },
-        itemCount: recipeList.length,
+        itemCount: _nutritionList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.73,
         ),
         shrinkWrap: true,
-        // todo comment this out and check the result
         physics: ClampingScrollPhysics(),
       ),
     );
   }
 
-  void _OnItemClick() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => NutritionDetail()));
+  void _OnItemClick(AllNutritions item) {
+//    Navigator.push(context, MaterialPageRoute(builder: (context) => NutritionDetail()));
+    Navigator.pushNamed(context, Strings.NUTRITION_DETAIL_ROUTE,arguments: item);
 //    onPush(0);
   }
 
-  Widget _verticalGridView(int index) {
+  Widget _verticalGridView(int index, AllNutritions item) {
     return InkWell(
-      onTap: () => _OnItemClick(),
+      onTap: () => _OnItemClick(item),
       child: Card(
         margin: EdgeInsets.all(Dimens.seven),
         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -191,12 +292,12 @@ class _NutritionState extends State<Nutrition> {
         elevation: Dimens.five,
         child: Column(
           children: <Widget>[
-            Image.asset(
-              Images.DummyFood,
-              fit: BoxFit.cover,
-              width: MediaQuery.of(context).size.width,
-              height: Dimens.ONE_TWO_FIVE,
-            ),
+            FadeInImage(
+                fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width,
+                height: Dimens.ONE_TWO_FIVE,
+                image: NetworkImage(item.imagePath),
+                placeholder: AssetImage(Images.DummyFood)),
             SizedBox(
               height: Dimens.fifteen,
             ),
@@ -205,7 +306,7 @@ class _NutritionState extends State<Nutrition> {
               alignment: Alignment.topLeft,
               height: Dimens.thirtyEight,
               child: Text(
-                recipeList[index].title,
+                item.nameDE != null ? item.nameDE : '',
                 maxLines: 2,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
@@ -229,7 +330,7 @@ class _NutritionState extends State<Nutrition> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '927 kcal',
+                        item.energy != null ? item.energy : '',
                         style: TextStyle(
                             fontSize: Dimens.twelve,
                             fontFamily: Strings.EXO_FONT,
@@ -255,7 +356,9 @@ class _NutritionState extends State<Nutrition> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '15 min',
+                        item.time != null && item.time.isNotEmpty
+                            ? '${item.time} min'
+                            : '',
                         style: TextStyle(
                             fontSize: Dimens.twelve,
                             fontFamily: Strings.EXO_FONT,

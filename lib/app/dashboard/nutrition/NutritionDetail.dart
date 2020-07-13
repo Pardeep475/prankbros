@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
+import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
@@ -74,7 +75,7 @@ class _NutritionDetail extends State<NutritionDetail> {
     }
   }
 
-  Widget _nutritionDetailWidget() {
+  Widget _nutritionDetailWidget(AllNutritions args) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -114,7 +115,7 @@ class _NutritionDetail extends State<NutritionDetail> {
             ),
             Expanded(
               child: Text(
-                'Green peas with Basmati Pilaf',
+                args.nameDE != null ? args.nameDE : '',
                 style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: Dimens.twentySix,
@@ -196,13 +197,13 @@ class _NutritionDetail extends State<NutritionDetail> {
             padding: EdgeInsets.only(top: Dimens.thirty),
             shrinkWrap: true,
             itemCount: _buttonClick == 0
-                ? _methodList.length
-                : _ingredientsList.length,
+                ? args.steps != null ? args.steps.length : 0
+                : args.ingredients != null ? args.ingredients.length : 0,
             itemBuilder: (BuildContext ctxt, int index) {
               if (_buttonClick == 0) {
-                return _methodItemBuilder(ctxt, index);
+                return _methodItemBuilder(ctxt, index,args.steps[index]);
               } else {
-                return _ingredientsItemBuilder(ctxt, index);
+                return _ingredientsItemBuilder(ctxt, index,args.ingredients[index]);
               }
             },
           ),
@@ -211,7 +212,7 @@ class _NutritionDetail extends State<NutritionDetail> {
     );
   }
 
-  Widget _methodItemBuilder(BuildContext ctxt, int index) {
+  Widget _methodItemBuilder(BuildContext ctxt, int index,Steps steps) {
     return Column(
       children: <Widget>[
         Row(
@@ -242,7 +243,7 @@ class _NutritionDetail extends State<NutritionDetail> {
             ),
             Expanded(
               child: Text(
-                _methodList[index],
+                steps.itemDE != null ? steps.itemDE : '',
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: Dimens.sixteen,
@@ -262,7 +263,7 @@ class _NutritionDetail extends State<NutritionDetail> {
     );
   }
 
-  Widget _ingredientsItemBuilder(BuildContext ctxt, int index) {
+  Widget _ingredientsItemBuilder(BuildContext ctxt, int index,Ingredients ingredients) {
     return Column(
       children: <Widget>[
         Row(
@@ -283,7 +284,7 @@ class _NutritionDetail extends State<NutritionDetail> {
             ),
             Expanded(
               child: Text(
-                _ingredientsList[index],
+                ingredients.itemDE != null ? ingredients.itemDE : '',
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: Dimens.forteen,
@@ -305,7 +306,7 @@ class _NutritionDetail extends State<NutritionDetail> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final AllNutritions args = ModalRoute.of(context).settings.arguments;
     return Stack(
       children: <Widget>[
         BackgroundWidgetWithImage(
@@ -314,7 +315,7 @@ class _NutritionDetail extends State<NutritionDetail> {
         ),
         Scaffold(
           backgroundColor: AppColors.transparent,
-          body: _nutritionDetailWidget(),
+          body: _nutritionDetailWidget(args),
         )
       ],
     );
