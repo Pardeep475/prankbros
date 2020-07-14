@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/models/nutrition/NutritionActionModel.dart';
 import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
 import 'package:prankbros2/utils/network/ApiEndPoints.dart';
 import '../Strings.dart';
@@ -43,26 +44,38 @@ class ApiRepository {
   }
 
   Future<LoginResponse> resetYourProgram(
-      String userId,
-      String trainingWeek,
-      ) async {
+    String userId,
+    String trainingWeek,
+  ) async {
     var value = {'userId': userId, 'trainingWeek': trainingWeek};
     var response = await apiHelper.postJson(
-        apiUrl: Strings.BASE_URL + ApiEndPoints.resetYourProgram, formData: value);
+        apiUrl: Strings.BASE_URL + ApiEndPoints.resetYourProgram,
+        formData: value);
     Map<String, dynamic> data = jsonDecode(response);
     return LoginResponse.fromJson(data);
   }
 
   Future<NutritionsApiResponse> getAllNutrition(
-      String userId,
-      ) async {
+    String userId,
+  ) async {
     var response = await apiHelper.get(
       apiUrl:
-      Strings.BASE_URL + ApiEndPoints.getAllNutritions + '?userId=$userId',
+          Strings.BASE_URL + ApiEndPoints.getAllNutritions + '?userId=$userId',
     );
     Map<String, dynamic> data = jsonDecode(response);
     return NutritionsApiResponse.fromJson(data);
   }
 
-}
+  Future<LoginResponse> actionFavNutrition(
+    NutritionActionModel nutritationModel,
+  ) async {
 
+    var json = jsonEncode(nutritationModel.toJson());
+
+    var response = await apiHelper.postJson(
+        apiUrl: Strings.BASE_URL + ApiEndPoints.nutritionActionModel,
+        formData: json);
+    Map<String, dynamic> data = jsonDecode(response);
+    return LoginResponse.fromJson(data);
+  }
+}

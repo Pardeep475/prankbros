@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/nutrition/NutritionDetailBloc.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
+import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/models/nutrition/NutritionActionModel.dart';
 import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 
 class NutritionDetail extends StatefulWidget {
   @override
@@ -15,36 +21,24 @@ class NutritionDetail extends StatefulWidget {
 class _NutritionDetail extends State<NutritionDetail> {
   int _buttonClick = 0;
   bool _likeClick = false;
-  List<String> _methodList = new List<String>();
-  List<String> _ingredientsList = new List<String>();
+  NutritionDetailBloc _nutritionDetailBloc;
+  SessionManager _sessionManager;
+  String userId = '';
 
   @override
   void initState() {
     super.initState();
+    _nutritionDetailBloc = new NutritionDetailBloc();
+    _sessionManager = new SessionManager();
 
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _methodListInit();
-    _ingredientsListInit();
-  }
-
-  void _methodListInit() {
-    for (int i = 0; i < 10; i++) {
-      _methodList.add(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
-    }
-  }
-
-  void _ingredientsListInit() {
-    _ingredientsList.add('2 tablespoons ghee or vegetable oil');
-    _ingredientsList.add('4 to 5 whole cloves');
-    _ingredientsList.add('1-inch stick cinnamon');
-    _ingredientsList.add('4 to 5 small green chillies, slit lengthwise');
-    _ingredientsList.add('2 medium onions sliced thin (about 2 cups)');
-    _ingredientsList.add('2 cups basmati rice');
+    _sessionManager.getUserModel().then((value) {
+      debugPrint("userdata   :        ${value}");
+      if (value != null) {
+        UserDetails userData = UserDetails.fromJson(value);
+        debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
+        userId = userData.id.toString();
+      }
+    });
   }
 
   void _onButtonClick(int index) {
@@ -53,15 +47,17 @@ class _NutritionDetail extends State<NutritionDetail> {
     });
   }
 
-  void _onLikeClicked() {
-    setState(() {
-      _likeClick = _likeClick ? false : true;
-    });
+  void _onLikeClicked(int nutritionId, BuildContext context) {
+    if (userId != null && userId.isNotEmpty) {
+      _nutritionActionModel(
+          int.parse(userId), nutritionId, _likeClick ? false : true, context);
+    } else {
+      Utils.showSnackBar('Something went wrong', context);
+    }
   }
 
   void _onBackPressed() {
     Navigator.pop(context);
-
   }
 
   NavigatorState getRootNavigator(BuildContext context) {
@@ -76,143 +72,172 @@ class _NutritionDetail extends State<NutritionDetail> {
   }
 
   Widget _nutritionDetailWidget(AllNutritions args) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: <Widget>[
-        SizedBox(
-          height: Dimens.ten,
-        ),
-        InkWell(
-          onTap: _onBackPressed,
-          child: Container(
-            width: Dimens.FORTY_FIVE,
-            height: Dimens.FORTY_FIVE,
-            margin:
-            EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
-            child: Container(
-              alignment: Alignment.topLeft,
-              decoration: BoxDecoration(
-                color: AppColors.light_gray,
-                borderRadius:
-                BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-              ),
-              child: Center(
-                  child: Image.asset(Images.ArrowBackWhite,
-                      height: Dimens.fifteen,
-                      width: Dimens.twenty,
-                      color: AppColors.black)),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: Dimens.twoHundredForteen,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              width: Dimens.twentyFive,
+              height: Dimens.ten,
+            ),
+            InkWell(
+              onTap: _onBackPressed,
+              child: Container(
+                width: Dimens.FORTY_FIVE,
+                height: Dimens.FORTY_FIVE,
+                margin: EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  decoration: BoxDecoration(
+                    color: AppColors.light_gray,
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+                  ),
+                  child: Center(
+                      child: Image.asset(Images.ArrowBackWhite,
+                          height: Dimens.fifteen,
+                          width: Dimens.twenty,
+                          color: AppColors.black)),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: Dimens.twoHundredForteen,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SizedBox(
+                  width: Dimens.twentyFive,
+                ),
+                Expanded(
+                  child: Text(
+                    args.nameDE != null ? args.nameDE : '',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: Dimens.twentySix,
+                        color: AppColors.black_text,
+                        fontFamily: Strings.EXO_FONT),
+                  ),
+                ),
+                SizedBox(
+                  width: Dimens.twenty,
+                ),
+                Builder(
+                  builder: (BuildContext context) {
+                    return GestureDetector(
+                        onTap: () {
+                          _onLikeClicked(args.id, context);
+                        },
+                        child: StreamBuilder<bool>(
+                            initialData: false,
+                            stream: _nutritionDetailBloc.nutritionStream,
+                            builder: (context, snapshot) {
+                              if (snapshot.data != null) {
+                                if (snapshot.data) {
+                                  _likeClick = _likeClick ? false : true;
+                                }
+                              }
+                              return Image.asset(_likeClick
+                                  ? Images.ICON_LIKE_ACTIVE
+                                  : Images.ICON_LIKE_INACTIVE);
+                            }));
+                  },
+                ),
+                SizedBox(
+                  width: Dimens.twentyFive,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: Dimens.thirtyThree,
+            ),
+            Row(
+              children: <Widget>[
+                SizedBox(
+                  width: Dimens.twentyFive,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _onButtonClick(0);
+                  },
+                  child: Text(
+                    'METHOD',
+                    style: TextStyle(
+                        fontFamily: Strings.EXO_FONT,
+                        color: _buttonClick == 0
+                            ? AppColors.pink_stroke
+                            : AppColors.light_text,
+                        fontSize: Dimens.fifteen,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 1.04),
+                  ),
+                ),
+                SizedBox(
+                  width: Dimens.ten,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _onButtonClick(1);
+                  },
+                  child: Text(
+                    'Ingredients'.toUpperCase(),
+                    style: TextStyle(
+                        fontFamily: Strings.EXO_FONT,
+                        color: _buttonClick == 1
+                            ? AppColors.pink_stroke
+                            : AppColors.light_text,
+                        fontSize: Dimens.fifteen,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 1.04),
+                  ),
+                ),
+                SizedBox(
+                  width: Dimens.twentyFive,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: Dimens.twenty,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: Dimens.twentyFive),
+              color: AppColors.divider_color,
+              height: 1,
             ),
             Expanded(
-              child: Text(
-                args.nameDE != null ? args.nameDE : '',
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: Dimens.twentySix,
-                    color: AppColors.black_text,
-                    fontFamily: Strings.EXO_FONT),
+              child: ListView.builder(
+                padding: EdgeInsets.only(top: Dimens.thirty),
+                shrinkWrap: true,
+                itemCount: _buttonClick == 0
+                    ? args.steps != null ? args.steps.length : 0
+                    : args.ingredients != null ? args.ingredients.length : 0,
+                itemBuilder: (BuildContext ctxt, int index) {
+                  if (_buttonClick == 0) {
+                    return _methodItemBuilder(ctxt, index, args.steps[index]);
+                  } else {
+                    return _ingredientsItemBuilder(
+                        ctxt, index, args.ingredients[index]);
+                  }
+                },
               ),
-            ),
-            SizedBox(
-              width: Dimens.twenty,
-            ),
-            GestureDetector(
-                onTap: _onLikeClicked,
-                child: Image.asset(_likeClick
-                    ? Images.ICON_LIKE_ACTIVE
-                    : Images.ICON_LIKE_INACTIVE)),
-            SizedBox(
-              width: Dimens.twentyFive,
             ),
           ],
         ),
-        SizedBox(
-          height: Dimens.thirtyThree,
-        ),
-        Row(
-          children: <Widget>[
-            SizedBox(
-              width: Dimens.twentyFive,
-            ),
-            GestureDetector(
-              onTap: () {
-                _onButtonClick(0);
-              },
-              child: Text(
-                'METHOD',
-                style: TextStyle(
-                    fontFamily: Strings.EXO_FONT,
-                    color: _buttonClick == 0
-                        ? AppColors.pink_stroke
-                        : AppColors.light_text,
-                    fontSize: Dimens.fifteen,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1.04),
-              ),
-            ),
-            SizedBox(
-              width: Dimens.ten,
-            ),
-            GestureDetector(
-              onTap: () {
-                _onButtonClick(1);
-              },
-              child: Text(
-                'Ingredients'.toUpperCase(),
-                style: TextStyle(
-                    fontFamily: Strings.EXO_FONT,
-                    color: _buttonClick == 1
-                        ? AppColors.pink_stroke
-                        : AppColors.light_text,
-                    fontSize: Dimens.fifteen,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1.04),
-              ),
-            ),
-            SizedBox(
-              width: Dimens.twentyFive,
-            ),
-          ],
-        ),
-        SizedBox(
-          height: Dimens.twenty,
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: Dimens.twentyFive),
-          color: AppColors.divider_color,
-          height: 1,
-        ),
-        Expanded(
-          child: ListView.builder(
-            padding: EdgeInsets.only(top: Dimens.thirty),
-            shrinkWrap: true,
-            itemCount: _buttonClick == 0
-                ? args.steps != null ? args.steps.length : 0
-                : args.ingredients != null ? args.ingredients.length : 0,
-            itemBuilder: (BuildContext ctxt, int index) {
-              if (_buttonClick == 0) {
-                return _methodItemBuilder(ctxt, index,args.steps[index]);
-              } else {
-                return _ingredientsItemBuilder(ctxt, index,args.ingredients[index]);
-              }
-            },
-          ),
+        StreamBuilder<bool>(
+          initialData: false,
+          stream: _nutritionDetailBloc.progressStream,
+          builder: (context, snapshot) {
+            return Center(
+                child:
+                    CommonProgressIndicator(snapshot.data ? true : false));
+          },
         ),
       ],
     );
   }
 
-  Widget _methodItemBuilder(BuildContext ctxt, int index,Steps steps) {
+  Widget _methodItemBuilder(BuildContext ctxt, int index, Steps steps) {
     return Column(
       children: <Widget>[
         Row(
@@ -263,7 +288,8 @@ class _NutritionDetail extends State<NutritionDetail> {
     );
   }
 
-  Widget _ingredientsItemBuilder(BuildContext ctxt, int index,Ingredients ingredients) {
+  Widget _ingredientsItemBuilder(
+      BuildContext ctxt, int index, Ingredients ingredients) {
     return Column(
       children: <Widget>[
         Row(
@@ -319,5 +345,22 @@ class _NutritionDetail extends State<NutritionDetail> {
         )
       ],
     );
+  }
+
+  void _nutritionActionModel(
+      int userId, int nutritionId, bool action, BuildContext context) {
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        debugPrint(
+            'userid----->  $userId   nutritionId----->$nutritionId  nutritionId----->$action');
+        _nutritionDetailBloc.nutritionActionModel(
+            NutritionActionModel(
+                userId: userId, nutritionId: nutritionId, favorite: action),
+            context);
+      } else {
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
+    });
   }
 }
