@@ -188,12 +188,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   void _resetMyProgram(BuildContext context) {
     showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (_) => CustomResetYourProgramDialog(
               title: "Are you sure want to reset program?",
               value: 0,
               yesPressed: () {
-                Navigator.pop(context);
                 _resetMyProgramApi(context);
               },
             ));
@@ -207,6 +207,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 //          _loginBloc.getUserDetails('1', context);
         }
       } else {
+        Navigator.pop(context);
         Utils.showSnackBar(
             Strings.please_check_your_internet_connection, context);
       }

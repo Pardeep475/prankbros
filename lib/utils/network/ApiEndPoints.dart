@@ -3,7 +3,7 @@ class ApiEndPoints {
   static const String forgotPassword = "users/forgot-password";
   static const String getUserDetails = "users/find-user";
   static const String resetYourProgram = "users/reset-user-program";
-  static const String getAllNutritions = "users/get-all-nutritions";
+  static const String getAllNutritions = "users/get-nutritions";
   static const String nutritionActionModel = "users/action-favorite-nutrition";
 
 }

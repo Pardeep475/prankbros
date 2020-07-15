@@ -44,7 +44,6 @@ class _CustomResetYourProgramDialog
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
       child: Center(
@@ -157,7 +156,12 @@ class _CustomResetYourProgramDialog
         height: Dimens.FIFTY,
         width: MediaQuery.of(context).size.width,
         borderRadius: Dimens.THIRTY,
-        onPressed: yesPressed,
+        onPressed: (){
+          setState(() {
+          isLoading = true;
+          });
+          yesPressed();
+        },
         isGradient: true,
         loading: isLoading,
         textStyle: TextStyle(
