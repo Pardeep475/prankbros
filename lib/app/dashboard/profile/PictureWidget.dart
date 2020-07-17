@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/popups/CustomImagePickerDialog.dart';
 import 'package:prankbros2/utils/AppColors.dart';
+import 'package:prankbros2/utils/AppConstantHelper.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 
@@ -11,9 +12,11 @@ class PictureWidget extends StatefulWidget {
 }
 
 class _PictureWidgetState extends State<PictureWidget> {
+  AppConstantHelper helper = AppConstantHelper();
+  var filePath = "";
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return _picturesWidget();
   }
 
@@ -33,7 +36,7 @@ class _PictureWidgetState extends State<PictureWidget> {
               width: Dimens.seventyFour,
               decoration: BoxDecoration(
                   borderRadius:
-                      BorderRadius.all(Radius.circular(Dimens.fifty)),
+                  BorderRadius.all(Radius.circular(Dimens.fifty)),
                   color: AppColors.light_gray),
               child: Center(
                 child: Image.asset(
@@ -50,6 +53,14 @@ class _PictureWidgetState extends State<PictureWidget> {
   }
 
   void _selectImageButton() {
-    showDialog(context: context, builder: (_) => CustomImagePickerDialog());
+    showDialog(context: context,
+        builder: (_) => CustomImagePickerDialog(context, (filePicked)
+        {
+        print("File Picked$filePicked");
+
+        filePath = filePicked.path;
+        debugPrint('file path is :--      $filePath');
+        setState(() {});
+        }));
   }
 }

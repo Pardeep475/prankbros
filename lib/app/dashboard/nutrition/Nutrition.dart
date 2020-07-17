@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/nutrition/NutritionBloc.dart';
-import 'package:prankbros2/app/dashboard/nutrition/NutritionDetail.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithColor.dart';
 import 'package:prankbros2/models/NutritionRecipeModel.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
@@ -9,6 +8,7 @@ import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
+import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
@@ -26,6 +26,10 @@ class Nutrition extends StatefulWidget {
 class _NutritionState extends State<Nutrition> {
   _NutritionState({this.onPush});
 
+  static const Key allNutritionKey = Key(Keys.allNutritionKey);
+  static const Key mixNutritionKey = Key(Keys.mixNutritionKey);
+  static const Key vegNutritionKey = Key(Keys.vegNutritionKey);
+  static const Key fevNutritionKey = Key(Keys.fevNutritionKey);
   final ValueChanged<int> onPush;
   List<NutritionRecipeModel> recipeList = new List();
   NutritionBloc _nutritionBloc;
@@ -43,7 +47,7 @@ class _NutritionState extends State<Nutrition> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _sessionManager.getUserModel().then((value) {
-      debugPrint("userdata   :        ${value}");
+      debugPrint("userdata   :        $value");
       if (value != null) {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
@@ -64,18 +68,6 @@ class _NutritionState extends State<Nutrition> {
     });
   }
 
-  void _recipeList() {
-    for (var i = 0; i < 10; i++) {
-      if (i % 2 == 0) {
-        recipeList.add(NutritionRecipeModel('Frische Erbsen mit ßasmati Reis',
-            '927 kcal', '15min', Images.DummyFood));
-      } else {
-        recipeList.add(NutritionRecipeModel(
-            'Gruner', '927 kcal', '15min', Images.DummyFood));
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,8 +76,14 @@ class _NutritionState extends State<Nutrition> {
       body: Stack(
         children: <Widget>[
           Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             child: BackgroundWidgetWithColor(
               curveColor: AppColors.workoutDetail2BackColor,
             ),
@@ -121,8 +119,31 @@ class _NutritionState extends State<Nutrition> {
                   SizedBox(
                     height: Dimens.thirtyFive,
                   ),
-                  _tabBarWidget(),
-                  _tabBarViewWidget()
+                  StreamBuilder<NutritionsApiResponse>(
+                      initialData: null,
+                      stream: _nutritionBloc.nutritionStream,
+                      builder: (context, snapshot) {
+                        if (snapshot != null && snapshot.data != null) {
+                          return Expanded(
+                            child: Column(
+                              children: <Widget>[
+                                _tabBarWidget(),
+                                _tabBarViewWidget(0, snapshot.data),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Expanded(
+                            child: Column(
+                              children: <Widget>[
+                                _tabBarWidget(),
+                                _tabBarViewWidget(1, null),
+                              ],
+                            ),
+                          );
+                        }
+
+                      })
                 ],
               ),
             ),
@@ -152,7 +173,7 @@ class _NutritionState extends State<Nutrition> {
           child: Align(
             alignment: Alignment.center,
             child:
-                Text(AppLocalizations.of(context).translate(Strings.MixedDiet)),
+            Text(AppLocalizations.of(context).translate(Strings.MixedDiet)),
           ),
         ),
         Tab(
@@ -166,43 +187,77 @@ class _NutritionState extends State<Nutrition> {
           child: Align(
             alignment: Alignment.center,
             child:
-                Text(AppLocalizations.of(context).translate(Strings.Favorites)),
+            Text(AppLocalizations.of(context).translate(Strings.Favorites)),
           ),
         ),
       ],
     );
   }
 
-  Widget _tabBarViewWidget() {
+  Widget _tabBarViewWidget(int index, NutritionsApiResponse item) {
     return Expanded(
-      child: StreamBuilder<List<AllNutritions>>(
-        initialData: null,
-          stream: _nutritionBloc.nutritionStream,
-          builder: (context, snapshot) {
-            if (snapshot != null &&
-                snapshot.data != null &&
-                snapshot.data.length > 0) {
-              debugPrint('value is ----->    ${snapshot.data.length}');
-              return TabBarView(
-                children: <Widget>[
-                  _nutritionWidget(0, snapshot.data),
-                  _nutritionWidget(1, snapshot.data),
-                  _nutritionWidget(2, snapshot.data),
-                  _nutritionWidget(3, snapshot.data),
-                ],
-              );
-            } else {
-              debugPrint('value is ----->    else');
-              return TabBarView(
-                children: <Widget>[
-                  _errorWidget(),
-                  _errorWidget(),
-                  _errorWidget(),
-                  _errorWidget(),
-                ],
-              );
-            }
-          }),
+      child: (() {
+        if (index == 0) {
+          return TabBarView(
+            children: <Widget>[
+              (() {
+                if (item.allNutritions != null &&
+                    item.allNutritions.length > 0) {
+                  _nutritionWidget(
+                      allNutritionKey, item.allNutritions);
+                } else {
+                  _errorWidget();
+                }
+              }()),
+              (() {
+                if (item.mixNutritions != null &&
+                    item.mixNutritions.length > 0) {
+                  _nutritionWidget(
+                      mixNutritionKey, item.mixNutritions);
+                } else {
+                  _errorWidget();
+                }
+              }()),
+              (() {
+                if (item.vegNutritions != null &&
+                    item.vegNutritions.length > 0) {
+                  _nutritionWidget(
+                      vegNutritionKey, item.vegNutritions);
+                } else {
+                  _errorWidget();
+                }
+              }()),
+              (() {
+                if (item.favoriteNutritions != null &&
+                    item.favoriteNutritions.length > 0) {
+                  _nutritionWidget(
+                      fevNutritionKey, item.favoriteNutritions);
+                } else {
+                  _errorWidget();
+                }
+              }()),
+            ],
+          );
+        } else if (index == 1) {
+          return TabBarView(
+            children: <Widget>[
+              _errorWidget(),
+              _errorWidget(),
+              _errorWidget(),
+              _errorWidget(),
+            ],
+          );
+        } else {
+          return TabBarView(
+            children: <Widget>[
+              _errorWidget(),
+              _errorWidget(),
+              _errorWidget(),
+              _errorWidget(),
+            ],
+          );
+        }
+      }()),
     );
   }
 
@@ -212,7 +267,7 @@ class _NutritionState extends State<Nutrition> {
         child: Text(
           'No data found',
           style: TextStyle(
-              color: AppColors.white,
+              color: AppColors.black_text,
               fontFamily: Strings.EXO_FONT,
               fontWeight: FontWeight.w700,
               fontSize: Dimens.thirty),
@@ -221,49 +276,17 @@ class _NutritionState extends State<Nutrition> {
     );
   }
 
-  Widget _nutritionWidget(int index, List<AllNutritions> list) {
-    List<AllNutritions> _nutritionList = new List();
-    for (int i = 0; i < list.length; i++) {
-      switch (index) {
-        case 0:
-          {
-            if (list[i].category.compareTo('Mixed_Diet') == 0) {
-              _nutritionList.add(list[i]);
-            }
-          }
-          break;
-        case 1:
-          {
-            if (list[i].category.compareTo('Vegetarian') == 0) {
-              _nutritionList.add(list[i]);
-            }
-          }
-          break;
-        case 2:
-          {
-            if (list[i].category.compareTo('Mixed_Diet') == 0) {
-              _nutritionList.add(list[i]);
-            }
-          }
-          break;
-        case 3:
-          {
-            if (list[i].category.compareTo('Vegetarian') == 0) {
-              _nutritionList.add(list[i]);
-            }
-          }
-          break;
-      }
-    }
+  Widget _nutritionWidget(Key key, List<NutritionData> list) {
     return Container(
       margin: EdgeInsets.only(top: Dimens.sixty),
       child: GridView.builder(
+        key: key,
         padding:
-            EdgeInsets.only(top: 0, left: 0, right: 0, bottom: Dimens.twenty),
+        EdgeInsets.only(top: 0, left: 0, right: 0, bottom: Dimens.twenty),
         itemBuilder: (context, position) {
-          return _verticalGridView(position, _nutritionList[position]);
+          return _verticalGridView(position, list[position]);
         },
-        itemCount: _nutritionList.length,
+        itemCount: list.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.73,
@@ -274,15 +297,16 @@ class _NutritionState extends State<Nutrition> {
     );
   }
 
-  void _OnItemClick(AllNutritions item) {
+  void _onItemClick(NutritionData item) {
 //    Navigator.push(context, MaterialPageRoute(builder: (context) => NutritionDetail()));
-    Navigator.pushNamed(context, Strings.NUTRITION_DETAIL_ROUTE,arguments: item);
+    Navigator.pushNamed(context, Strings.NUTRITION_DETAIL_ROUTE,
+        arguments: item);
 //    onPush(0);
   }
 
-  Widget _verticalGridView(int index, AllNutritions item) {
+  Widget _verticalGridView(int index, NutritionData item) {
     return InkWell(
-      onTap: () => _OnItemClick(item),
+      onTap: () => _onItemClick(item),
       child: Card(
         margin: EdgeInsets.all(Dimens.seven),
         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -294,7 +318,10 @@ class _NutritionState extends State<Nutrition> {
           children: <Widget>[
             FadeInImage(
                 fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 height: Dimens.ONE_TWO_FIVE,
                 image: NetworkImage(item.imagePath),
                 placeholder: AssetImage(Images.DummyFood)),

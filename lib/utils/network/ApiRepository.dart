@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/nutrition/NutritionActionModel.dart';
 import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
+import 'package:prankbros2/models/userweight/AddUserWeightApiResponse.dart';
+import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
 import 'package:prankbros2/utils/network/ApiEndPoints.dart';
 import '../Strings.dart';
 import 'ApiHelper.dart';
@@ -69,7 +71,6 @@ class ApiRepository {
   Future<LoginResponse> actionFavNutrition(
     NutritionActionModel nutritationModel,
   ) async {
-
     var json = jsonEncode(nutritationModel.toJson());
 
     var response = await apiHelper.postJson(
@@ -77,5 +78,29 @@ class ApiRepository {
         formData: json);
     Map<String, dynamic> data = jsonDecode(response);
     return LoginResponse.fromJson(data);
+  }
+
+  Future<GetUserWeightApiResponse> getUserWeight({
+    String userId,
+  }) async {
+    var response = await apiHelper.get(
+        apiUrl:
+            '${Strings.BASE_URL}${ApiEndPoints.getUserWeight}?userId=$userId');
+    Map<String, dynamic> data = jsonDecode(response);
+    return GetUserWeightApiResponse.fromJson(data);
+  }
+
+  Future<AddUserWeightApiResponse> addUserWeight({
+    String userId,
+    String weight,
+  }) async {
+    var json = {
+      "userId": userId,
+      "weight": weight,
+    };
+    var response = await apiHelper.postJson(
+        apiUrl: Strings.BASE_URL + ApiEndPoints.addUserWeight, formData: json);
+    Map<String, dynamic> data = jsonDecode(response);
+    return AddUserWeightApiResponse.fromJson(data);
   }
 }

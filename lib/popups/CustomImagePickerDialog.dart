@@ -1,14 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:prankbros2/utils/AppColors.dart';
+import 'package:prankbros2/utils/AppConstantHelper.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Strings.dart';
 
 class CustomImagePickerDialog extends StatelessWidget {
+  AppConstantHelper helper = AppConstantHelper();
+  Function(File) onFilePicked;
+  CustomImagePickerDialog(context, Function(File) onFilePicked);
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return SafeArea(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
@@ -35,6 +42,9 @@ class CustomImagePickerDialog extends StatelessWidget {
                             ),
                             onTap: () {
                               print('Add photo');
+                              requestPermission(Permission.camera, true);
+
+                              Navigator.pop(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -72,6 +82,12 @@ class CustomImagePickerDialog extends StatelessWidget {
                             ),
                             onTap: () {
                               print('Add photo from gallery');
+                              if (Platform.isAndroid)
+                                requestPermission(Permission.storage, false);
+                              else
+                                requestPermission(Permission.photos, false);
+
+                              Navigator.pop(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -125,5 +141,21 @@ class CustomImagePickerDialog extends StatelessWidget {
 
   void _dismissLanguagePopUp(BuildContext context) {
     Navigator.pop(context);
+  }
+
+  Future<void> requestPermission(Permission permission, bool isCamera) async {
+    Map<Permission, PermissionStatus> statuses = await [permission].request();
+    PermissionStatus permissionStatus = statuses[permission];
+    print("pickImage>>>>>${permissionStatus}");
+    if (permissionStatus == PermissionStatus.granted) {
+      await helper.pickImage(
+          isCamera: isCamera,
+          imagePicked: (file) {
+            print("pickImage>>>>>${file.path}");
+            onFilePicked(file);
+          });
+    } else {
+      helper.showAlert(true, "need permission");
+    }
   }
 }

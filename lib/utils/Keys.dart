@@ -16,8 +16,12 @@ class Keys {
   static const String noResetKey = 'noResetKey';
   static const String doneChangeWeekKey = 'doneChangeWeekKey';
   static const String downloadWorkoutButtonKey  = 'downloadWorkoutButtonKey ';
-  static const String gradientLoadingKey  = 'gradientLoading ';
-  static const String grayLoadingKey  = 'grayLoading ';
+  static const String gradientLoadingKey  = 'gradientLoading';
+  static const String grayLoadingKey  = 'grayLoading';
+  static const String allNutritionKey  = 'allNutritionKey';
+  static const String mixNutritionKey  = 'mixNutritionKey';
+  static const String vegNutritionKey  = 'vegNutritionKey';
+  static const String fevNutritionKey  = 'fevNutritionKey';
 
   // session manager keys
 

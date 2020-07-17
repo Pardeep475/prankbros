@@ -5,5 +5,7 @@ class ApiEndPoints {
   static const String resetYourProgram = "users/reset-user-program";
   static const String getAllNutritions = "users/get-nutritions";
   static const String nutritionActionModel = "users/action-favorite-nutrition";
+  static const String addUserWeight = "users/add-user-weight";
+  static const String getUserWeight = "users/get-user-weights";
 
 }

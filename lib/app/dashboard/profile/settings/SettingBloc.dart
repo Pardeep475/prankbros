@@ -10,7 +10,6 @@ import 'package:rxdart/rxdart.dart';
 
 class SettingBloc {
   Stream get progressStream => progressController.stream;
-
   final BehaviorSubject progressController = BehaviorSubject<bool>();
   StreamSink get progressSink => progressController.sink;
   ApiRepository apiRepository = ApiRepository();

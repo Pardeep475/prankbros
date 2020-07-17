@@ -1,15 +1,42 @@
 class NutritionsApiResponse {
-  List<AllNutritions> allNutritions;
+  List<NutritionData> allNutritions;
+  List<NutritionData> mixNutritions;
+  List<NutritionData> vegNutritions;
+  List<NutritionData> favoriteNutritions;
   String message;
   int status;
 
-  NutritionsApiResponse({this.allNutritions, this.message, this.status});
+  NutritionsApiResponse(
+      {this.allNutritions,
+        this.mixNutritions,
+        this.vegNutritions,
+        this.favoriteNutritions,
+        this.message,
+        this.status});
 
   NutritionsApiResponse.fromJson(Map<String, dynamic> json) {
     if (json['allNutritions'] != null) {
-      allNutritions = new List<AllNutritions>();
+      allNutritions = new List<NutritionData>();
       json['allNutritions'].forEach((v) {
-        allNutritions.add(new AllNutritions.fromJson(v));
+        allNutritions.add(new NutritionData.fromJson(v));
+      });
+    }
+    if (json['mixNutritions'] != null) {
+      mixNutritions = new List<NutritionData>();
+      json['mixNutritions'].forEach((v) {
+        mixNutritions.add(new NutritionData.fromJson(v));
+      });
+    }
+    if (json['vegNutritions'] != null) {
+      vegNutritions = new List<NutritionData>();
+      json['vegNutritions'].forEach((v) {
+        vegNutritions.add(new NutritionData.fromJson(v));
+      });
+    }
+    if (json['favoriteNutritions'] != null) {
+      favoriteNutritions = new List<NutritionData>();
+      json['favoriteNutritions'].forEach((v) {
+        favoriteNutritions.add(new NutritionData.fromJson(v));
       });
     }
     message = json['message'];
@@ -22,19 +49,31 @@ class NutritionsApiResponse {
       data['allNutritions'] =
           this.allNutritions.map((v) => v.toJson()).toList();
     }
+    if (this.mixNutritions != null) {
+      data['mixNutritions'] =
+          this.mixNutritions.map((v) => v.toJson()).toList();
+    }
+    if (this.vegNutritions != null) {
+      data['vegNutritions'] =
+          this.vegNutritions.map((v) => v.toJson()).toList();
+    }
+    if (this.favoriteNutritions != null) {
+      data['favoriteNutritions'] =
+          this.favoriteNutritions.map((v) => v.toJson()).toList();
+    }
     data['message'] = this.message;
     data['status'] = this.status;
     return data;
   }
 }
 
-class AllNutritions {
+class NutritionData {
   String imagePath;
   String nameEN;
   List<Steps> steps;
   String feddingTime;
-  bool deleted;
   String nameDE;
+  bool deleted;
   String thumbnailPath;
   List<Ingredients> ingredients;
   String time;
@@ -43,22 +82,22 @@ class AllNutritions {
   bool favorite;
   String energy;
 
-  AllNutritions(
+  NutritionData(
       {this.imagePath,
-      this.nameEN,
-      this.steps,
-      this.feddingTime,
-      this.deleted,
-      this.nameDE,
-      this.thumbnailPath,
-      this.ingredients,
-      this.time,
-      this.id,
-      this.category,
-      this.favorite,
-      this.energy});
+        this.nameEN,
+        this.steps,
+        this.feddingTime,
+        this.nameDE,
+        this.deleted,
+        this.thumbnailPath,
+        this.ingredients,
+        this.time,
+        this.id,
+        this.category,
+        this.favorite,
+        this.energy});
 
-  AllNutritions.fromJson(Map<String, dynamic> json) {
+  NutritionData.fromJson(Map<String, dynamic> json) {
     imagePath = json['imagePath'];
     nameEN = json['nameEN'];
     if (json['steps'] != null) {
@@ -68,8 +107,8 @@ class AllNutritions {
       });
     }
     feddingTime = json['feddingTime'];
-    deleted = json['deleted'];
     nameDE = json['nameDE'];
+    deleted = json['deleted'];
     thumbnailPath = json['thumbnailPath'];
     if (json['ingredients'] != null) {
       ingredients = new List<Ingredients>();
@@ -92,8 +131,8 @@ class AllNutritions {
       data['steps'] = this.steps.map((v) => v.toJson()).toList();
     }
     data['feddingTime'] = this.feddingTime;
-    data['deleted'] = this.deleted;
     data['nameDE'] = this.nameDE;
+    data['deleted'] = this.deleted;
     data['thumbnailPath'] = this.thumbnailPath;
     if (this.ingredients != null) {
       data['ingredients'] = this.ingredients.map((v) => v.toJson()).toList();
@@ -103,30 +142,6 @@ class AllNutritions {
     data['category'] = this.category;
     data['favorite'] = this.favorite;
     data['energy'] = this.energy;
-    return data;
-  }
-}
-
-class Ingredients {
-  int id;
-  String itemDE;
-  String itemEN;
-  String nutrition_id;
-
-  Ingredients({this.id, this.itemDE, this.itemEN, this.nutrition_id});
-
-  Ingredients.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    itemDE = json['itemDE'];
-    itemEN = json['itemEN'];
-    nutrition_id = json['nutrition_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['itemDE'] = this.itemDE;
-    data['itemEN'] = this.itemEN;
     return data;
   }
 }
@@ -152,6 +167,30 @@ class Steps {
     data['nutrition_id'] = this.nutritionId;
     data['itemDE'] = this.itemDE;
     data['id'] = this.id;
+    return data;
+  }
+}
+
+class Ingredients {
+  int id;
+  String itemDE;
+  String itemEN;
+  String nutrition_id;
+
+  Ingredients({this.id, this.itemDE, this.itemEN, this.nutrition_id});
+
+  Ingredients.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    itemDE = json['itemDE'];
+    itemEN = json['itemEN'];
+    nutrition_id = json['nutrition_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['itemDE'] = this.itemDE;
+    data['itemEN'] = this.itemEN;
     return data;
   }
 }

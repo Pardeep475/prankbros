@@ -32,7 +32,7 @@ class _NutritionDetail extends State<NutritionDetail> {
     _sessionManager = new SessionManager();
 
     _sessionManager.getUserModel().then((value) {
-      debugPrint("userdata   :        ${value}");
+      debugPrint("userdata   :        $value");
       if (value != null) {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
@@ -71,7 +71,7 @@ class _NutritionDetail extends State<NutritionDetail> {
     }
   }
 
-  Widget _nutritionDetailWidget(AllNutritions args) {
+  Widget _nutritionDetailWidget(NutritionData args) {
     return Stack(
       children: <Widget>[
         Column(
@@ -216,8 +216,7 @@ class _NutritionDetail extends State<NutritionDetail> {
                   if (_buttonClick == 0) {
                     return _methodItemBuilder(ctxt, index, args.steps[index]);
                   } else {
-                    return _ingredientsItemBuilder(
-                        ctxt, index, args.ingredients[index]);
+                    return _ingredientsItemBuilder(ctxt, index, args.ingredients[index]);
                   }
                 },
               ),
@@ -288,8 +287,7 @@ class _NutritionDetail extends State<NutritionDetail> {
     );
   }
 
-  Widget _ingredientsItemBuilder(
-      BuildContext ctxt, int index, Ingredients ingredients) {
+  Widget _ingredientsItemBuilder(BuildContext ctxt, int index, Ingredients ingredients) {
     return Column(
       children: <Widget>[
         Row(
@@ -332,7 +330,7 @@ class _NutritionDetail extends State<NutritionDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final AllNutritions args = ModalRoute.of(context).settings.arguments;
+    final NutritionData args = ModalRoute.of(context).settings.arguments;
     return Stack(
       children: <Widget>[
         BackgroundWidgetWithImage(
