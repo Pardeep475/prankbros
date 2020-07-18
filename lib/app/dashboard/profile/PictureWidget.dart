@@ -30,7 +30,7 @@ class _PictureWidgetState extends State<PictureWidget> {
     _pictureWidgetBloc = new PictureWidgetBloc();
     _sessionManager = new SessionManager();
     _sessionManager.getUserModel().then((value) {
-      debugPrint("userdata   :        ${value}");
+      debugPrint("userdata   :        $value");
       if (value != null) {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
@@ -74,7 +74,7 @@ class _PictureWidgetState extends State<PictureWidget> {
               if(snapshot.data != null){
                 return GridView.builder(
                   padding: EdgeInsets.only(
-                      top: 0, left: 0, right: 0, bottom: Dimens.twenty),
+                      top: 0, left: Dimens.ten, right: Dimens.twenty, bottom: Dimens.twenty),
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, position) {
                     debugPrint('------------>itembuilder   ${position}');
@@ -82,7 +82,7 @@ class _PictureWidgetState extends State<PictureWidget> {
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
-                    childAspectRatio: 4/4,
+                    childAspectRatio: 4/3.5,
                   ),
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
@@ -133,17 +133,20 @@ class _PictureWidgetState extends State<PictureWidget> {
 
   Widget _mainItem(String item) {
     debugPrint('imageitem:--->   $item');
-    return Container(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+    return Padding(
+      padding: EdgeInsets.only(left: Dimens.ten),
+      child: Container(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: FadeInImage(
+            fit: BoxFit.cover,
+            width: Dimens.seventy,
+            height: Dimens.fifty,
+            image: NetworkImage(item),
+            placeholder: AssetImage(Images.DummyFood)),
       ),
-      child: FadeInImage(
-          fit: BoxFit.cover,
-          width: Dimens.seventy,
-          height: Dimens.fifty,
-          image: NetworkImage(item),
-          placeholder: AssetImage(Images.DummyFood)),
     );
   }
 
