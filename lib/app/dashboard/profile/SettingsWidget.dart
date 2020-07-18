@@ -223,7 +223,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 
   void _languagePressed(BuildContext context) {
-    showDialog(context: context, builder: (_) => CustomLanguageDialog());
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => CustomLanguageDialog());
   }
 
   void _supportPressed() {

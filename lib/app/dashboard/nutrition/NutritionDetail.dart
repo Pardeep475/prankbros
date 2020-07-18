@@ -342,7 +342,7 @@ class _NutritionDetail extends State<NutritionDetail> {
     return Stack(
       children: <Widget>[
         BackgroundWidgetWithImage(
-          imagePath: Images.DummyFood,
+          imagePath: args.imagePath,
           curveColor: AppColors.white,
         ),
         Scaffold(

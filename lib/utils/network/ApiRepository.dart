@@ -131,10 +131,21 @@ class ApiRepository {
     });
 
     var response = await apiHelper.postJson(
-        apiUrl: Strings.BASE_URL + ApiEndPoints.addUserWeight, formData: formData);
+        apiUrl: Strings.BASE_URL + ApiEndPoints.addUserProfileImages, formData: formData);
     Map<String, dynamic> data = jsonDecode(response);
     return AddProfileImagesApiResponse.fromJson(data);
   }
 
+  Future<LoginResponse> changeLanguage(
+      String userId,
+      String language,
+      ) async {
+    var value = {'userId': userId,'language':language};
+    var response = await apiHelper.postJson(
+        apiUrl: Strings.BASE_URL + ApiEndPoints.changeLanguage,
+        formData: value);
+    Map<String, dynamic> data = jsonDecode(response);
+    return LoginResponse.fromJson(data);
+  }
 
 }

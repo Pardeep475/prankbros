@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/profile/picturewidget/PictureWidgetBloc.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/models/profileimage/GetProfileImagesApiResponse.dart';
 import 'package:prankbros2/popups/CustomImagePickerDialog.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/AppConstantHelper.dart';
@@ -61,38 +62,85 @@ class _PictureWidgetState extends State<PictureWidget> {
   }
 
   Widget _picturesWidget() {
-    return Container(
-      margin: EdgeInsets.only(top: 100),
-      child: Center(
-        child: Material(
-          child: InkWell(
-            onTap: () {
-              _selectImageButton();
-            },
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.fifty)),
-            child: Container(
-              height: Dimens.seventyFour,
-              width: Dimens.seventyFour,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(Dimens.fifty)),
-                  color: AppColors.light_gray),
-              child: Center(
-                child: Image.asset(
-                  Images.ICON_PLUS,
-                  height: Dimens.twentyFour,
-                  width: Dimens.twentyFour,
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          height: Dimens.hundred,
+        ),
+        StreamBuilder<List<UserProfileImages>>(
+            initialData: null,
+            stream: _pictureWidgetBloc.weightStream,
+            builder: (context, snapshot) {
+              if(snapshot.data != null){
+                return GridView.builder(
+                  padding: EdgeInsets.only(
+                      top: 0, left: 0, right: 0, bottom: Dimens.twenty),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, position) {
+                    debugPrint('------------>itembuilder   ${position}');
+                    return _mainItem(snapshot.data[position].imagePath);
+                  },
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    childAspectRatio: 0.73,
+                  ),
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                );
+              }else{
+                return SizedBox(height: 0,width: 0,);
+              }
+            }),
+        Center(
+          child: Material(
+            child: InkWell(
+              onTap: () {
+                _selectImageButton();
+              },
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.fifty)),
+              child: Container(
+                height: Dimens.seventyFour,
+                width: Dimens.seventyFour,
+                decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(Dimens.fifty)),
+                    color: AppColors.light_gray),
+                child: Center(
+                  child: Image.asset(
+                    Images.ICON_PLUS,
+                    height: Dimens.twentyFour,
+                    width: Dimens.twentyFour,
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 
+  Widget _headerItem(String item) {
+    return Text(
+      item,
+      style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: Dimens.twenty,
+          color: AppColors.black_text,
+          fontFamily: Strings.EXO_FONT),
+    );
+  }
+
+  Widget _mainItem(String item) {
+    return FadeInImage(
+        fit: BoxFit.cover,
+        width: Dimens.seventyFive,
+        height: Dimens.seventyFive,
+        image: NetworkImage(item),
+        placeholder: AssetImage(Images.DummyFood));
+  }
+
   void _selectImageButton() {
-    showDialog(
-        context: context,
-        builder: (_) => CustomImagePickerDialog());
+    showDialog(context: context, builder: (_) => CustomImagePickerDialog());
   }
 }

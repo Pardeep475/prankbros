@@ -9,5 +9,6 @@ class ApiEndPoints {
   static const String getUserWeight = "users/get-user-weights";
   static const String getUserProfileImages = "users/get-user-profile-images";
   static const String addUserProfileImages = "users/upload-profile-image";
+  static const String changeLanguage = "users/update-app-language";
 
 }

@@ -229,6 +229,4 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       _saveButtonLoading = _saveButtonLoading ? false : true;
     });
   }
-
-
 }

@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/profile/changelanguage/ChangeLanguageBloc.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Keys.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class CustomLanguageDialog extends StatefulWidget {
@@ -17,10 +21,34 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
   static const Key changeLanguageKey = Key(Keys.changeLanguageKey);
   bool isLoading = false;
   int language = 0; // 0 for Deutch, 1 for ENGLISH
+  SessionManager _sessionManager;
+  String userId = '';
+  ChangeLanguageBloc _changeLanguageBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _changeLanguageBloc = new ChangeLanguageBloc();
+    _sessionManager = new SessionManager();
+    _sessionManager.getUserModel().then((value) {
+      if (value != null) {
+        UserDetails userData = UserDetails.fromJson(value);
+        userId = userData.id.toString();
+        if(userData.language.compareTo('ENGLISH')== 0){
+          language = 1;
+        }else{
+          language = 0;
+        }
+        setState(() {
+
+        });
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
       child: Center(
@@ -199,6 +227,7 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
     setState(() {
       isLoading = isLoading ? false : true;
     });
+    changeLanguage();
   }
 
   void _selectLanguage(int langValue) {
@@ -206,6 +235,30 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
       language = langValue;
     });
   }
+
+  void changeLanguage() {
+    if (userId == null || userId.isEmpty) {
+      Utils.showSnackBar('Something went wrong.', context);
+      return;
+    }
+    var languageString = 'DEUTCH';
+    if (language == 0){
+      languageString = 'DEUTCH';
+    }else{
+      languageString = 'ENGLISH';
+    }
+    debugPrint("language code ----->   ${languageString}");
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        _changeLanguageBloc.changeLanguage(userId,languageString, context);
+      } else {
+        Navigator.pop(context);
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
+    });
+  }
+
 
   void _dismissLanguagePopUp(BuildContext context) {
     Navigator.pop(context);

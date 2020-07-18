@@ -30,6 +30,8 @@ class UserDetails {
   int influencerId;
   String password;
   bool deleted;
+  String language;
+  int trainingWeek;
   int id;
   String accessToken;
   String createdOn;
@@ -42,6 +44,8 @@ class UserDetails {
         this.influencerId,
         this.password,
         this.deleted,
+        this.language,
+        this.trainingWeek,
         this.id,
         this.accessToken,
         this.createdOn,
@@ -54,6 +58,8 @@ class UserDetails {
     influencerId = json['influencerId'];
     password = json['password'];
     deleted = json['deleted'];
+    language = json['language'];
+    trainingWeek = json['trainingWeek'];
     id = json['id'];
     accessToken = json['accessToken'];
     createdOn = json['createdOn'];
@@ -68,6 +74,8 @@ class UserDetails {
     data['influencerId'] = this.influencerId;
     data['password'] = this.password;
     data['deleted'] = this.deleted;
+    data['language'] = this.language;
+    data['trainingWeek'] = this.trainingWeek;
     data['id'] = this.id;
     data['accessToken'] = this.accessToken;
     data['createdOn'] = this.createdOn;

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/nutrition/NutritionBloc.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithColor.dart';
+import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/models/NutritionRecipeModel.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
@@ -114,16 +115,35 @@ class _NutritionState extends State<Nutrition> {
                     height: Dimens.thirtyFive,
                   ),
                   _tabBarWidget(),
-                  StreamBuilder<NutritionsApiResponse>(
-                      initialData: null,
-                      stream: _nutritionBloc.nutritionStream,
-                      builder: (context, snapshot) {
-                        if (snapshot != null && snapshot.data != null) {
-                          return _tabBarViewWidget(0, snapshot.data);
-                        } else {
-                          return _tabBarViewWidget(1, null);
-                        }
-                      })
+                  StreamBuilder<bool>(
+                    initialData: true,
+                    stream: _nutritionBloc.progressStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.data) {
+                        return Expanded(
+                          child: TabBarView(
+                            children: <Widget>[
+                              progressWidget(),
+                              progressWidget(),
+                              progressWidget(),
+                              progressWidget(),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return StreamBuilder<NutritionsApiResponse>(
+                            initialData: null,
+                            stream: _nutritionBloc.nutritionStream,
+                            builder: (context, snapshot) {
+                              if (snapshot != null && snapshot.data != null) {
+                                return _tabBarViewWidget(0, snapshot.data);
+                              } else {
+                                return _tabBarViewWidget(1, null);
+                              }
+                            });
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -174,6 +194,10 @@ class _NutritionState extends State<Nutrition> {
     );
   }
 
+  Widget progressWidget() {
+    return Center(child: CommonProgressIndicator(true));
+  }
+
   Widget _tabBarViewWidget(int index, NutritionsApiResponse item) {
     debugPrint('------------>${item}');
     return Expanded(
@@ -183,17 +207,17 @@ class _NutritionState extends State<Nutrition> {
             children: <Widget>[
               item.allNutritions != null && item.allNutritions.length > 0
                   ? _nutritionWidget(item.allNutritions)
-                  : _errorWidget(),
+                  : _errorWidget(value: 'No data found'),
               item.mixNutritions != null && item.mixNutritions.length > 0
                   ? _nutritionWidget(item.mixNutritions)
-                  : _errorWidget(),
+                  : _errorWidget(value: 'No data found'),
               item.vegNutritions != null && item.vegNutritions.length > 0
                   ? _nutritionWidget(item.vegNutritions)
-                  : _errorWidget(),
-              item.favoriteNutritions != null && item.favoriteNutritions.length > 0
+                  : _errorWidget(value: 'No data found'),
+              item.favoriteNutritions != null &&
+                      item.favoriteNutritions.length > 0
                   ? _nutritionWidget(item.favoriteNutritions)
-                  : _errorWidget(),
-
+                  : _errorWidget(value: 'No data found'),
             ],
           );
         } else if (index == 1) {
@@ -220,11 +244,11 @@ class _NutritionState extends State<Nutrition> {
     ;
   }
 
-  Widget _errorWidget() {
+  Widget _errorWidget({String value =''}) {
     return Container(
       child: Center(
         child: Text(
-          'No data found',
+          value,
           style: TextStyle(
               color: AppColors.black_text,
               fontFamily: Strings.EXO_FONT,
@@ -245,7 +269,7 @@ class _NutritionState extends State<Nutrition> {
         itemCount: list.length,
         itemBuilder: (context, position) {
           debugPrint('------------>itembuilder   ${position}');
-          return _verticalGridView(position,list[position]);
+          return _verticalGridView(position, list[position]);
         },
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,

@@ -13,12 +13,12 @@ class BackgroundWidgetWithImage extends StatelessWidget {
     // TODO: implement build
     return Stack(
       children: <Widget>[
-        Image.asset(
-          imagePath,
-          height: MediaQuery.of(context).size.height / 2.7,
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.cover,
-        ),
+        FadeInImage(
+            height: MediaQuery.of(context).size.height / 2.7,
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.cover,
+            image: NetworkImage(imagePath),
+            placeholder: AssetImage(Images.DummyFood)),
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
