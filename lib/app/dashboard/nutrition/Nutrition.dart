@@ -76,14 +76,8 @@ class _NutritionState extends State<Nutrition> {
       body: Stack(
         children: <Widget>[
           Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
             child: BackgroundWidgetWithColor(
               curveColor: AppColors.workoutDetail2BackColor,
             ),
@@ -142,7 +136,6 @@ class _NutritionState extends State<Nutrition> {
                             ),
                           );
                         }
-
                       })
                 ],
               ),
@@ -173,7 +166,7 @@ class _NutritionState extends State<Nutrition> {
           child: Align(
             alignment: Alignment.center,
             child:
-            Text(AppLocalizations.of(context).translate(Strings.MixedDiet)),
+                Text(AppLocalizations.of(context).translate(Strings.MixedDiet)),
           ),
         ),
         Tab(
@@ -187,7 +180,7 @@ class _NutritionState extends State<Nutrition> {
           child: Align(
             alignment: Alignment.center,
             child:
-            Text(AppLocalizations.of(context).translate(Strings.Favorites)),
+                Text(AppLocalizations.of(context).translate(Strings.Favorites)),
           ),
         ),
       ],
@@ -195,6 +188,7 @@ class _NutritionState extends State<Nutrition> {
   }
 
   Widget _tabBarViewWidget(int index, NutritionsApiResponse item) {
+    debugPrint('------------>${item}');
     return Expanded(
       child: (() {
         if (index == 0) {
@@ -203,8 +197,7 @@ class _NutritionState extends State<Nutrition> {
               (() {
                 if (item.allNutritions != null &&
                     item.allNutritions.length > 0) {
-                  _nutritionWidget(
-                      allNutritionKey, item.allNutritions);
+                  _nutritionWidget(item.allNutritions);
                 } else {
                   _errorWidget();
                 }
@@ -212,8 +205,7 @@ class _NutritionState extends State<Nutrition> {
               (() {
                 if (item.mixNutritions != null &&
                     item.mixNutritions.length > 0) {
-                  _nutritionWidget(
-                      mixNutritionKey, item.mixNutritions);
+                  _nutritionWidget(item.mixNutritions);
                 } else {
                   _errorWidget();
                 }
@@ -221,8 +213,7 @@ class _NutritionState extends State<Nutrition> {
               (() {
                 if (item.vegNutritions != null &&
                     item.vegNutritions.length > 0) {
-                  _nutritionWidget(
-                      vegNutritionKey, item.vegNutritions);
+                  _nutritionWidget(item.vegNutritions);
                 } else {
                   _errorWidget();
                 }
@@ -230,8 +221,7 @@ class _NutritionState extends State<Nutrition> {
               (() {
                 if (item.favoriteNutritions != null &&
                     item.favoriteNutritions.length > 0) {
-                  _nutritionWidget(
-                      fevNutritionKey, item.favoriteNutritions);
+                  _nutritionWidget(item.favoriteNutritions);
                 } else {
                   _errorWidget();
                 }
@@ -276,24 +266,34 @@ class _NutritionState extends State<Nutrition> {
     );
   }
 
-  Widget _nutritionWidget(Key key, List<NutritionData> list) {
+  Widget _nutritionWidget( List<NutritionData> list) {
+    debugPrint('------------>${list.length}');
     return Container(
       margin: EdgeInsets.only(top: Dimens.sixty),
-      child: GridView.builder(
-        key: key,
-        padding:
-        EdgeInsets.only(top: 0, left: 0, right: 0, bottom: Dimens.twenty),
-        itemBuilder: (context, position) {
-          return _verticalGridView(position, list[position]);
-        },
-        itemCount: list.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.73,
-        ),
-        shrinkWrap: true,
-        physics: ClampingScrollPhysics(),
-      ),
+child:  Text(
+  'found',
+  style: TextStyle(
+      color: AppColors.black_text,
+      fontFamily: Strings.EXO_FONT,
+      fontWeight: FontWeight.w700,
+      fontSize: Dimens.thirty),
+),
+//      child: GridView.builder(
+//        key: key,
+//        padding:
+//        EdgeInsets.only(top: 0, left: 0, right: 0, bottom: Dimens.twenty),
+//        itemCount: list.length,
+//        itemBuilder: (context, position) {
+//          debugPrint('------------>itembuilder   ${position}');
+//          return _verticalGridView(position, list[position]);
+//        },
+//        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//          crossAxisCount: 2,
+//          childAspectRatio: 0.73,
+//        ),
+//        shrinkWrap: true,
+//        physics: ClampingScrollPhysics(),
+//      ),
     );
   }
 
@@ -318,10 +318,7 @@ class _NutritionState extends State<Nutrition> {
           children: <Widget>[
             FadeInImage(
                 fit: BoxFit.cover,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
+                width: MediaQuery.of(context).size.width,
                 height: Dimens.ONE_TWO_FIVE,
                 image: NetworkImage(item.imagePath),
                 placeholder: AssetImage(Images.DummyFood)),
