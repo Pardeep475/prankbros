@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/profile/updateprofile/UpdateProfileBloc.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Keys.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class ProfileWidget extends StatefulWidget {
@@ -18,13 +22,36 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       _lastNameController,
       _emailController;
   bool _saveButtonLoading = false;
+  UpdateProfileBloc _updateProfileBloc;
+  SessionManager _sessionManager;
+  String userId = '';
 
   @override
   void initState() {
     super.initState();
+    _updateProfileBloc = new UpdateProfileBloc();
+    _sessionManager = new SessionManager();
+    _updateValues();
     _firstNameController = TextEditingController();
     _lastNameController = TextEditingController();
     _emailController = TextEditingController();
+  }
+
+  void _updateValues() {
+    _sessionManager.getUserModel().then((value) {
+      debugPrint("userdata   :        ${value}");
+      if (value != null) {
+        UserDetails userData = UserDetails.fromJson(value);
+        debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
+        userId = userData.id.toString();
+        _firstNameController.text =
+            userData.firstName != null ? userData.firstName : '';
+        _lastNameController.text =
+            userData.lastName != null ? userData.lastName : '';
+        _emailController.text = userData.email != null ? userData.email : '';
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -72,15 +99,15 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               disabledBorder: InputBorder.none,
               hintStyle: TextStyle(
                   fontFamily: Strings.EXO_FONT,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: Dimens.SIXTEEN,
                   color: AppColors.light_text),
-              labelStyle: TextStyle(
-                  fontFamily: Strings.EXO_FONT,
-                  fontWeight: FontWeight.w700,
-                  fontSize: Dimens.SIXTEEN,
-                  color: AppColors.black_text),
             ),
+            style: TextStyle(
+                fontFamily: Strings.EXO_FONT,
+                fontWeight: FontWeight.w600,
+                fontSize: Dimens.SIXTEEN,
+                color: AppColors.black_text),
             controller: _firstNameController,
             textInputAction: TextInputAction.next,
             onSubmitted: (_) => FocusScope.of(context).nextFocus(),
@@ -121,15 +148,15 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               disabledBorder: InputBorder.none,
               hintStyle: TextStyle(
                   fontFamily: Strings.EXO_FONT,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: Dimens.SIXTEEN,
                   color: AppColors.light_text),
-              labelStyle: TextStyle(
-                  fontFamily: Strings.EXO_FONT,
-                  fontWeight: FontWeight.w700,
-                  fontSize: Dimens.SIXTEEN,
-                  color: AppColors.black_text),
             ),
+            style: TextStyle(
+                fontFamily: Strings.EXO_FONT,
+                fontWeight: FontWeight.w600,
+                fontSize: Dimens.SIXTEEN,
+                color: AppColors.black_text),
             controller: _lastNameController,
             textInputAction: TextInputAction.next,
             onSubmitted: (_) => FocusScope.of(context).nextFocus(),
@@ -170,15 +197,15 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               disabledBorder: InputBorder.none,
               hintStyle: TextStyle(
                   fontFamily: Strings.EXO_FONT,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: Dimens.SIXTEEN,
                   color: AppColors.light_text),
-              labelStyle: TextStyle(
-                  fontFamily: Strings.EXO_FONT,
-                  fontWeight: FontWeight.w700,
-                  fontSize: Dimens.SIXTEEN,
-                  color: AppColors.black_text),
             ),
+            style: TextStyle(
+                fontFamily: Strings.EXO_FONT,
+                fontWeight: FontWeight.w600,
+                fontSize: Dimens.SIXTEEN,
+                color: AppColors.black_text),
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.done,
@@ -209,7 +236,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         height: Dimens.SIXTY,
         width: MediaQuery.of(context).size.width,
         borderRadius: Dimens.THIRTY,
-        onPressed: _profileSavePressed,
+        onPressed: () {
+          _profileSavePressed(context);
+        },
         isGradient: true,
         loading: _saveButtonLoading,
         textStyle: TextStyle(
@@ -223,10 +252,42 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     );
   }
 
-  void _profileSavePressed() {
+  void _profileSavePressed(BuildContext context)  {
     print('Profile Saved !');
     setState(() {
-      _saveButtonLoading = _saveButtonLoading ? false : true;
+      _saveButtonLoading = true;
     });
+
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        if (_validation(context)) {
+         _updateProfileBloc.updateUserProfile(userId, _firstNameController.text,
+                  _lastNameController.text, _emailController.text, context).then((value){
+           setState(() {
+             _saveButtonLoading = false;
+           });
+           debugPrint('after api hit');
+         });
+
+        }
+      } else {
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
+    });
+  }
+
+  bool _validation(BuildContext context) {
+    if (Utils.checkNullOrEmpty(_firstNameController.text)) {
+      Utils.showSnackBar('Please enter your first name', context);
+      return false;
+    } else if (Utils.checkNullOrEmpty(_lastNameController.text)) {
+      Utils.showSnackBar('Please enter your last name', context);
+      return false;
+    } else if (Utils.checkNullOrEmpty(_emailController.text)) {
+      Utils.showSnackBar("please enter your email.", context);
+      return false;
+    }
+    return true;
   }
 }

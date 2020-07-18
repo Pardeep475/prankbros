@@ -10,11 +10,11 @@ import 'package:prankbros2/utils/network/AppConstantHelper.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginBloc {
-  Stream get progressStream => progressController.stream;
-
   final BehaviorSubject progressController = BehaviorSubject<bool>();
-
+  Stream get progressStream => progressController.stream;
   StreamSink get progressSink => progressController.sink;
+
+
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
 

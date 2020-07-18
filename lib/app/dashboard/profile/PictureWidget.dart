@@ -82,7 +82,7 @@ class _PictureWidgetState extends State<PictureWidget> {
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
-                    childAspectRatio: 0.73,
+                    childAspectRatio: 4/4,
                   ),
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
@@ -132,12 +132,19 @@ class _PictureWidgetState extends State<PictureWidget> {
   }
 
   Widget _mainItem(String item) {
-    return FadeInImage(
-        fit: BoxFit.cover,
-        width: Dimens.seventyFive,
-        height: Dimens.seventyFive,
-        image: NetworkImage(item),
-        placeholder: AssetImage(Images.DummyFood));
+    debugPrint('imageitem:--->   $item');
+    return Container(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: FadeInImage(
+          fit: BoxFit.cover,
+          width: Dimens.seventy,
+          height: Dimens.fifty,
+          image: NetworkImage(item),
+          placeholder: AssetImage(Images.DummyFood)),
+    );
   }
 
   void _selectImageButton() {

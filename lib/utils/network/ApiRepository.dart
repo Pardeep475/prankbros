@@ -6,6 +6,7 @@ import 'package:prankbros2/models/nutrition/NutritionActionModel.dart';
 import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
 import 'package:prankbros2/models/profileimage/AddProfileImagesApiResponse.dart';
 import 'package:prankbros2/models/profileimage/GetProfileImagesApiResponse.dart';
+import 'package:prankbros2/models/updateprofile/UpdateProfileApiResponse.dart';
 import 'package:prankbros2/models/userweight/AddUserWeightApiResponse.dart';
 import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
 import 'package:prankbros2/utils/network/ApiEndPoints.dart';
@@ -146,6 +147,20 @@ class ApiRepository {
         formData: value);
     Map<String, dynamic> data = jsonDecode(response);
     return LoginResponse.fromJson(data);
+  }
+
+  Future<UpdateProfileApiResponse> updateUserProfile(
+      String userId,
+      String firstName,
+      String lastName,
+      String email,
+      ) async {
+    var value = {'id': userId,'firstName':firstName,'lastName': lastName,'email':email};
+    var response = await apiHelper.postJson(
+        apiUrl: Strings.BASE_URL + ApiEndPoints.updateProfile,
+        formData: value);
+    Map<String, dynamic> data = jsonDecode(response);
+    return UpdateProfileApiResponse.fromJson(data);
   }
 
 }

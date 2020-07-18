@@ -225,7 +225,7 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
   void _changeLanguage(BuildContext context) {
     print('clicked   $isLoading');
     setState(() {
-      isLoading = isLoading ? false : true;
+      isLoading = true;
     });
     changeLanguage();
   }
