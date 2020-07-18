@@ -64,6 +64,7 @@ class AppConstantHelper {
 
     if (imageFile != null) {
       print("imageFile>>${imageFile.path}");
+      imagePicked(imageFile);
     } else {
       showAlert(true, "Need Camera & Gellery Permission");
     }

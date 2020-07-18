@@ -7,5 +7,7 @@ class ApiEndPoints {
   static const String nutritionActionModel = "users/action-favorite-nutrition";
   static const String addUserWeight = "users/add-user-weight";
   static const String getUserWeight = "users/get-user-weights";
+  static const String getUserProfileImages = "users/get-user-profile-images";
+  static const String addUserProfileImages = "users/upload-profile-image";
 
 }

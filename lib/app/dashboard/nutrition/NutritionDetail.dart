@@ -216,7 +216,8 @@ class _NutritionDetail extends State<NutritionDetail> {
                   if (_buttonClick == 0) {
                     return _methodItemBuilder(ctxt, index, args.steps[index]);
                   } else {
-                    return _ingredientsItemBuilder(ctxt, index, args.ingredients[index]);
+                    return _ingredientsItemBuilder(
+                        ctxt, index, args.ingredients[index]);
                   }
                 },
               ),
@@ -228,8 +229,7 @@ class _NutritionDetail extends State<NutritionDetail> {
           stream: _nutritionDetailBloc.progressStream,
           builder: (context, snapshot) {
             return Center(
-                child:
-                    CommonProgressIndicator(snapshot.data ? true : false));
+                child: CommonProgressIndicator(snapshot.data ? true : false));
           },
         ),
       ],
@@ -245,8 +245,8 @@ class _NutritionDetail extends State<NutritionDetail> {
               width: Dimens.twentyFive,
             ),
             Container(
-              height: Dimens.forty,
-              width: Dimens.forty,
+              height: Dimens.thirtyFive,
+              width: Dimens.thirtyFive,
               decoration: BoxDecoration(
                 color: AppColors.light_gray,
                 borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
@@ -256,7 +256,7 @@ class _NutritionDetail extends State<NutritionDetail> {
                   (index + 1).toString(),
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: Dimens.seventeen,
+                      fontSize: Dimens.sixteen,
                       fontFamily: Strings.EXO_FONT,
                       color: AppColors.black_text),
                 ),
@@ -287,44 +287,52 @@ class _NutritionDetail extends State<NutritionDetail> {
     );
   }
 
-  Widget _ingredientsItemBuilder(BuildContext ctxt, int index, Ingredients ingredients) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            SizedBox(
-              width: Dimens.twentyFive,
-            ),
-            Container(
-              height: Dimens.three,
-              width: Dimens.three,
-              decoration: BoxDecoration(
-                color: AppColors.nutritionBackColor,
-                borderRadius: BorderRadius.all(Radius.circular(Dimens.ninety)),
+  Widget _ingredientsItemBuilder(
+      BuildContext ctxt, int index, Ingredients ingredients) {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                width: Dimens.twentyFive,
               ),
-            ),
-            SizedBox(
-              width: Dimens.twentyOne,
-            ),
-            Expanded(
-              child: Text(
-                ingredients.itemDE != null ? ingredients.itemDE : '',
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: Dimens.forteen,
-                    fontFamily: Strings.EXO_FONT,
-                    color: AppColors.light_text),
+              Container(
+                height: Dimens.six,
+                width: Dimens.six,
+                decoration: BoxDecoration(
+                  color: AppColors.nutritionBackColor,
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimens.ninety)),
+                ),
               ),
-            ),
-            SizedBox(
-              width: Dimens.twentyOne,
-            ),
-          ],
-        ),
-        SizedBox(
-          height: Dimens.ten,
-        ),
-      ],
+              SizedBox(
+                width: Dimens.twentyOne,
+              ),
+              Expanded(
+                child: Text(
+                  ingredients.itemDE != null ? ingredients.itemDE : '',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: Dimens.sixteen,
+                      fontFamily: Strings.EXO_FONT,
+                      color: AppColors.light_text),
+                ),
+              ),
+              SizedBox(
+                width: Dimens.twentyOne,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: Dimens.ten,
+          ),
+        ],
+      ),
     );
   }
 

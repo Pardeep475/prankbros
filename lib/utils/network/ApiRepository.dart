@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/nutrition/NutritionActionModel.dart';
 import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
+import 'package:prankbros2/models/profileimage/AddProfileImagesApiResponse.dart';
+import 'package:prankbros2/models/profileimage/GetProfileImagesApiResponse.dart';
 import 'package:prankbros2/models/userweight/AddUserWeightApiResponse.dart';
 import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
 import 'package:prankbros2/utils/network/ApiEndPoints.dart';
@@ -103,4 +106,35 @@ class ApiRepository {
     Map<String, dynamic> data = jsonDecode(response);
     return AddUserWeightApiResponse.fromJson(data);
   }
+
+  Future<GetProfileImagesApiResponse> getUserProfileImages({
+    String userId,
+  }) async {
+    var response = await apiHelper.get(
+        apiUrl:
+        '${Strings.BASE_URL}${ApiEndPoints.getUserProfileImages}?userId=$userId');
+    Map<String, dynamic> data = jsonDecode(response);
+    return GetProfileImagesApiResponse.fromJson(data);
+  }
+
+  Future<AddProfileImagesApiResponse> addUserProfileImage ({
+    String userId,
+    String path,
+  }) async {
+    FormData formData = new FormData.fromMap({
+      'userId': userId,
+      'file': path == null
+          ? ""
+          : await MultipartFile.fromFile(path,
+          filename: File(path).path.split('/').last),
+
+    });
+
+    var response = await apiHelper.postJson(
+        apiUrl: Strings.BASE_URL + ApiEndPoints.addUserWeight, formData: formData);
+    Map<String, dynamic> data = jsonDecode(response);
+    return AddProfileImagesApiResponse.fromJson(data);
+  }
+
+
 }

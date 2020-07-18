@@ -113,28 +113,15 @@ class _NutritionState extends State<Nutrition> {
                   SizedBox(
                     height: Dimens.thirtyFive,
                   ),
+                  _tabBarWidget(),
                   StreamBuilder<NutritionsApiResponse>(
                       initialData: null,
                       stream: _nutritionBloc.nutritionStream,
                       builder: (context, snapshot) {
                         if (snapshot != null && snapshot.data != null) {
-                          return Expanded(
-                            child: Column(
-                              children: <Widget>[
-                                _tabBarWidget(),
-                                _tabBarViewWidget(0, snapshot.data),
-                              ],
-                            ),
-                          );
+                          return _tabBarViewWidget(0, snapshot.data);
                         } else {
-                          return Expanded(
-                            child: Column(
-                              children: <Widget>[
-                                _tabBarWidget(),
-                                _tabBarViewWidget(1, null),
-                              ],
-                            ),
-                          );
+                          return _tabBarViewWidget(1, null);
                         }
                       })
                 ],
@@ -194,38 +181,19 @@ class _NutritionState extends State<Nutrition> {
         if (index == 0) {
           return TabBarView(
             children: <Widget>[
-              (() {
-                if (item.allNutritions != null &&
-                    item.allNutritions.length > 0) {
-                  _nutritionWidget(item.allNutritions);
-                } else {
-                  _errorWidget();
-                }
-              }()),
-              (() {
-                if (item.mixNutritions != null &&
-                    item.mixNutritions.length > 0) {
-                  _nutritionWidget(item.mixNutritions);
-                } else {
-                  _errorWidget();
-                }
-              }()),
-              (() {
-                if (item.vegNutritions != null &&
-                    item.vegNutritions.length > 0) {
-                  _nutritionWidget(item.vegNutritions);
-                } else {
-                  _errorWidget();
-                }
-              }()),
-              (() {
-                if (item.favoriteNutritions != null &&
-                    item.favoriteNutritions.length > 0) {
-                  _nutritionWidget(item.favoriteNutritions);
-                } else {
-                  _errorWidget();
-                }
-              }()),
+              item.allNutritions != null && item.allNutritions.length > 0
+                  ? _nutritionWidget(item.allNutritions)
+                  : _errorWidget(),
+              item.mixNutritions != null && item.mixNutritions.length > 0
+                  ? _nutritionWidget(item.mixNutritions)
+                  : _errorWidget(),
+              item.vegNutritions != null && item.vegNutritions.length > 0
+                  ? _nutritionWidget(item.vegNutritions)
+                  : _errorWidget(),
+              item.favoriteNutritions != null && item.favoriteNutritions.length > 0
+                  ? _nutritionWidget(item.favoriteNutritions)
+                  : _errorWidget(),
+
             ],
           );
         } else if (index == 1) {
@@ -249,6 +217,7 @@ class _NutritionState extends State<Nutrition> {
         }
       }()),
     );
+    ;
   }
 
   Widget _errorWidget() {
@@ -266,34 +235,25 @@ class _NutritionState extends State<Nutrition> {
     );
   }
 
-  Widget _nutritionWidget( List<NutritionData> list) {
+  Widget _nutritionWidget(List<NutritionData> list) {
     debugPrint('------------>${list.length}');
     return Container(
       margin: EdgeInsets.only(top: Dimens.sixty),
-child:  Text(
-  'found',
-  style: TextStyle(
-      color: AppColors.black_text,
-      fontFamily: Strings.EXO_FONT,
-      fontWeight: FontWeight.w700,
-      fontSize: Dimens.thirty),
-),
-//      child: GridView.builder(
-//        key: key,
-//        padding:
-//        EdgeInsets.only(top: 0, left: 0, right: 0, bottom: Dimens.twenty),
-//        itemCount: list.length,
-//        itemBuilder: (context, position) {
-//          debugPrint('------------>itembuilder   ${position}');
-//          return _verticalGridView(position, list[position]);
-//        },
-//        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//          crossAxisCount: 2,
-//          childAspectRatio: 0.73,
-//        ),
-//        shrinkWrap: true,
-//        physics: ClampingScrollPhysics(),
-//      ),
+      child: GridView.builder(
+        padding:
+            EdgeInsets.only(top: 0, left: 0, right: 0, bottom: Dimens.twenty),
+        itemCount: list.length,
+        itemBuilder: (context, position) {
+          debugPrint('------------>itembuilder   ${position}');
+          return _verticalGridView(position,list[position]);
+        },
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.73,
+        ),
+        shrinkWrap: true,
+        physics: ClampingScrollPhysics(),
+      ),
     );
   }
 
