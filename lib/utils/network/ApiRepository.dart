@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/models/motivation/MotivationApiResponse.dart';
 import 'package:prankbros2/models/nutrition/NutritionActionModel.dart';
 import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
 import 'package:prankbros2/models/profileimage/AddProfileImagesApiResponse.dart';
@@ -92,6 +93,16 @@ class ApiRepository {
             '${Strings.BASE_URL}${ApiEndPoints.getUserWeight}?userId=$userId');
     Map<String, dynamic> data = jsonDecode(response);
     return GetUserWeightApiResponse.fromJson(data);
+  }
+
+  Future<MotivationApiResponse> getMotivation({
+    String userId,
+  }) async {
+    var response = await apiHelper.get(
+        apiUrl:
+        '${Strings.BASE_URL}${ApiEndPoints.getMotivation}?userId=$userId');
+    Map<String, dynamic> data = jsonDecode(response);
+    return MotivationApiResponse.fromJson(data);
   }
 
   Future<AddUserWeightApiResponse> addUserWeight({

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/models/MotivationHistoryModel.dart';
+import 'package:prankbros2/models/motivation/MotivationApiResponse.dart';
 import 'package:prankbros2/popups/CustomChangeWeekDialog.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
@@ -8,16 +9,24 @@ import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Strings.dart';
 
 class HistoryWidget extends StatefulWidget {
+  final MotivationData motivationData;
+
+  HistoryWidget({this.motivationData});
+
   @override
-  State<StatefulWidget> createState() => _HistoryWidgetState();
+  State<StatefulWidget> createState() =>
+      _HistoryWidgetState(motivationData: this.motivationData);
 }
 
 class _HistoryWidgetState extends State<HistoryWidget> {
+  final MotivationData motivationData;
+
+  _HistoryWidgetState({this.motivationData});
+
   List<MotivationHistoryItem> _motivationHistoryList = new List();
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     _motivationHistoryListInit();
   }
@@ -41,7 +50,6 @@ class _HistoryWidgetState extends State<HistoryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return _historyWidget();
   }
 
@@ -120,7 +128,11 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                           SizedBox(
                             width: Dimens.fifteen,
                           ),
-                          Image.asset(Images.ICON_DOWN_ARROW,height: Dimens.sixteen,width: Dimens.sixteen,),
+                          Image.asset(
+                            Images.ICON_DOWN_ARROW,
+                            height: Dimens.sixteen,
+                            width: Dimens.sixteen,
+                          ),
                         ],
                       ),
                     ),

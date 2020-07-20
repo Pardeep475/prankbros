@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:prankbros2/models/profileimage/GetProfileImagesApiResponse.dart';
+import 'package:prankbros2/models/profileimage/PictureFinalModel.dart';
 import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
 import 'package:prankbros2/utils/AppConstantHelper.dart';
 import 'package:prankbros2/utils/Utils.dart';
@@ -17,7 +19,7 @@ class PictureWidgetBloc {
   StreamSink get progressSink => progressController.sink;
 
   final BehaviorSubject weightController =
-  BehaviorSubject<List<UserProfileImages>>();
+      BehaviorSubject<List<PictureFinalModel>>();
 
   Stream get weightStream => weightController.stream;
 
@@ -35,7 +37,48 @@ class PictureWidgetBloc {
         if (onResponse.userProfileImages != null &&
             onResponse.userProfileImages.length > 0) {
           progressSink.add(1);
-          weightController.add(onResponse.userProfileImages);
+
+          List<UserProfileImages> userProfileImages = new List();
+          userProfileImages.addAll(onResponse.userProfileImages);
+          userProfileImages.sort((a, b) {
+            return b.createdOnStr.compareTo(a.createdOnStr);
+          });
+
+          List<PictureFinalModel> list = new List();
+
+          userProfileImages.forEach((element) {
+            PictureFinalModel pictureFinalModel = new PictureFinalModel();
+            List<UserProfileImages> _imageProfileList = new List();
+            userProfileImages.forEach((item) {
+              if (list.length > 0) {
+                if (list[list.length - 1].title.compareTo(item.createdOnStr) ==
+                    0) {
+                  pictureFinalModel.title = item.createdOnStr;
+                  _imageProfileList.add(item);
+                  userProfileImages.remove(item);
+                }
+              }else{
+                if (_imageProfileList.length > 0) {
+                  if (_imageProfileList[_imageProfileList.length - 1]
+                      .createdOnStr
+                      .compareTo(item.createdOnStr) ==
+                      0) {
+                    pictureFinalModel.title = item.createdOnStr;
+                    _imageProfileList.add(item);
+                    userProfileImages.remove(item);
+                  }
+                } else {
+                  pictureFinalModel.title = item.createdOnStr;
+                  _imageProfileList.add(item);
+                  userProfileImages.remove(item);
+                }
+              }
+            });
+            list.add(pictureFinalModel);
+            debugPrint(element.createdOnStr);
+          });
+
+          weightController.add(list);
         } else {
           progressSink.add(2);
         }
@@ -62,15 +105,15 @@ class PictureWidgetBloc {
       }
 
       if (onResponse.status == 1) {
-        getUserProfileImages(userId,context);
+        getUserProfileImages(userId, context);
       } else {
-        Utils.showToast(onResponse.message,context);
+        Utils.showToast(onResponse.message, context);
       }
 
 //      Utils.showSnackBar(onResponse.message.toString(), context);
     }).catchError((onError) {
       print("On_Error" + onError.toString());
-      Utils.showToast(onError.toString(),context);
+      Utils.showToast(onError.toString(), context);
     });
   }
 }

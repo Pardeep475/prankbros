@@ -62,7 +62,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
               ),
             ),
             Container(
-//              color: Colors.yellow,
 //            margin: EdgeInsets.symmetric(horizontal: Dimens.FORTY),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

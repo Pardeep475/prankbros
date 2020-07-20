@@ -1,17 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/motivation/MotivationBloc.dart';
 import 'package:prankbros2/models/MotivationModel.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/models/motivation/MotivationApiResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 
 class MotivationWidget extends StatefulWidget {
+  final MotivationData motivationData;
+
+  MotivationWidget({this.motivationData});
+
   @override
-  State<StatefulWidget> createState() => _MotivationWidgetState();
+  State<StatefulWidget> createState() =>
+      _MotivationWidgetState(motivationData: this.motivationData);
 }
 
 class _MotivationWidgetState extends State<MotivationWidget> {
+  final MotivationData motivationData;
+
+  _MotivationWidgetState({this.motivationData});
+
   List<MotivationModel> titleList = new List();
 
   @override
@@ -20,50 +34,81 @@ class _MotivationWidgetState extends State<MotivationWidget> {
     this.getTitleList(0);
   }
 
+  void setData() {}
+
   void getTitleList(int index) {
     if (titleList.length > 0) {
       titleList.clear();
     }
-    titleList.add(MotivationModel(0, "workouts"));
-    titleList.add(MotivationModel(24, "workouts"));
-    titleList.add(MotivationModel(36, "workouts"));
-    titleList.add(MotivationModel(48, "workouts"));
-    titleList.add(MotivationModel(0, "workouts"));
-    titleList.add(MotivationModel(24, "workouts"));
-    titleList.add(MotivationModel(36, "workouts"));
-    titleList.add(MotivationModel(48, "workouts"));
+    if (motivationData.imagePath1 != null || motivationData.videoPath1 != null)
+      titleList.add(MotivationModel(
+          count: 0,
+          title: '',
+          imgPath: motivationData.imagePath1,
+          videoPath: motivationData.videoPath1));
+    if (motivationData.imagePath2 != null || motivationData.videoPath2 != null)
+      titleList.add(MotivationModel(
+          count: 0,
+          title: '',
+          imgPath: motivationData.imagePath2,
+          videoPath: motivationData.videoPath2));
+    if (motivationData.imagePath3 != null || motivationData.videoPath3 != null)
+      titleList.add(MotivationModel(
+          count: 0,
+          title: '',
+          imgPath: motivationData.imagePath3,
+          videoPath: motivationData.videoPath3));
+    if (motivationData.imagePath4 != null || motivationData.videoPath4 != null)
+      titleList.add(MotivationModel(
+          count: 0,
+          title: '',
+          imgPath: motivationData.imagePath4,
+          videoPath: motivationData.videoPath4));
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       margin: EdgeInsets.only(
           left: Dimens.twenty, top: Dimens.sixty, right: Dimens.twenty),
-      child: GridView.builder(
-        padding:
-        EdgeInsets.only(top: 0, left: 0, right: 0, bottom: Dimens.twenty),
-        itemBuilder: (context, position) {
-          return Card(
-            margin: EdgeInsets.all(Dimens.seven),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            color: AppColors.white,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(Dimens.twenty))),
-            child: Center(
-                child: titleList[position].count == 0
-                    ? _motivationImageWidget(position)
-                    : _motivationNormalWidget(position)),
-          );
-        },
-        itemCount: titleList.length,
-        gridDelegate:
-        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      ),
+      child: titleList.length > 0
+          ? GridView.builder(
+              padding: EdgeInsets.only(
+                  top: 0, left: 0, right: 0, bottom: Dimens.twenty),
+              itemBuilder: (context, position) {
+                return Card(
+                  margin: EdgeInsets.all(Dimens.seven),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  color: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(Dimens.twenty))),
+                  child: Center(
+                      child: titleList[position].count == 0
+                          ? _motivationImageWidget(position)
+                          : _motivationNormalWidget(position)),
+                );
+              },
+              itemCount: titleList.length,
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            )
+          : _errorData(),
     );
   }
 
-
+  Widget _errorData() {
+    return Center(
+      child: Text(
+        'No data found',
+        style: TextStyle(
+            color: AppColors.black_text,
+            fontFamily: Strings.EXO_FONT,
+            fontWeight: FontWeight.w700,
+            fontSize: Dimens.thirty),
+      ),
+    );
+  }
 
   Widget _motivationNormalWidget(int position) {
     return Material(
@@ -104,17 +149,27 @@ class _MotivationWidgetState extends State<MotivationWidget> {
         image: AssetImage(Images.DummyFood),
         fit: BoxFit.cover,
       )),
-      child: Material(
-        color: AppColors.transparent,
-        child: InkWell(
-          splashColor: AppColors.pink_stroke,
-          onTap: () {
-            _motivationItemClick(position);
-          },
-          child: Center(
-            child: Image.asset(Images.ICON_PLAY),
+      child: Stack(
+        children: <Widget>[
+          FadeInImage(
+              fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              image: NetworkImage(titleList[position].imgPath),
+              placeholder: AssetImage(Images.DummyFood)),
+          Material(
+            color: AppColors.transparent,
+            child: InkWell(
+              splashColor: AppColors.pink_stroke,
+              onTap: () {
+                _motivationItemClick(position);
+              },
+              child: Center(
+                child: Image.asset(Images.ICON_PLAY),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
