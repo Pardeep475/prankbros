@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:toast/toast.dart';
@@ -117,4 +118,37 @@ class Utils {
           ),
         ));
   }
+
+  static String getMonthFromDate(String value) {
+    final DateFormat oldFormatter = DateFormat('dd.MM.yyyy');
+    final DateFormat newFormatter = DateFormat('dd');
+    final DateFormat newFormatterTwo = DateFormat('EE');
+
+    DateTime date = oldFormatter.parse(value);
+    print(date.toString());
+    String formattedDateDate = newFormatter.format(date);
+    String formattedDay = newFormatterTwo.format(date);
+
+    debugPrint('$formattedDateDate   $formattedDay');
+    return formattedDateDate;
+  }
+
+  static String getMonthFromDay(String value) {
+    final DateFormat oldFormatter = DateFormat('dd.MM.yyyy');
+    final DateFormat newFormatter = DateFormat('dd');
+    final DateFormat newFormatterTwo = DateFormat('EE');
+
+    DateTime date = oldFormatter.parse(value);
+    print(date.toString());
+    String formattedDateDate = newFormatter.format(date);
+    String formattedDay = newFormatterTwo.format(date);
+
+    debugPrint('$formattedDateDate   $formattedDay');
+
+    return formattedDay.length < 2
+        ? formattedDay
+        : formattedDay.substring(0, 2);
+  }
+
+//  return str.length() < 2 ? str : str.substring(0, 2);
 }

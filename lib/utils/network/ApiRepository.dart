@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/models/motivation/MotivationActivityApiResponse.dart';
 import 'package:prankbros2/models/motivation/MotivationApiResponse.dart';
 import 'package:prankbros2/models/nutrition/NutritionActionModel.dart';
 import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
@@ -100,9 +101,27 @@ class ApiRepository {
   }) async {
     var response = await apiHelper.get(
         apiUrl:
-        '${Strings.BASE_URL}${ApiEndPoints.getMotivation}?userId=$userId');
+            '${Strings.BASE_URL}${ApiEndPoints.getMotivation}?userId=$userId');
     Map<String, dynamic> data = jsonDecode(response);
     return MotivationApiResponse.fromJson(data);
+  }
+
+  Future<MotivationActivityApiResponse> getMotivationActivation({
+    String userId,
+    String trainingWeek,
+  }) async {
+//    {
+//      "userId":1,
+//    "trainingWeek":1
+//    }
+
+    var value = {"userId": userId, "trainingWeek": trainingWeek};
+
+    var response = await apiHelper.postJson(
+        apiUrl: '${Strings.BASE_URL}${ApiEndPoints.getMotivationActivation}',
+        formData: value);
+    Map<String, dynamic> data = jsonDecode(response);
+    return MotivationActivityApiResponse.fromJson(data);
   }
 
   Future<AddUserWeightApiResponse> addUserWeight({
@@ -124,12 +143,12 @@ class ApiRepository {
   }) async {
     var response = await apiHelper.get(
         apiUrl:
-        '${Strings.BASE_URL}${ApiEndPoints.getUserProfileImages}?userId=$userId');
+            '${Strings.BASE_URL}${ApiEndPoints.getUserProfileImages}?userId=$userId');
     Map<String, dynamic> data = jsonDecode(response);
     return GetProfileImagesApiResponse.fromJson(data);
   }
 
-  Future<AddProfileImagesApiResponse> addUserProfileImage ({
+  Future<AddProfileImagesApiResponse> addUserProfileImage({
     String userId,
     String path,
   }) async {
@@ -138,21 +157,21 @@ class ApiRepository {
       'file': path == null
           ? ""
           : await MultipartFile.fromFile(path,
-          filename: File(path).path.split('/').last),
-
+              filename: File(path).path.split('/').last),
     });
 
     var response = await apiHelper.postJson(
-        apiUrl: Strings.BASE_URL + ApiEndPoints.addUserProfileImages, formData: formData);
+        apiUrl: Strings.BASE_URL + ApiEndPoints.addUserProfileImages,
+        formData: formData);
     Map<String, dynamic> data = jsonDecode(response);
     return AddProfileImagesApiResponse.fromJson(data);
   }
 
   Future<LoginResponse> changeLanguage(
-      String userId,
-      String language,
-      ) async {
-    var value = {'userId': userId,'language':language};
+    String userId,
+    String language,
+  ) async {
+    var value = {'userId': userId, 'language': language};
     var response = await apiHelper.postJson(
         apiUrl: Strings.BASE_URL + ApiEndPoints.changeLanguage,
         formData: value);
@@ -161,17 +180,20 @@ class ApiRepository {
   }
 
   Future<UpdateProfileApiResponse> updateUserProfile(
-      String userId,
-      String firstName,
-      String lastName,
-      String email,
-      ) async {
-    var value = {'id': userId,'firstName':firstName,'lastName': lastName,'email':email};
+    String userId,
+    String firstName,
+    String lastName,
+    String email,
+  ) async {
+    var value = {
+      'id': userId,
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email
+    };
     var response = await apiHelper.postJson(
-        apiUrl: Strings.BASE_URL + ApiEndPoints.updateProfile,
-        formData: value);
+        apiUrl: Strings.BASE_URL + ApiEndPoints.updateProfile, formData: value);
     Map<String, dynamic> data = jsonDecode(response);
     return UpdateProfileApiResponse.fromJson(data);
   }
-
 }

@@ -40,30 +40,53 @@ class _MotivationWidgetState extends State<MotivationWidget> {
     if (titleList.length > 0) {
       titleList.clear();
     }
-    if (motivationData.imagePath1 != null || motivationData.videoPath1 != null)
+    if (motivationData.imagePath1 != null ||
+        motivationData.videoPath1 != null) {
       titleList.add(MotivationModel(
           count: 0,
           title: '',
           imgPath: motivationData.imagePath1,
           videoPath: motivationData.videoPath1));
-    if (motivationData.imagePath2 != null || motivationData.videoPath2 != null)
+    } else {
+      titleList.add(MotivationModel(
+          count: 4, title: 'workouts', imgPath: null, videoPath: null));
+    }
+
+    if (motivationData.imagePath2 != null ||
+        motivationData.videoPath2 != null) {
       titleList.add(MotivationModel(
           count: 0,
           title: '',
           imgPath: motivationData.imagePath2,
           videoPath: motivationData.videoPath2));
-    if (motivationData.imagePath3 != null || motivationData.videoPath3 != null)
+    } else {
+      titleList.add(MotivationModel(
+          count: 12, title: 'workouts', imgPath: null, videoPath: null));
+    }
+
+    if (motivationData.imagePath3 != null ||
+        motivationData.videoPath3 != null) {
       titleList.add(MotivationModel(
           count: 0,
           title: '',
           imgPath: motivationData.imagePath3,
           videoPath: motivationData.videoPath3));
-    if (motivationData.imagePath4 != null || motivationData.videoPath4 != null)
+    } else {
+      titleList.add(MotivationModel(
+          count: 24, title: 'workouts', imgPath: null, videoPath: null));
+    }
+
+    if (motivationData.imagePath4 != null ||
+        motivationData.videoPath4 != null) {
       titleList.add(MotivationModel(
           count: 0,
           title: '',
           imgPath: motivationData.imagePath4,
           videoPath: motivationData.videoPath4));
+    } else {
+      titleList.add(MotivationModel(
+          count: 36, title: 'workouts', imgPath: null, videoPath: null));
+    }
   }
 
   @override
@@ -111,34 +134,38 @@ class _MotivationWidgetState extends State<MotivationWidget> {
   }
 
   Widget _motivationNormalWidget(int position) {
-    return Material(
-      color: AppColors.transparent,
-      child: InkWell(
-        splashColor: AppColors.pink_stroke,
-        onTap: () {
-          _motivationItemClick(position);
-        },
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(Images.Cup),
-              SizedBox(
-                height: Dimens.thrteen,
+    return Builder(
+      builder: (BuildContext context){
+        return Material(
+          color: AppColors.transparent,
+          child: InkWell(
+            splashColor: AppColors.pink_stroke,
+            onTap: () {
+              Utils.showSnackBar("This item not available right now.", context);
+            },
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(Images.Cup),
+                  SizedBox(
+                    height: Dimens.thrteen,
+                  ),
+                  Text(
+                    '${titleList[position].count} ${titleList[position].title}',
+                    style: TextStyle(
+                        fontSize: Dimens.thrteen,
+                        fontFamily: Strings.EXO_FONT,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.light_text),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-              Text(
-                '${titleList[position].count} ${titleList[position].title}',
-                style: TextStyle(
-                    fontSize: Dimens.thrteen,
-                    fontFamily: Strings.EXO_FONT,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.light_text),
-                textAlign: TextAlign.center,
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

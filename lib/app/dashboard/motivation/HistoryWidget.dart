@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/motivation/HistoryBloc.dart';
 import 'package:prankbros2/models/MotivationHistoryModel.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/motivation/MotivationApiResponse.dart';
 import 'package:prankbros2/popups/CustomChangeWeekDialog.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 
 class HistoryWidget extends StatefulWidget {
   final MotivationData motivationData;
@@ -24,6 +28,43 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   _HistoryWidgetState({this.motivationData});
 
   List<MotivationHistoryItem> _motivationHistoryList = new List();
+
+
+  HistoryBloc _historyBloc;
+  SessionManager _sessionManager;
+  String userId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _historyBloc = new HistoryBloc();
+    _sessionManager = new SessionManager();
+    _sessionManager.getUserModel().then((value) {
+      debugPrint("userdata   :        $value");
+      if (value != null) {
+        UserDetails userData = UserDetails.fromJson(value);
+        debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
+        userId = userData.id.toString();
+        getMotivation();
+      }
+    });
+  }
+
+  void getMotivation() {
+    if (userId == null || userId.isEmpty) {
+      Utils.showSnackBar('Something went wrong.', context);
+      return;
+    }
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        _historyBloc.getMotivationActivation(userId,'1', context);
+      } else {
+        Navigator.pop(context);
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
+    });
+  }
 
   @override
   void didChangeDependencies() {
