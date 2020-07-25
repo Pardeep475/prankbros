@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:prankbros2/app/dashboard/profile/picturewidget/PictureWidgetBloc.dart';
+import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/AppConstantHelper.dart';
@@ -13,14 +15,65 @@ import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
 
-class CustomImagePickerDialog extends StatefulWidget{
+class CustomImagePickerDialog extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _CustomImagePickerDialogState();
   }
 }
 
-class _CustomImagePickerDialogState extends State<CustomImagePickerDialog>{
+typedef void OnPickImageCallback();
+
+class _CustomImagePickerDialogState extends State<CustomImagePickerDialog> {
+  PickedFile _imageFile;
+  dynamic _pickImageError;
+  String _retrieveDataError;
+
+  final ImagePicker _picker = ImagePicker();
+
+  void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
+    final pickedFile = await _picker.getImage(
+      source: source,
+    );
+
+    _imageFile = pickedFile;
+
+    _uploadImage();
+  }
+
+  void _uploadImage() {
+    if (_imageFile == null || _imageFile.path == null) {
+      Utils.showToast('Something went wrong', context);
+      return;
+    }
+
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        if (_imageFile.path != null && _imageFile.path.isNotEmpty) {
+          isProgressBar = true;
+          setState(() {
+
+          });
+          _pictureWidgetBloc.addUserProfileImages(
+              userId, _imageFile.path, context);
+        } else {
+          Utils.showToast('Something went wrong', context);
+        }
+      }
+    });
+  }
+
+  Text _getRetrieveErrorWidget() {
+    if (_retrieveDataError != null) {
+      final Text result = Text(_retrieveDataError);
+      _retrieveDataError = null;
+      return result;
+    }
+    return null;
+  }
+
+
+  bool isProgressBar = false;
 
   AppConstantHelper helper = AppConstantHelper();
   var filePath = "";
@@ -43,13 +96,12 @@ class _CustomImagePickerDialogState extends State<CustomImagePickerDialog>{
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
-        child: Center(
+        child: !isProgressBar ? Center(
           child: Card(
             color: AppColors.white,
             elevation: Dimens.FIVE,
@@ -72,9 +124,10 @@ class _CustomImagePickerDialogState extends State<CustomImagePickerDialog>{
                             ),
                             onTap: () {
                               print('Add photo');
-                              requestPermission(Permission.camera, true);
-
-                              Navigator.pop(context);
+//                              requestPermission(Permission.camera, true);
+                              _onImageButtonPressed(ImageSource.camera,
+                                  context: context);
+//                              Navigator.pop(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -112,12 +165,13 @@ class _CustomImagePickerDialogState extends State<CustomImagePickerDialog>{
                             ),
                             onTap: () {
                               print('Add photo from gallery');
-                              if (Platform.isAndroid)
-                                requestPermission(Permission.storage, false);
-                              else
-                                requestPermission(Permission.photos, false);
-
-                              Navigator.pop(context);
+//                              if (Platform.isAndroid)
+//                                requestPermission(Permission.storage, false);
+//                              else
+//                                requestPermission(Permission.photos, false);
+                              _onImageButtonPressed(ImageSource.gallery,
+                                  context: context);
+//                              Navigator.pop(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -164,7 +218,7 @@ class _CustomImagePickerDialogState extends State<CustomImagePickerDialog>{
               ],
             ),
           ),
-        ),
+        ) : Center(child: CommonProgressIndicator(true)),
       ),
     );
   }
@@ -180,7 +234,6 @@ class _CustomImagePickerDialogState extends State<CustomImagePickerDialog>{
       await helper.pickImage(
           isCamera: isCamera,
           imagePicked: (file) {
-            print("pickImage>>>>>${file.path}");
             debugPrint('file path is :--      ${file.path}');
             if (file.path != null && file.path.isNotEmpty) {
               _pictureWidgetBloc.addUserProfileImages(
@@ -188,7 +241,6 @@ class _CustomImagePickerDialogState extends State<CustomImagePickerDialog>{
             } else {
               Utils.showToast('Something went wrong', context);
             }
-
           });
     } else {
       helper.showAlert(true, "need permission");

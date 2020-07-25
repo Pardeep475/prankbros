@@ -69,4 +69,6 @@ without losing your data''';
   static const String CUSTOM_DASHBOARD_ROUTE = '/custom_dashboard_route';
   static const String WARM_UP_ROUTE = '/warm_up_route';
   static const String NUTRITION_DETAIL_ROUTE = '/nutrition_detail_route';
+  static const String VIDEO_PLAYER_ROUTE = '/video_player_route';
+  static const String FULL_IMAGE_VIEW_SCREEN = '/full_image_view_screen';
 }

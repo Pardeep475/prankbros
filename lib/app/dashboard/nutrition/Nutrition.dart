@@ -338,7 +338,7 @@ class _NutritionState extends State<Nutrition> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        item.energy != null ? item.energy : '',
+                        item.energy != null ? '${item.energy} kcal' : '',
                         style: TextStyle(
                             fontSize: Dimens.twelve,
                             fontFamily: Strings.EXO_FONT,

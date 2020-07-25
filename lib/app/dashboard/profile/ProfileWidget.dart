@@ -87,6 +87,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           TextField(
             minLines: 1,
             maxLines: 1,
+            readOnly: true,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.all(0.0),
               isDense: true,
@@ -136,6 +137,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           TextField(
             minLines: 1,
             maxLines: 1,
+            readOnly: true,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.all(0.0),
               isDense: true,
@@ -185,6 +187,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           TextField(
             minLines: 1,
             maxLines: 1,
+            readOnly: true,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.all(0.0),
               isDense: true,
@@ -220,7 +223,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           SizedBox(
             height: Dimens.HUNDRUD,
           ),
-          _saveButton(),
+//          _saveButton(),
         ],
       ),
     );

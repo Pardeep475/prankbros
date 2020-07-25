@@ -34,7 +34,9 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
   WeightCurveBloc _weightCurveBloc;
   SessionManager _sessionManager;
   String userId = '';
-  String weight = '00,0';
+  String weight = '50,0';
+  bool _buttonPressed = false;
+  bool _loopActive = false;
 
   @override
   void initState() {
@@ -53,7 +55,6 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
       child: Center(
@@ -116,12 +117,14 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            InkWell(
-                              onTap: () {
-                                _minusButtonClick();
+                            Listener(
+                              onPointerDown: (details) {
+                                _buttonPressed = true;
+                                _minusButtonLongClick();
                               },
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(Dimens.thirty)),
+                              onPointerUp: (details) {
+                                _buttonPressed = false;
+                              },
                               child: Container(
                                 height: Dimens.twentyEight,
                                 width: Dimens.twentyEight,
@@ -153,12 +156,14 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
                             SizedBox(
                               width: Dimens.FIFTY_ONE,
                             ),
-                            InkWell(
-                              onTap: () {
-                                _plusButtonClick();
+                            Listener(
+                              onPointerDown: (details) {
+                                _buttonPressed = true;
+                                _plusButtonLongClick();
                               },
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(Dimens.thirty)),
+                              onPointerUp: (details) {
+                                _buttonPressed = false;
+                              },
                               child: Container(
                                 height: Dimens.twentyEight,
                                 width: Dimens.twentyEight,
@@ -231,12 +236,72 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
     Navigator.pop(context);
   }
 
+  void _plusButtonLongClick() async {
+    // make sure that only one loop is active
+    if (_loopActive) return;
+
+    _loopActive = true;
+
+    while (_buttonPressed) {
+      // do your thing
+      setState(() {
+        double value = double.parse(weight.replaceAll(',', '.'));
+        value = value * 10;
+        value++;
+        value = value / 10;
+        weight = value.toStringAsFixed(1).replaceAll('.', ',');
+        setState(() {});
+      });
+
+      // wait a bit
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+
+    _loopActive = false;
+
+    debugPrint('long plus press icon click   -----plus');
+    try {} catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void _minusButtonLongClick() async {
+    // make sure that only one loop is active
+    if (_loopActive) return;
+
+    _loopActive = true;
+
+    while (_buttonPressed) {
+      // do your thing
+      setState(() {
+        double value = double.parse(weight.replaceAll(',', '.'));
+        value = value * 10;
+        value--;
+        value = value / 10;
+        weight = value.toStringAsFixed(1).replaceAll('.', ',');
+        setState(() {});
+      });
+
+      // wait a bit
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+
+    _loopActive = false;
+
+    debugPrint('long plus press icon click   -----plus');
+    try {} catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   void _plusButtonClick() {
     debugPrint('plus icon click');
     try {
       double value = double.parse(weight.replaceAll(',', '.'));
+      value = value * 10;
       value++;
-      weight = value.toString().replaceAll('.', ',');
+      value = value / 10;
+      weight = value.toStringAsFixed(1).replaceAll('.', ',');
       setState(() {});
     } catch (e) {
       debugPrint(e.toString());
@@ -248,8 +313,10 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
     try {
       double value = double.parse(weight.replaceAll(',', '.'));
       if (value <= 0) return;
+      value = value * 10;
       value--;
-      weight = value.toString().replaceAll('.', ',');
+      value = value / 10;
+      weight = value.toStringAsFixed(1).replaceAll('.', ',');
       setState(() {});
     } catch (e) {
       debugPrint(e.toString());

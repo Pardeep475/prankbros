@@ -19,7 +19,7 @@ class PictureWidgetBloc {
   StreamSink get progressSink => progressController.sink;
 
   final BehaviorSubject weightController =
-      BehaviorSubject<List<PictureFinalModel>>();
+      BehaviorSubject<List<UserProfileImages>>();
 
   Stream get weightStream => weightController.stream;
 
@@ -33,52 +33,80 @@ class PictureWidgetBloc {
     progressSink.add(0);
     apiRepository.getUserProfileImages(userId: userId).then((onResponse) {
       if (onResponse.status == 1) {
-        debugPrint("Here is user id   :        $userId");
+        debugPrint(
+            "Here is user id   :        ${onResponse.userProfileImages.length}");
         if (onResponse.userProfileImages != null &&
             onResponse.userProfileImages.length > 0) {
+          debugPrint(
+              "Here is user id   :        ${onResponse.userProfileImages.length}");
           progressSink.add(1);
-
-          List<UserProfileImages> userProfileImages = new List();
-          userProfileImages.addAll(onResponse.userProfileImages);
-          userProfileImages.sort((a, b) {
-            return b.createdOnStr.compareTo(a.createdOnStr);
-          });
-
-          List<PictureFinalModel> list = new List();
-
-          userProfileImages.forEach((element) {
-            PictureFinalModel pictureFinalModel = new PictureFinalModel();
-            List<UserProfileImages> _imageProfileList = new List();
-            userProfileImages.forEach((item) {
-              if (list.length > 0) {
-                if (list[list.length - 1].title.compareTo(item.createdOnStr) ==
-                    0) {
-                  pictureFinalModel.title = item.createdOnStr;
-                  _imageProfileList.add(item);
-                  userProfileImages.remove(item);
-                }
-              }else{
-                if (_imageProfileList.length > 0) {
-                  if (_imageProfileList[_imageProfileList.length - 1]
-                      .createdOnStr
-                      .compareTo(item.createdOnStr) ==
-                      0) {
-                    pictureFinalModel.title = item.createdOnStr;
-                    _imageProfileList.add(item);
-                    userProfileImages.remove(item);
-                  }
-                } else {
-                  pictureFinalModel.title = item.createdOnStr;
-                  _imageProfileList.add(item);
-                  userProfileImages.remove(item);
-                }
-              }
-            });
-            list.add(pictureFinalModel);
-            debugPrint(element.createdOnStr);
-          });
-
-          weightController.add(list);
+          weightController.add(onResponse.userProfileImages);
+//          List<UserProfileImages> userProfileImages = new List();
+//          userProfileImages.addAll(onResponse.userProfileImages);
+//          userProfileImages.sort((a, b) {
+//            return b.createdOnStr.compareTo(a.createdOnStr);
+//          });
+//
+//          List<PictureFinalModel> list = new List();
+//          userProfileImages.forEach((element) {
+//            PictureFinalModel pictureFinalModel = new PictureFinalModel();
+//            List<UserProfileImages> _imageProfileList = new List();
+//
+//            if(list.length > 0){
+//              if(element.createdOnStr.compareTo(list[list.length-1].title) == 0) {
+//
+//              }else{
+//                userProfileImages.forEach((item) {
+//                  if (list.length > 0) {
+//                    if (list[list.length - 1].title.compareTo(item.createdOnStr) !=
+//                        0) {
+//                      pictureFinalModel.title = item.createdOnStr;
+//                      _imageProfileList.add(item);
+//                    }
+//                  }else{
+//                    if (_imageProfileList.length > 0) {
+//                      if (_imageProfileList[_imageProfileList.length - 1]
+//                          .createdOnStr
+//                          .compareTo(item.createdOnStr) ==
+//                          0) {
+//                        pictureFinalModel.title = item.createdOnStr;
+//                        _imageProfileList.add(item);
+//                      }
+//                    } else {
+//                      pictureFinalModel.title = item.createdOnStr;
+//                      _imageProfileList.add(item);
+//                    }
+//                  }
+//                });
+//              }
+//            }else{
+//              userProfileImages.forEach((item) {
+//                if (list.length > 0) {
+//                  if (list[list.length - 1].title.compareTo(item.createdOnStr) ==
+//                      0) {
+//                    pictureFinalModel.title = item.createdOnStr;
+//                    _imageProfileList.add(item);
+//                  }
+//                }else{
+//                  if (_imageProfileList.length > 0) {
+//                    if (_imageProfileList[_imageProfileList.length - 1].createdOnStr
+//                        .compareTo(item.createdOnStr) ==
+//                        0) {
+//                      pictureFinalModel.title = item.createdOnStr;
+//                      _imageProfileList.add(item);
+//                    }
+//                  } else {
+//                    pictureFinalModel.title = item.createdOnStr;
+//                    _imageProfileList.add(item);
+//                  }
+//                }
+//              });
+//            }
+//            list.add(pictureFinalModel);
+//            debugPrint(element.createdOnStr);
+//          });
+//
+//          weightController.add(list);
         } else {
           progressSink.add(2);
         }
@@ -103,17 +131,18 @@ class PictureWidgetBloc {
       if (onResponse == null) {
         return;
       }
-
-      if (onResponse.status == 1) {
-        getUserProfileImages(userId, context);
-      } else {
-        Utils.showToast(onResponse.message, context);
-      }
-
+      Utils.showToast(onResponse.message, context);
+//      if (onResponse.status == 1) {
+////        getUserProfileImages(userId, context);
+//      } else {
+//        Utils.showToast(onResponse.message, context);
+//      }
+      Navigator.pop(context);
 //      Utils.showSnackBar(onResponse.message.toString(), context);
     }).catchError((onError) {
       print("On_Error" + onError.toString());
       Utils.showToast(onError.toString(), context);
+      Navigator.pop(context);
     });
   }
 }

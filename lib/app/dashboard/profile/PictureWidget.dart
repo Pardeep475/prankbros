@@ -76,7 +76,7 @@ class _PictureWidgetState extends State<PictureWidget> {
               );
             } else if (snapshot.data == 1) {
               return Container(
-                child: StreamBuilder<List<PictureFinalModel>>(
+                child: StreamBuilder<List<UserProfileImages>>(
                     initialData: null,
                     stream: _pictureWidgetBloc.weightStream,
                     builder: (context, snapshot) {
@@ -170,11 +170,17 @@ class _PictureWidgetState extends State<PictureWidget> {
                             SizedBox(
                               height: Dimens.forty,
                             ),
-                            ListView.builder(
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (BuildContext context, int pos) {
-                                  return _imageListItem(snapshot.data[pos]);
-                                }),
+
+                            _imageListItem(snapshot.data)
+
+//                            Container(
+//                              height: MediaQuery.of(context).size.height * 0.5,
+//                              child: ListView.builder(
+//                                  itemCount: snapshot.data.length,
+//                                  itemBuilder: (BuildContext context, int pos) {
+//                                    return _imageListItem(snapshot.data[pos]);
+//                                  }),
+//                            ),
                           ],
                         );
                       } else {
@@ -274,12 +280,12 @@ class _PictureWidgetState extends State<PictureWidget> {
         });
   }
 
-  Widget _imageListItem(PictureFinalModel item) {
+  Widget _imageListItem(List<UserProfileImages> item) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        _headerItem(item.title),
+//        _headerItem(item.title),
         SizedBox(
           height: Dimens.twenty,
         ),
@@ -289,10 +295,10 @@ class _PictureWidgetState extends State<PictureWidget> {
               left: Dimens.ten,
               right: Dimens.twenty,
               bottom: Dimens.ten),
-          itemCount: item.list.length,
+          itemCount: item.length,
           itemBuilder: (context, position) {
             debugPrint('------------>itembuilder   ${position}');
-            return _mainItem(item.list[position].imagePath);
+            return _mainItem(item[position]);
           },
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
@@ -319,26 +325,44 @@ class _PictureWidgetState extends State<PictureWidget> {
     );
   }
 
-  Widget _mainItem(String item) {
+  Widget _mainItem(UserProfileImages item) {
     debugPrint('imageitem:--->   $item');
-    return Padding(
-      padding: EdgeInsets.only(left: Dimens.ten, bottom: Dimens.ten),
-      child: Container(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: (){
+          imageClick(item);
+        },
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Padding(
+          padding: EdgeInsets.only(left: Dimens.ten, bottom: Dimens.ten),
+          child: Container(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: FadeInImage(
+                fit: BoxFit.cover,
+                width: Dimens.seventy,
+                height: Dimens.fifty,
+                image: NetworkImage(item.imagePath),
+                placeholder: AssetImage(Images.DummyFood)),
+          ),
         ),
-        child: FadeInImage(
-            fit: BoxFit.cover,
-            width: Dimens.seventy,
-            height: Dimens.fifty,
-            image: NetworkImage(item),
-            placeholder: AssetImage(Images.DummyFood)),
       ),
     );
   }
 
+  void imageClick(UserProfileImages item){
+    Navigator.pushNamed(context, Strings.FULL_IMAGE_VIEW_SCREEN,arguments: item);
+  }
+
   void _selectImageButton() {
-    showDialog(context: context, builder: (_) => CustomImagePickerDialog());
+    showDialog(context: context, builder: (_) => CustomImagePickerDialog()).then((value) {
+      getUserWeight();
+    });
   }
 }

@@ -175,6 +175,8 @@ class _MotivationWidgetState extends State<MotivationWidget> {
   }
 
   void _motivationItemClick(int index) {
-    debugPrint('Motivation Item click ${index.toString()}');
+    debugPrint('videoPathis ----->  ${titleList[index].videoPath}');
+    Navigator.pushNamed(context, Strings.VIDEO_PLAYER_ROUTE,
+        arguments: titleList[index].videoPath);
   }
 }
