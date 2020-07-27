@@ -150,5 +150,23 @@ class Utils {
         : formattedDay.substring(0, 2);
   }
 
+  static bool checkCurrentDate(String value) {
+    final DateFormat oldFormatter = DateFormat('dd.MM.yyyy');
+
+    DateTime date = oldFormatter.parse(value);
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    final aDate = DateTime(date.year, date.month, date.day);
+    if (aDate == today) {
+      return true;
+    } else {
+      return false;
+    }
+
+    print(date.toString());
+  }
+
 //  return str.length() < 2 ? str : str.substring(0, 2);
 }

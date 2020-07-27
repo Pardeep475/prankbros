@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:prankbros2/models/MotivationHistoryModel.dart';
-import 'package:prankbros2/models/motivation/MotivationActivityApiResponse.dart';
 import 'package:prankbros2/utils/AppConstantHelper.dart';
 import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/network/ApiRepository.dart';
@@ -35,8 +34,6 @@ class HistoryBloc {
         .then((onResponse) {
       if (onResponse.status == 1) {
         debugPrint("Here is user id   :        $userId");
-//        progressSink.add(1);
-//        weightController.add(onResponse.workoutActivities);
         List<MotivationHistoryItem> _list = new List();
 
         for (int i = 0; i < onResponse.workoutActivities.length; i++) {
@@ -49,10 +46,13 @@ class HistoryBloc {
               weekDay: Utils.getMonthFromDay(
                   onResponse.workoutActivities[i].createdOnStr),
               title: onResponse.workoutActivities[i].workoutName,
-              isSelected: false));
+              isSelected: Utils.checkCurrentDate(
+                  onResponse.workoutActivities[i].createdOnStr)));
           debugPrint(
               'date  :   ${_list[i].date}   week  :   ${_list[i].weekDay}   name:   ${_list[i].title}    isselected:   ${_list[i].isSelected}');
         }
+        progressSink.add(1);
+        weightController.add(_list);
       } else {
         progressSink.add(2);
         print("Error From Server  " + onResponse.message);

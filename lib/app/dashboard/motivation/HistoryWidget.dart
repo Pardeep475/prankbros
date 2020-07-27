@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/motivation/HistoryBloc.dart';
+import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/models/MotivationHistoryModel.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/motivation/MotivationApiResponse.dart';
@@ -29,7 +30,6 @@ class _HistoryWidgetState extends State<HistoryWidget> {
 
   List<MotivationHistoryItem> _motivationHistoryList = new List();
 
-
   HistoryBloc _historyBloc;
   SessionManager _sessionManager;
   String userId = '';
@@ -57,7 +57,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     }
     Utils.checkConnectivity().then((value) {
       if (value) {
-        _historyBloc.getMotivationActivation(userId,'1', context);
+        _historyBloc.getMotivationActivation(userId, '1', context);
       } else {
         Navigator.pop(context);
         Utils.showSnackBar(
@@ -103,18 +103,59 @@ class _HistoryWidgetState extends State<HistoryWidget> {
         SliverToBoxAdapter(
           child: _headerWidget(),
         ),
-        SliverList(
-          delegate:
-              SliverChildBuilderDelegate((BuildContext context, int index) {
-            if (_motivationHistoryList[index].isSelected) {
-              return _selectedListItem(_motivationHistoryList[index], index);
-            } else {
-              return _unSelectedListItem(_motivationHistoryList[index], index);
-            }
-          }, childCount: _motivationHistoryList.length),
-        ),
+        StreamBuilder<int>(
+            initialData: 0,
+            stream: _historyBloc.progressStream,
+            builder: (context, snapshot) {
+              if (snapshot.data == 0) {
+                return _progressBarData();
+              } else if (snapshot.data == 1) {
+                return StreamBuilder<List<MotivationHistoryItem>>(
+                    stream: _historyBloc.weightStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.data != null) {
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                            if (snapshot.data[index].isSelected) {
+                              return _selectedListItem(
+                                  snapshot.data[index], index);
+                            } else {
+                              return _unSelectedListItem(
+                                  snapshot.data[index], index);
+                            }
+                          }, childCount: snapshot.data.length),
+                        );
+                      } else {
+                        return _errorData();
+                      }
+                    });
+              } else {
+                return _errorData();
+              }
+            }),
       ],
     );
+  }
+
+  Widget _errorData() {
+    return SliverFillRemaining(
+      child: Center(
+        child: Text(
+          'No data found',
+          style: TextStyle(
+              color: AppColors.black_text,
+              fontFamily: Strings.EXO_FONT,
+              fontWeight: FontWeight.w700,
+              fontSize: Dimens.thirty),
+        ),
+      ),
+    );
+  }
+
+  Widget _progressBarData() {
+    return SliverFillRemaining(
+        child: Center(child: CommonProgressIndicator(true)));
   }
 
   Widget _headerWidget() {
@@ -322,43 +363,106 @@ class _HistoryWidgetState extends State<HistoryWidget> {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                SizedBox(
-                  width: Dimens.thirtySix,
-                ),
-                Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: Dimens.fifteen,
+            Container(
+              decoration: motivationHistoryItem.isSelected
+                  ? BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(Dimens.ONE_ONE_SEVEN),
+                          bottomRight: Radius.circular(Dimens.ONE_ONE_SEVEN)),
+                      gradient: LinearGradient(
+                        colors: [AppColors.blue, AppColors.pink],
+                        begin: Alignment.bottomLeft,
+                      ))
+                  : BoxDecoration(),
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: Dimens.thirtySix,
+                  ),
+                  Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: Dimens.fifteen,
+                      ),
+                      Text(
+                        motivationHistoryItem.date,
+                        style: TextStyle(
+                            fontSize: Dimens.twenty,
+                            fontFamily: Strings.EXO_FONT,
+                            fontWeight: FontWeight.w700,
+                            color: motivationHistoryItem.isSelected
+                                ? AppColors.white
+                                : AppColors.black_text),
+                      ),
+                      SizedBox(
+                        height: Dimens.five,
+                      ),
+                      Text(
+                        motivationHistoryItem.weekDay.toUpperCase(),
+                        style: TextStyle(
+                            fontSize: Dimens.twelve,
+                            fontFamily: Strings.EXO_FONT,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.79,
+                            color: motivationHistoryItem.isSelected
+                                ? AppColors.white
+                                : AppColors.black_text),
+                      ),
+                      SizedBox(
+                        height: Dimens.fifteen,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: Dimens.fifteen,
+                  ),
+                  Container(
+                    height: Dimens.eight,
+                    width: Dimens.eight,
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(Dimens.twenty),
+                      ),
                     ),
-                    Text(
-                      motivationHistoryItem.date,
-                      style: TextStyle(
-                          fontSize: Dimens.twenty,
-                          fontFamily: Strings.EXO_FONT,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.black_text),
-                    ),
-                    SizedBox(
-                      height: Dimens.five,
-                    ),
-                    Text(
-                      motivationHistoryItem.weekDay,
-                      style: TextStyle(
-                          fontSize: Dimens.twelve,
-                          fontFamily: Strings.EXO_FONT,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 1.79,
-                          color: AppColors.unSelectedTextRadioColor),
-                    ),
-                    SizedBox(
-                      height: Dimens.fifteen,
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(
+                    width: Dimens.twentyFive,
+                  ),
+                ],
+              ),
             ),
+            SizedBox(
+              width: Dimens.thrteen,
+            ),
+            Expanded(
+              child: motivationHistoryItem.title != null
+                  ? Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Dimens.twentyFive,
+                          vertical: Dimens.fifteen),
+                      decoration: BoxDecoration(
+                        color: AppColors.light_gray,
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(Dimens.hundred)),
+                      ),
+                      child: Text(
+                        motivationHistoryItem.title,
+                        style: TextStyle(
+                            fontSize: Dimens.eighteen,
+                            fontFamily: Strings.EXO_FONT,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.light_text),
+                      ),
+                    )
+                  : SizedBox(
+                      height: 0,
+                      width: 0,
+                    ),
+            ),
+            SizedBox(
+              width: Dimens.thirtySix,
+            )
           ],
         ),
         Padding(
