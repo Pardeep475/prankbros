@@ -1,6 +1,8 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/motivation/MotivationActivityApiResponse.dart';
 import 'package:prankbros2/models/motivation/MotivationApiResponse.dart';
@@ -8,6 +10,7 @@ import 'package:prankbros2/models/nutrition/NutritionActionModel.dart';
 import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
 import 'package:prankbros2/models/profileimage/AddProfileImagesApiResponse.dart';
 import 'package:prankbros2/models/profileimage/GetProfileImagesApiResponse.dart';
+import 'package:prankbros2/models/profileimage/PictureFinalModel.dart';
 import 'package:prankbros2/models/updateprofile/UpdateProfileApiResponse.dart';
 import 'package:prankbros2/models/userweight/AddUserWeightApiResponse.dart';
 import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
@@ -138,14 +141,46 @@ class ApiRepository {
     return AddUserWeightApiResponse.fromJson(data);
   }
 
-  Future<GetProfileImagesApiResponse> getUserProfileImages({
+  Future<List<PictureFinalModel>> getUserProfileImages({
     String userId,
   }) async {
     var response = await apiHelper.get(
         apiUrl:
             '${Strings.BASE_URL}${ApiEndPoints.getUserProfileImages}?userId=$userId');
-    Map<String, dynamic> data = jsonDecode(response);
-    return GetProfileImagesApiResponse.fromJson(data);
+    Map<String, dynamic> parsed = jsonDecode(response);
+
+//   final parsed =  data['userProfileImages'];
+
+//    final parsed = json.decode(response.body);
+//
+    List<PictureFinalModel> _list = new List();
+    Queue numQ = new Queue();
+    numQ.addAll(parsed["userProfileImages"]);
+    Iterator iterator = numQ.iterator;
+    while (iterator.moveNext()) {
+      Map<String, dynamic> parsed2 = iterator.current;
+      List<UserProfileImages> _userProfileImagesList = new List();
+      String title = '';
+
+      for (int i = 0; i < parsed2.values.toList().length; i++) {
+        debugPrint("parsedvalueis   6-----${parsed2.values.toList()[i]}");
+        List<dynamic> map = parsed2.values.toList()[i];
+        for (int j = 0; j < map.length; j++) {
+          debugPrint("parsedvalueis   7   $j-----${map[j]}");
+          debugPrint(
+              "parsedvalueis   8   $j -----${UserProfileImages.fromJson(map[j]).createdOn}");
+          if (j == 0) {
+            title = UserProfileImages.fromJson(map[j]).createdOn;
+          }
+          _userProfileImagesList
+              .add(UserProfileImages.fromJson(map[j]));
+          debugPrint("parsedvalueis   9----   ${_userProfileImagesList.length}");
+        }
+      }
+      _list.add(PictureFinalModel(title: title, list: _userProfileImagesList));
+    }
+    debugPrint("parsedvalueis   4----   ${_list.length}");
+    return _list;
   }
 
   Future<AddProfileImagesApiResponse> addUserProfileImage({

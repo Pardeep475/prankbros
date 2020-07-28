@@ -123,9 +123,9 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
                       child: CustomScrollView(
                         shrinkWrap: true,
                         slivers: <Widget>[
-                          SliverToBoxAdapter(
-                            child:  _addItem(),
-                          ),
+//                          SliverToBoxAdapter(
+//                            child:  _addItem(),
+//                          ),
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
@@ -166,7 +166,7 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
               width: Dimens.FIFTEEN,
             ),
             Text(
-              item.createdOnStr,
+              item.createdOnStr != null ? item.createdOnStr :"",
               style: TextStyle(
                 color: AppColors.black_text,
                 fontSize: Dimens.sixteen,
@@ -175,7 +175,7 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
             ),
             Expanded(
               child: Text(
-                item.weight,
+                item.weight != null ? item.weight :"",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.light_text,

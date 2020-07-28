@@ -71,116 +71,145 @@ class _PictureWidgetState extends State<PictureWidget> {
           if (snapshot != null && snapshot.data != null) {
             if (snapshot.data == 0) {
               return Container(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.62,
                 child: Center(child: CommonProgressIndicator(true)),
               );
             } else if (snapshot.data == 1) {
               return Container(
-                child: StreamBuilder<List<UserProfileImages>>(
+                child: StreamBuilder<List<PictureFinalModel>>(
                     initialData: null,
                     stream: _pictureWidgetBloc.weightStream,
                     builder: (context, snapshot) {
                       if (snapshot.data != null) {
                         return Column(
                           children: <Widget>[
-                            snapshot.data.length <= 0
-                                ? SizedBox(
-                                    height: Dimens.fifty,
-                                  )
-                                : SizedBox(
-                                    height: Dimens.hundred,
-                                  ),
-                            snapshot.data.length <= 0
-                                ? Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.5,
-                                    child: Center(
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          onTap: () {
-                                            _selectImageButton();
-                                          },
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(Dimens.fifty)),
-                                          child: Card(
-                                            color: AppColors.light_gray,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Dimens.fifty),
-                                            ),
-                                            elevation: Dimens.three,
-                                            child: Container(
-                                              height: Dimens.seventyFour,
-                                              width: Dimens.seventyFour,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              Dimens.fifty)),
-                                                  color: AppColors.light_gray),
-                                              child: Center(
-                                                child: Image.asset(
-                                                  Images.ICON_PLUS,
-                                                  height: Dimens.twentyFour,
-                                                  width: Dimens.twentyFour,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {
-                                        _selectImageButton();
-                                      },
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(Dimens.fifty)),
-                                      child: Card(
-                                        color: AppColors.light_gray,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimens.fifty),
-                                        ),
-                                        elevation: Dimens.three,
-                                        child: Container(
-                                          height: Dimens.seventyFour,
-                                          width: Dimens.seventyFour,
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(
-                                                      Dimens.fifty)),
-                                              color: AppColors.light_gray),
-                                          child: Center(
-                                            child: Image.asset(
-                                              Images.ICON_PLUS,
-                                              height: Dimens.twentyFour,
-                                              width: Dimens.twentyFour,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                             SizedBox(
-                              height: Dimens.forty,
+                              height: Dimens.thirty,
                             ),
-
-                            _imageListItem(snapshot.data)
-
-//                            Container(
-//                              height: MediaQuery.of(context).size.height * 0.5,
-//                              child: ListView.builder(
-//                                  itemCount: snapshot.data.length,
-//                                  itemBuilder: (BuildContext context, int pos) {
-//                                    return _imageListItem(snapshot.data[pos]);
-//                                  }),
-//                            ),
+//                            _imageListItem(snapshot.data)
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.62,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  primary: false,
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (BuildContext context, int pos) {
+                                    if (pos == 0) {
+                                      return Column(
+                                        children: <Widget>[
+                                          snapshot.data.length <= 0
+                                              ? Container(
+                                                  child: Center(
+                                                    child: Material(
+                                                      color: Colors.transparent,
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          _selectImageButton();
+                                                        },
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    Dimens
+                                                                        .fifty)),
+                                                        child: Card(
+                                                          color: AppColors
+                                                              .light_gray,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(Dimens
+                                                                        .fifty),
+                                                          ),
+                                                          elevation:
+                                                              Dimens.three,
+                                                          child: Container(
+                                                            height: Dimens
+                                                                .seventyFour,
+                                                            width: Dimens
+                                                                .seventyFour,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(Dimens
+                                                                            .fifty)),
+                                                                color: AppColors
+                                                                    .light_gray),
+                                                            child: Center(
+                                                              child:
+                                                                  Image.asset(
+                                                                Images
+                                                                    .ICON_PLUS,
+                                                                height: Dimens
+                                                                    .twentyFour,
+                                                                width: Dimens
+                                                                    .twentyFour,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Material(
+                                                  color: Colors.transparent,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      _selectImageButton();
+                                                    },
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                Dimens.fifty)),
+                                                    child: Card(
+                                                      color:
+                                                          AppColors.light_gray,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(Dimens
+                                                                    .fifty),
+                                                      ),
+                                                      elevation: Dimens.three,
+                                                      child: Container(
+                                                        height:
+                                                            Dimens.seventyFour,
+                                                        width:
+                                                            Dimens.seventyFour,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        Dimens
+                                                                            .fifty)),
+                                                            color: AppColors
+                                                                .light_gray),
+                                                        child: Center(
+                                                          child: Image.asset(
+                                                            Images.ICON_PLUS,
+                                                            height: Dimens
+                                                                .twentyFour,
+                                                            width: Dimens
+                                                                .twentyFour,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                          SizedBox(
+                                            height: Dimens.forty,
+                                          ),
+                                          _imageListItem(snapshot.data[pos])
+                                        ],
+                                      );
+                                    } else {
+                                      return _imageListItem(snapshot.data[pos]);
+                                    }
+                                  }),
+                            ),
                           ],
                         );
                       } else {
@@ -190,7 +219,7 @@ class _PictureWidgetState extends State<PictureWidget> {
                               height: Dimens.hundred,
                             ),
                             Container(
-                              height: MediaQuery.of(context).size.height * 0.5,
+                              height: MediaQuery.of(context).size.height * 0.62,
                               child: Center(
                                 child: Material(
                                   color: Colors.transparent,
@@ -234,7 +263,7 @@ class _PictureWidgetState extends State<PictureWidget> {
               );
             } else {
               return Container(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.62,
                 child: Center(
                   child: Material(
                     color: Colors.transparent,
@@ -273,19 +302,19 @@ class _PictureWidgetState extends State<PictureWidget> {
             }
           } else {
             return Container(
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.62,
               child: Center(child: CommonProgressIndicator(true)),
             );
           }
         });
   }
 
-  Widget _imageListItem(List<UserProfileImages> item) {
+  Widget _imageListItem(PictureFinalModel item) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-//        _headerItem(item.title),
+        _headerItem(item.title),
         SizedBox(
           height: Dimens.twenty,
         ),
@@ -295,16 +324,17 @@ class _PictureWidgetState extends State<PictureWidget> {
               left: Dimens.ten,
               right: Dimens.twenty,
               bottom: Dimens.ten),
-          itemCount: item.length,
+          itemCount: item.list.length,
           itemBuilder: (context, position) {
             debugPrint('------------>itembuilder   ${position}');
-            return _mainItem(item[position]);
+            return _mainItem(item.list[position]);
           },
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
             childAspectRatio: 4 / 4,
           ),
           shrinkWrap: true,
+          primary: false,
           physics: ClampingScrollPhysics(),
         ),
       ],
@@ -330,7 +360,7 @@ class _PictureWidgetState extends State<PictureWidget> {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: (){
+        onTap: () {
           imageClick(item);
         },
         focusColor: Colors.transparent,
@@ -356,12 +386,14 @@ class _PictureWidgetState extends State<PictureWidget> {
     );
   }
 
-  void imageClick(UserProfileImages item){
-    Navigator.pushNamed(context, Strings.FULL_IMAGE_VIEW_SCREEN,arguments: item);
+  void imageClick(UserProfileImages item) {
+    Navigator.pushNamed(context, Strings.FULL_IMAGE_VIEW_SCREEN,
+        arguments: item);
   }
 
   void _selectImageButton() {
-    showDialog(context: context, builder: (_) => CustomImagePickerDialog()).then((value) {
+    showDialog(context: context, builder: (_) => CustomImagePickerDialog())
+        .then((value) {
       getUserWeight();
     });
   }
