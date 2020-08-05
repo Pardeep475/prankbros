@@ -23,6 +23,7 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
   int language = 0; // 0 for Deutch, 1 for ENGLISH
   SessionManager _sessionManager;
   String userId = '';
+  String accessToken = '';
   ChangeLanguageBloc _changeLanguageBloc;
 
   @override
@@ -34,18 +35,16 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
       if (value != null) {
         UserDetails userData = UserDetails.fromJson(value);
         userId = userData.id.toString();
-        if(userData.language.compareTo('ENGLISH')== 0){
+        accessToken = userData.accessToken.toString();
+        if (userData.language.compareTo('ENGLISH') == 0) {
           language = 1;
-        }else{
+        } else {
           language = 0;
         }
-        setState(() {
-
-        });
+        setState(() {});
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +125,8 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
                                       : AppColors.unSelectedRadioColor,
                                   child: CircleAvatar(
                                     backgroundColor: AppColors.backRadioColor,
-                                    radius: language == 0 ? Dimens.SIX : Dimens.TEN,
+                                    radius:
+                                        language == 0 ? Dimens.SIX : Dimens.TEN,
                                   ),
                                 ),
                               ),
@@ -139,9 +139,11 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
                               ),
                               Text(
                                 'Deutch'.toUpperCase(),
-                                    style: TextStyle(
+                                style: TextStyle(
                                     letterSpacing: 1.04,
-                                    color: language == 0 ? AppColors.black_text:AppColors.unSelectedTextRadioColor,
+                                    color: language == 0
+                                        ? AppColors.black_text
+                                        : AppColors.unSelectedTextRadioColor,
                                     fontSize: Dimens.THRTEEN,
                                     fontFamily: Strings.EXO_FONT,
                                     fontWeight: FontWeight.w600),
@@ -176,7 +178,8 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
                                       : AppColors.unSelectedRadioColor,
                                   child: CircleAvatar(
                                     backgroundColor: AppColors.backRadioColor,
-                                    radius: language == 1 ? Dimens.SIX : Dimens.TEN,
+                                    radius:
+                                        language == 1 ? Dimens.SIX : Dimens.TEN,
                                   ),
                                 ),
                               ),
@@ -191,7 +194,9 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
                                 'English'.toUpperCase(),
                                 style: TextStyle(
                                     letterSpacing: 1.04,
-                                    color: language == 1 ? AppColors.black_text:AppColors.unSelectedTextRadioColor,
+                                    color: language == 1
+                                        ? AppColors.black_text
+                                        : AppColors.unSelectedTextRadioColor,
                                     fontSize: Dimens.THRTEEN,
                                     fontFamily: Strings.EXO_FONT,
                                     fontWeight: FontWeight.w600),
@@ -242,15 +247,16 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
       return;
     }
     var languageString = 'DEUTCH';
-    if (language == 0){
+    if (language == 0) {
       languageString = 'DEUTCH';
-    }else{
+    } else {
       languageString = 'ENGLISH';
     }
     debugPrint("language code ----->   ${languageString}");
     Utils.checkConnectivity().then((value) {
       if (value) {
-        _changeLanguageBloc.changeLanguage(userId,languageString, context);
+        _changeLanguageBloc.changeLanguage(
+            userId: userId, language: language.toString(), context: context,accessToken: accessToken);
       } else {
         Navigator.pop(context);
         Utils.showSnackBar(
@@ -258,7 +264,6 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
       }
     });
   }
-
 
   void _dismissLanguagePopUp(BuildContext context) {
     Navigator.pop(context);

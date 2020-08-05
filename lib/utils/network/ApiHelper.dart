@@ -16,6 +16,7 @@ class ApiHelper {
   BaseOptions options;
   String authTOKEN;
   SessionManager _sessionManager;
+
   ApiHelper() {
     options = BaseOptions(
       connectTimeout: 50000,
@@ -75,24 +76,11 @@ class ApiHelper {
     }
   }
 
-  dynamic postJson({String apiUrl, dynamic formData}) async {
+  dynamic postJson(
+      {String apiUrl, dynamic formData, String accessToken}) async {
     try {
-      if (authTOKEN != null) {
-        _dio.options.headers["accessToken"] = "$authTOKEN";
-      } else {
-        setAuthToken().then((value) {
-          if(value != null){
-            authTOKEN = value;
-            debugPrint('authToken---------------3   $authTOKEN');
-            _dio.options.headers["accessToken"] = "$authTOKEN";
-          }
-        });
-      }
-      Future<String> accessToken = setAuthToken();
-      accessToken.then((value) {
-        authTOKEN = value;
-      });
-      _dio.options.headers['accessToken'] = "EuojzdIMwy01oScz/pn9kQ==";
+      if (accessToken != null)
+        _dio.options.headers['accessToken'] = accessToken;
       print("headers----> $authTOKEN");
       Response res = await _dio.post(apiUrl, data: formData);
       print("statusCode${res.statusCode}");
@@ -104,14 +92,12 @@ class ApiHelper {
     }
   }
 
-  dynamic get(
-      {String apiUrl}) async {
+  dynamic get({String apiUrl, String accessToken}) async {
     print("ApiUrl  $apiUrl");
 
     try {
-      _dio.options.headers['accessToken'] = "EuojzdIMwy01oScz/pn9kQ==";
-      print("headers----> $authTOKEN");
-
+      if (accessToken != null)
+        _dio.options.headers['accessToken'] = accessToken;
       Response res = await _dio.get(
         apiUrl,
       );

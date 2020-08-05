@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/nutrition/NutritionBloc.dart';
@@ -27,15 +28,12 @@ class Nutrition extends StatefulWidget {
 class _NutritionState extends State<Nutrition> {
   _NutritionState({this.onPush});
 
-  static const Key allNutritionKey = Key(Keys.allNutritionKey);
-  static const Key mixNutritionKey = Key(Keys.mixNutritionKey);
-  static const Key vegNutritionKey = Key(Keys.vegNutritionKey);
-  static const Key fevNutritionKey = Key(Keys.fevNutritionKey);
   final ValueChanged<int> onPush;
   List<NutritionRecipeModel> recipeList = new List();
   NutritionBloc _nutritionBloc;
   SessionManager _sessionManager;
   String userId = '';
+  String accessToken = '';
 
   @override
   void initState() {
@@ -53,6 +51,7 @@ class _NutritionState extends State<Nutrition> {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         userId = userData.id.toString();
+        accessToken = userData.accessToken.toString();
         _getNutrition(context);
       }
     });
@@ -61,7 +60,8 @@ class _NutritionState extends State<Nutrition> {
   void _getNutrition(BuildContext context) {
     Utils.checkConnectivity().then((value) {
       if (value) {
-        _nutritionBloc.getNutritions(userId, context);
+        _nutritionBloc.getNutritions(
+            userId: userId, context: context, accessToken: accessToken);
       } else {
         Utils.showSnackBar(
             Strings.please_check_your_internet_connection, context);
@@ -244,7 +244,7 @@ class _NutritionState extends State<Nutrition> {
     ;
   }
 
-  Widget _errorWidget({String value =''}) {
+  Widget _errorWidget({String value = ''}) {
     return Container(
       child: Center(
         child: Text(
@@ -300,12 +300,50 @@ class _NutritionState extends State<Nutrition> {
         elevation: Dimens.five,
         child: Column(
           children: <Widget>[
-            FadeInImage(
-                fit: BoxFit.cover,
+//            FadeInImage(
+//                fit: BoxFit.cover,
+//                width: MediaQuery.of(context).size.width,
+//                height: Dimens.ONE_TWO_FIVE,
+////                image: NetworkImage(item.imagePath),
+//                image: CachedNetworkImage(
+//                  imageUrl: "http://via.placeholder.com/200x150",
+//                  imageBuilder: (context, imageProvider) => Container(
+//                    decoration: BoxDecoration(
+//                      image: DecorationImage(
+//                          image: imageProvider,
+//                          fit: BoxFit.cover,
+//                          colorFilter:
+//                          ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
+//                    ),
+//                  ),
+//                  placeholder: (context, url) => CircularProgressIndicator(),
+//                  errorWidget: (context, url, error) => Icon(Icons.error),
+//                ),
+//                placeholder: AssetImage(Images.DummyFood)),
+
+            CachedNetworkImage(
+              width: MediaQuery.of(context).size.width,
+              height: Dimens.ONE_TWO_FIVE,
+              imageUrl: item.imagePath,
+              imageBuilder: (context, imageProvider) => Container(
                 width: MediaQuery.of(context).size.width,
                 height: Dimens.ONE_TWO_FIVE,
-                image: NetworkImage(item.imagePath),
-                placeholder: AssetImage(Images.DummyFood)),
+                decoration: BoxDecoration(
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
+              ),
+              placeholder: (context, url) =>
+                  Utils.getImagePlaceHolderWidgetProfile(
+                      context: context,
+                      height: Dimens.ONE_TWO_FIVE,
+                      width: MediaQuery.of(context).size.width),
+              errorWidget: (context, url, error) =>
+                  Utils.getImagePlaceHolderWidgetProfile(
+                      context: context,
+                      height: Dimens.ONE_TWO_FIVE,
+                      width: MediaQuery.of(context).size.width),
+            ),
             SizedBox(
               height: Dimens.fifteen,
             ),

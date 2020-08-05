@@ -14,7 +14,7 @@ import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
 
 class HistoryWidget extends StatefulWidget {
-  final MotivationData motivationData;
+  final MotivationApiResponse motivationData;
 
   HistoryWidget({this.motivationData});
 
@@ -24,7 +24,7 @@ class HistoryWidget extends StatefulWidget {
 }
 
 class _HistoryWidgetState extends State<HistoryWidget> {
-  final MotivationData motivationData;
+  final MotivationApiResponse motivationData;
 
   _HistoryWidgetState({this.motivationData});
 
@@ -45,31 +45,33 @@ class _HistoryWidgetState extends State<HistoryWidget> {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         userId = userData.id.toString();
-        getMotivation();
+//        getMotivation();
       }
     });
   }
 
-  void getMotivation() {
-    if (userId == null || userId.isEmpty) {
-      Utils.showSnackBar('Something went wrong.', context);
-      return;
-    }
-    Utils.checkConnectivity().then((value) {
-      if (value) {
-        _historyBloc.getMotivationActivation(userId, '1', context);
-      } else {
-        Navigator.pop(context);
-        Utils.showSnackBar(
-            Strings.please_check_your_internet_connection, context);
-      }
-    });
-  }
+//  void getMotivation() {
+//    if (userId == null || userId.isEmpty) {
+//      Utils.showSnackBar('Something went wrong.', context);
+//      return;
+//    }
+//    Utils.checkConnectivity().then((value) {
+//      if (value) {
+//        _historyBloc.getMotivationActivation(userId, '1', context);
+//      } else {
+//        Navigator.pop(context);
+//        Utils.showSnackBar(
+//            Strings.please_check_your_internet_connection, context);
+//      }
+//    });
+//  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _motivationHistoryListInit();
+    Future.delayed(Duration(milliseconds: 60), (){
+      _historyBloc.getMotivationActivationStart(motivationData, context);
+    });
   }
 
   void _motivationHistoryListInit() {
@@ -91,6 +93,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
 
   @override
   Widget build(BuildContext context) {
+
     return _historyWidget();
   }
 
@@ -321,13 +324,15 @@ class _HistoryWidgetState extends State<HistoryWidget> {
               width: Dimens.thrteen,
             ),
             Expanded(
-              child: Container(
+              child: motivationHistoryItem.title != null
+                  ? Container(
                 padding: EdgeInsets.symmetric(
-                    horizontal: Dimens.twentyFive, vertical: Dimens.fifteen),
+                    horizontal: Dimens.twentyFive,
+                    vertical: Dimens.fifteen),
                 decoration: BoxDecoration(
                   color: AppColors.light_gray,
                   borderRadius:
-                      BorderRadius.all(Radius.circular(Dimens.hundred)),
+                  BorderRadius.all(Radius.circular(Dimens.hundred)),
                 ),
                 child: Text(
                   motivationHistoryItem.title,
@@ -337,6 +342,10 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                       fontWeight: FontWeight.w700,
                       color: AppColors.light_text),
                 ),
+              )
+                  : SizedBox(
+                height: 0,
+                width: 0,
               ),
             ),
             SizedBox(

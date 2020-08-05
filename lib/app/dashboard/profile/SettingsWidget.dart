@@ -30,6 +30,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   SettingBloc _settingBloc;
   SessionManager _sessionManager;
   String userId = '';
+  String accessToken = '';
   String trainingWeek = "1";
 
   @override
@@ -44,6 +45,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         userId = userData.id.toString();
+        accessToken = userData.accessToken.toString();
       }
     });
   }
@@ -203,7 +205,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     Utils.checkConnectivity().then((value) {
       if (value) {
         if (_validation(context)) {
-          _settingBloc.resetYourProgram(userId, trainingWeek, context);
+          _settingBloc.resetYourProgram(
+              userId: userId,
+              trainingWeek: trainingWeek,
+              context: context,
+              accessToken: accessToken);
 //          _loginBloc.getUserDetails('1', context);
         }
       } else {

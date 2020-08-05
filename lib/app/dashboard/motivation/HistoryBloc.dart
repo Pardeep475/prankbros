@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:prankbros2/models/MotivationHistoryModel.dart';
+import 'package:prankbros2/models/motivation/MotivationApiResponse.dart';
 import 'package:prankbros2/utils/AppConstantHelper.dart';
 import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/network/ApiRepository.dart';
@@ -26,11 +27,11 @@ class HistoryBloc {
   AppConstantHelper helper = AppConstantHelper();
 
   void getMotivationActivation(
-      String userId, String trainingWeek, BuildContext context) {
+      {String userId, String trainingWeek,String accessToken, BuildContext context}) {
     debugPrint('userID  :-- $userId');
     progressSink.add(0);
     apiRepository
-        .getMotivationActivation(userId: userId, trainingWeek: trainingWeek)
+        .getMotivationActivation(userId: userId, trainingWeek: trainingWeek,accessToken: accessToken)
         .then((onResponse) {
       if (onResponse.status == 1) {
         debugPrint("Here is user id   :        $userId");
@@ -63,5 +64,43 @@ class HistoryBloc {
       print("On_Error" + onError.toString());
       Utils.showSnackBar(onError.toString(), context);
     });
+  }
+
+  void getMotivationActivationStart(
+      MotivationApiResponse motivationData, BuildContext context) {
+    progressSink.add(0);
+
+    List<MotivationHistoryItem> _list = new List();
+
+    try {
+      if (motivationData == null ||
+          motivationData.workoutActivities == null ||
+          motivationData.workoutActivities.length <= 0) {
+        progressSink.add(2);
+        Utils.showSnackBar("Something went wrong", context);
+      } else {
+        for (int i = 0; i < motivationData.workoutActivities.length; i++) {
+          debugPrint(
+              "date   :        ${motivationData.workoutActivities[i].createdOnStr}");
+
+          _list.add(MotivationHistoryItem(
+              date: Utils.getMonthFromDate(
+                  motivationData.workoutActivities[i].createdOnStr),
+              weekDay: Utils.getMonthFromDay(
+                  motivationData.workoutActivities[i].createdOnStr),
+              title: motivationData.workoutActivities[i].workoutName,
+              isSelected: Utils.checkCurrentDate(
+                  motivationData.workoutActivities[i].createdOnStr)));
+          debugPrint(
+              'date  :   ${_list[i].date}   week  :   ${_list[i].weekDay}   name:   ${_list[i].title}    isselected:   ${_list[i].isSelected}');
+        }
+        progressSink.add(1);
+        weightController.add(_list);
+      }
+    } catch (e) {
+      progressSink.add(2);
+      print("On_Error" + e.toString());
+      Utils.showSnackBar(e.toString(), context);
+    }
   }
 }

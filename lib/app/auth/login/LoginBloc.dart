@@ -11,9 +11,10 @@ import 'package:rxdart/rxdart.dart';
 
 class LoginBloc {
   final BehaviorSubject progressController = BehaviorSubject<bool>();
-  Stream get progressStream => progressController.stream;
-  StreamSink get progressSink => progressController.sink;
 
+  Stream get progressStream => progressController.stream;
+
+  StreamSink get progressSink => progressController.sink;
 
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
@@ -23,7 +24,8 @@ class LoginBloc {
     debugPrint('email  :-- $email    password:--   $password');
     apiRepository.login(email, password).then((onResponse) {
       if (onResponse.status == 1) {
-        debugPrint("Here is user email   :        ${onResponse.userDetails.id}");
+        debugPrint(
+            "Here is user email   :        ${onResponse.userDetails.id}");
         SessionManager sessionManager = new SessionManager();
         sessionManager.setUserModel(onResponse.userDetails);
         sessionManager.getUserModel().then((value) {
@@ -48,10 +50,13 @@ class LoginBloc {
     });
   }
 
-  void getUserDetails(String userId, BuildContext context) {
+  void getUserDetails(
+      {String userId, String accessToken, BuildContext context}) {
     progressSink.add(true);
     debugPrint('userID  :-- $userId');
-    apiRepository.getUserDetails(userId).then((onResponse) {
+    apiRepository
+        .getUserDetails(userId: userId, accessToken: accessToken)
+        .then((onResponse) {
       if (onResponse.status == 1) {
         debugPrint("Here is user id   :        $userId");
         SessionManager sessionManager = new SessionManager();

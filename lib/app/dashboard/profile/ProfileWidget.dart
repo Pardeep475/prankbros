@@ -25,6 +25,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   UpdateProfileBloc _updateProfileBloc;
   SessionManager _sessionManager;
   String userId = '';
+  String accessToken = '';
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         userId = userData.id.toString();
+        accessToken = userData.accessToken.toString();
         _firstNameController.text =
             userData.firstName != null ? userData.firstName : '';
         _lastNameController.text =
@@ -255,7 +257,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     );
   }
 
-  void _profileSavePressed(BuildContext context)  {
+  void _profileSavePressed(BuildContext context) {
     print('Profile Saved !');
     setState(() {
       _saveButtonLoading = true;
@@ -264,14 +266,20 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     Utils.checkConnectivity().then((value) {
       if (value) {
         if (_validation(context)) {
-         _updateProfileBloc.updateUserProfile(userId, _firstNameController.text,
-                  _lastNameController.text, _emailController.text, context).then((value){
-           setState(() {
-             _saveButtonLoading = false;
-           });
-           debugPrint('after api hit');
-         });
-
+          _updateProfileBloc
+              .updateUserProfile(
+                  userId: userId,
+                  firstName: _firstNameController.text,
+                  lastName: _lastNameController.text,
+                  email: _emailController.text,
+                  context: context,
+                  accessToken: accessToken)
+              .then((value) {
+            setState(() {
+              _saveButtonLoading = false;
+            });
+            debugPrint('after api hit');
+          });
         }
       } else {
         Utils.showSnackBar(
@@ -279,6 +287,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       }
     });
   }
+
+  /*
+  * userId, ,
+                  _lastNameController.text, _emailController.text, context
+  * 
+  * */
 
   bool _validation(BuildContext context) {
     if (Utils.checkNullOrEmpty(_firstNameController.text)) {

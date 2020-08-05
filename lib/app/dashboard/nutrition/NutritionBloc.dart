@@ -24,10 +24,13 @@ class NutritionBloc {
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
 
-  void getNutritions(String userId, BuildContext context) {
+  void getNutritions(
+      {String userId, String accessToken, BuildContext context}) {
     progressSink.add(true);
     debugPrint('userID  :-- $userId');
-    apiRepository.getAllNutrition(userId).then((onResponse) {
+    apiRepository
+        .getAllNutrition(userId: userId, accessToken: accessToken)
+        .then((onResponse) {
       if (onResponse.status == 1) {
         debugPrint("Here is user id   :        ${onResponse}");
         if (onResponse != null)

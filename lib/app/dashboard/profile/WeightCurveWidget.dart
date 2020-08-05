@@ -23,6 +23,7 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
   WeightCurveBloc _weightCurveBloc;
   SessionManager _sessionManager;
   String userId = '';
+  String accessToken = '';
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         userId = userData.id.toString();
+        accessToken = userData.accessToken.toString();
         getUserWeight();
       }
     });
@@ -52,7 +54,8 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
     }
     Utils.checkConnectivity().then((value) {
       if (value) {
-        _weightCurveBloc.getWeightCurve(userId, context);
+        _weightCurveBloc.getWeightCurve(
+            userId: userId, context: context, accessToken: accessToken);
       } else {
         Navigator.pop(context);
         Utils.showSnackBar(
@@ -166,7 +169,7 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
               width: Dimens.FIFTEEN,
             ),
             Text(
-              item.createdOnStr != null ? item.createdOnStr :"",
+              item.createdOnStr != null ? item.createdOnStr : "",
               style: TextStyle(
                 color: AppColors.black_text,
                 fontSize: Dimens.sixteen,
@@ -175,7 +178,7 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
             ),
             Expanded(
               child: Text(
-                item.weight != null ? item.weight :"",
+                item.weight != null ? item.weight : "",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.light_text,
@@ -186,7 +189,7 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
             ),
             InkWell(
               onTap: () {
-                _plusButtonClick(index: index);
+                _plusButtonClick(item: item);
               },
               borderRadius: BorderRadius.all(Radius.circular(Dimens.thirty)),
               child: Container(
@@ -223,74 +226,75 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
     );
   }
 
-  Widget _addItem() {
-    return Column(
-      children: <Widget>[
-        SizedBox(
-          height: Dimens.TWENTY,
-        ),
-        Row(
-          children: <Widget>[
-            SizedBox(
-              width: Dimens.FIFTEEN,
-            ),
-            Text(
-              '',
-              style: TextStyle(
-                color: AppColors.black_text,
-                fontSize: Dimens.sixteen,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Expanded(
-              child: Text(
-                '',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColors.light_text,
-                  fontSize: Dimens.sixteen,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                _plusButtonClick();
-              },
-              borderRadius: BorderRadius.all(Radius.circular(Dimens.thirty)),
-              child: Container(
-                height: Dimens.twentyEight,
-                width: Dimens.twentyEight,
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(Dimens.thirty)),
-                    color: AppColors.light_gray),
-                child: Center(
-                  child: Image.asset(
-                    Images.ICON_PLUS,
-                    height: Dimens.twelve,
-                    color: AppColors.black_text,
-                    width: Dimens.twelve,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: Dimens.TWENTY,
-            ),
-          ],
-        ),
-        SizedBox(
-          height: Dimens.FIFTEEN,
-        ),
-        Divider(height: Dimens.ONE, color: AppColors.divider_color)
-      ],
-    );
-  }
+//  Widget _addItem() {
+//    return Column(
+//      children: <Widget>[
+//        SizedBox(
+//          height: Dimens.TWENTY,
+//        ),
+//        Row(
+//          children: <Widget>[
+//            SizedBox(
+//              width: Dimens.FIFTEEN,
+//            ),
+//            Text(
+//              '',
+//              style: TextStyle(
+//                color: AppColors.black_text,
+//                fontSize: Dimens.sixteen,
+//                fontWeight: FontWeight.w700,
+//              ),
+//            ),
+//            Expanded(
+//              child: Text(
+//                '',
+//                textAlign: TextAlign.center,
+//                style: TextStyle(
+//                  color: AppColors.light_text,
+//                  fontSize: Dimens.sixteen,
+//                  fontWeight: FontWeight.w500,
+//                ),
+//              ),
+//            ),
+//            InkWell(
+//              onTap: () {
+//                _plusButtonClick();
+//              },
+//              borderRadius: BorderRadius.all(Radius.circular(Dimens.thirty)),
+//              child: Container(
+//                height: Dimens.twentyEight,
+//                width: Dimens.twentyEight,
+//                decoration: BoxDecoration(
+//                    borderRadius:
+//                        BorderRadius.all(Radius.circular(Dimens.thirty)),
+//                    color: AppColors.light_gray),
+//                child: Center(
+//                  child: Image.asset(
+//                    Images.ICON_PLUS,
+//                    height: Dimens.twelve,
+//                    color: AppColors.black_text,
+//                    width: Dimens.twelve,
+//                  ),
+//                ),
+//              ),
+//            ),
+//            SizedBox(
+//              width: Dimens.TWENTY,
+//            ),
+//          ],
+//        ),
+//        SizedBox(
+//          height: Dimens.FIFTEEN,
+//        ),
+//        Divider(height: Dimens.ONE, color: AppColors.divider_color)
+//      ],
+//    );
+//  }
 
-  void _plusButtonClick({int index}) {
-    showDialog(context: context, builder: (_) => CustomUpdateWeightDialog())
-        .then((value) {
+  void _plusButtonClick({UserProfileWeights item}) {
+    showDialog(
+        context: context,
+        builder: (_) => CustomUpdateWeightDialog(item: item)).then((value) {
       getUserWeight();
     });
   }

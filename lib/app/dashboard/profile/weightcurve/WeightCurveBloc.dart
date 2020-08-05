@@ -25,10 +25,10 @@ class WeightCurveBloc {
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
 
-  void getWeightCurve(String userId, BuildContext context) {
+  void getWeightCurve({String userId,String accessToken, BuildContext context}) {
     debugPrint('userID  :-- $userId');
     progressSink.add(0);
-    apiRepository.getUserWeight(userId: userId).then((onResponse) {
+    apiRepository.getUserWeight(userId: userId,accessToken: accessToken).then((onResponse) {
       if (onResponse.status == 1) {
         debugPrint("Here is user id   :        $userId");
         if (onResponse.userProfileWeights != null &&
@@ -50,10 +50,10 @@ class WeightCurveBloc {
     });
   }
 
-  void addWeightCurve(String userId, String widget, BuildContext context) {
+  void addWeightCurve({String userId, String widget,String createdOn,String accessToken, BuildContext context}) {
     debugPrint('userID  :-- $userId');
     apiRepository
-        .addUserWeight(userId: userId, weight: widget)
+        .addUserWeight(userId: userId, weight: widget,createdOn :createdOn,accessToken: accessToken)
         .then((onResponse) {
       debugPrint('add metjod--->   ${onResponse.toJson()}');
       if (onResponse == null) {

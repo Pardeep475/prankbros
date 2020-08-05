@@ -28,6 +28,7 @@ class _MotivationState extends State<Motivation> {
   String motivation = '1/4';
   SessionManager _sessionManager;
   String userId = '';
+  String accessToken = '';
   MotivationBloc _motivationBloc;
 
   @override
@@ -41,6 +42,7 @@ class _MotivationState extends State<Motivation> {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         userId = userData.id.toString();
+        accessToken = userData.accessToken;
         getMotivation();
       }
     });
@@ -53,7 +55,8 @@ class _MotivationState extends State<Motivation> {
     }
     Utils.checkConnectivity().then((value) {
       if (value) {
-        _motivationBloc.getMotivation('1', context);
+        _motivationBloc.getMotivation(
+            accessToken: accessToken, userId: userId, context: context);
       } else {
         Navigator.pop(context);
         Utils.showSnackBar(
@@ -315,23 +318,27 @@ class _MotivationState extends State<Motivation> {
   }
 
   Widget _contentData() {
-    return StreamBuilder<MotivationData>(
+    return StreamBuilder<MotivationApiResponse>(
         initialData: null,
         stream: _motivationBloc.weightStream,
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             _motivationBloc.motivationSink.add(
-                snapshot.data.motivationalVideos != null
-                    ? '${snapshot.data.motivationalVideos}/4'
+                snapshot.data.motivationData.motivationalVideos != null
+                    ? '${snapshot.data.motivationData.motivationalVideos}/4'
                     : '0/4');
             _motivationBloc.workoutSink.add(
-                snapshot.data.workouts != null ? snapshot.data.workouts.toString() : '0');
-            _motivationBloc.weekSink
-                .add(snapshot.data.week != null ? snapshot.data.week.toString() : '1');
+                snapshot.data.motivationData.workouts != null
+                    ? snapshot.data.motivationData.workouts.toString()
+                    : '0');
+            _motivationBloc.weekSink.add(
+                snapshot.data.motivationData.week != null
+                    ? snapshot.data.motivationData.week.toString()
+                    : '1');
             return Expanded(
               child: _tabClickIndex == 0
                   ? MotivationWidget(
-                      motivationData: snapshot.data,
+                      motivationData: snapshot.data.motivationData,
                     )
                   : HistoryWidget(
                       motivationData: snapshot.data,

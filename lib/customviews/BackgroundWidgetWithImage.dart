@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/utils/Images.dart';
+import 'package:prankbros2/utils/Utils.dart';
 
 class BackgroundWidgetWithImage extends StatelessWidget {
   String imagePath;
@@ -13,12 +15,36 @@ class BackgroundWidgetWithImage extends StatelessWidget {
     // TODO: implement build
     return Stack(
       children: <Widget>[
-        FadeInImage(
-            height: MediaQuery.of(context).size.height / 2.7,
+//        FadeInImage(
+//            height: MediaQuery.of(context).size.height / 2.7,
+//            width: MediaQuery.of(context).size.width,
+//            fit: BoxFit.cover,
+//            image: NetworkImage(imagePath),
+//            placeholder: AssetImage(Images.DummyFood)),
+
+        CachedNetworkImage(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 2.7,
+          imageUrl: imagePath,
+          imageBuilder: (context, imageProvider) => Container(
             width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-            image: NetworkImage(imagePath),
-            placeholder: AssetImage(Images.DummyFood)),
+            height: MediaQuery.of(context).size.height / 2.7,
+            decoration: BoxDecoration(
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+            ),
+          ),
+          placeholder: (context, url) =>
+              Utils.getImagePlaceHolderWidgetProfile(
+                  context: context,
+                  height: MediaQuery.of(context).size.height / 2.7,
+                  width: MediaQuery.of(context).size.width),
+          errorWidget: (context, url, error) =>
+              Utils.getImagePlaceHolderWidgetProfile(
+                  context: context,
+                  height: MediaQuery.of(context).size.height / 2.7,
+                  width: MediaQuery.of(context).size.width),
+        ),
+
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,

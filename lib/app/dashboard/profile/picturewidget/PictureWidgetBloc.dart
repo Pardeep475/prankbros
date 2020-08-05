@@ -28,16 +28,19 @@ class PictureWidgetBloc {
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
 
-  void getUserProfileImages(String userId, BuildContext context) {
+  void getUserProfileImages(
+      {String userId, String accessToken, BuildContext context}) {
     debugPrint('userID  :-- $userId');
     progressSink.add(0);
-    apiRepository.getUserProfileImages(userId: userId).then((onResponse) {
-      if (onResponse != null &&
-          onResponse.length > 0) {
-        debugPrint(
-            "Here is user id   :        ${onResponse.length}");
+    apiRepository
+        .getUserProfileImages(userId: userId, accessToken: accessToken)
+        .then((onResponse) {
+      if (onResponse != null && onResponse.length > 0) {
+        debugPrint("Here is user id   :        ${onResponse.length}");
         progressSink.add(1);
         weightController.add(onResponse);
+      }else{
+        progressSink.add(2);
       }
     }).catchError((onError) {
       progressSink.add(2);
@@ -46,10 +49,12 @@ class PictureWidgetBloc {
     });
   }
 
-  void addUserProfileImages(String userId, String path, BuildContext context) {
+  void addUserProfileImages(
+      {String userId, String path, String accessToken, BuildContext context}) {
     debugPrint('userID  :-- $userId');
     apiRepository
-        .addUserProfileImage(userId: userId, path: path)
+        .addUserProfileImage(
+            userId: userId, path: path, accessToken: accessToken)
         .then((onResponse) {
       debugPrint('add metjod--->   ${onResponse.toJson()}');
       if (onResponse == null) {
@@ -63,6 +68,24 @@ class PictureWidgetBloc {
 //      }
       Navigator.pop(context);
 //      Utils.showSnackBar(onResponse.message.toString(), context);
+    }).catchError((onError) {
+      print("On_Error" + onError.toString());
+      Utils.showToast(onError.toString(), context);
+      Navigator.pop(context);
+    });
+  }
+
+  void deleteUserProfileImages(
+      {String userId, String id, String accessToken, BuildContext context}) {
+    debugPrint('userID  :-- $userId');
+    apiRepository
+        .deleteUserImage(userId: userId, id: id, accessToken: accessToken)
+        .then((onResponse) {
+      debugPrint('add metjod--->   ${onResponse.toJson()}');
+      if (onResponse != null) {
+        Utils.showToast(onResponse.message, context);
+      }
+      Navigator.pop(context);
     }).catchError((onError) {
       print("On_Error" + onError.toString());
       Utils.showToast(onError.toString(), context);

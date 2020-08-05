@@ -24,10 +24,15 @@ class NutritionDetailBloc {
   AppConstantHelper helper = AppConstantHelper();
 
   void nutritionActionModel(
-      NutritionActionModel nutritionActionModel, BuildContext context) {
+      {NutritionActionModel nutritionActionModel,
+      String accessToken,
+      BuildContext context}) {
     progressSink.add(true);
     debugPrint('userID  :-- ${nutritionActionModel.userId}');
-    apiRepository.actionFavNutrition(nutritionActionModel).then((onResponse) {
+    apiRepository
+        .actionFavNutrition(
+            nutritationModel: nutritionActionModel, accessToken: accessToken)
+        .then((onResponse) {
       if (onResponse.status == 1) {
         nutritionSink.add(true);
       } else {

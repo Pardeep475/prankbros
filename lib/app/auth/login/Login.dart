@@ -28,10 +28,11 @@ class _LoginState extends State<Login> {
     super.initState();
     _loginBloc = new LoginBloc();
     _emailController =
-        TextEditingController(text: 'pardeepsharma475@yopmail.com');
+        TextEditingController(text: 'test@yopmail.com');
     _passwordController = TextEditingController(text: '12345');
   }
-
+//pardeepsharma475@yopmail.com
+  // 12345
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();

@@ -11,12 +11,21 @@ class UpdateProfileBloc {
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
 
-  Future<bool> updateUserProfile(String userId, String firstName,
-      String lastName, String email, BuildContext context) async {
+  Future<bool> updateUserProfile(
+      {String userId,
+      String firstName,
+      String lastName,
+      String email,
+      String accessToken,
+      BuildContext context}) async {
     debugPrint(
         'userId  :-- $userId    firstName:--   $firstName  lastName:--   $lastName  email---:   $email');
     var onResponse = await apiRepository.updateUserProfile(
-        userId, firstName, lastName, email);
+        userId: userId,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        accessToken: accessToken);
     try {
       if (onResponse.status == 1) {
         debugPrint(

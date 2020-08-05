@@ -11,10 +11,10 @@ class ChangeLanguageBloc {
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
 
-  void changeLanguage(String userId, String language, BuildContext context) {
+  void changeLanguage({String userId, String language,String accessToken, BuildContext context}) {
 
     debugPrint('userId  :-- $userId    language:--   $language');
-    apiRepository.changeLanguage(userId, language).then((onResponse) {
+    apiRepository.changeLanguage(userId: userId,language: language,accessToken: accessToken).then((onResponse) {
       if (onResponse.status == 1) {
         debugPrint("Here is user email   :        ${onResponse.userDetails.id}");
         SessionManager sessionManager = new SessionManager();

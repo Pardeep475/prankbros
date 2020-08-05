@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/profile/picturewidget/PictureWidgetBloc.dart';
@@ -24,6 +25,7 @@ class _PictureWidgetState extends State<PictureWidget> {
   var filePath = "";
   SessionManager _sessionManager;
   String userId = '';
+  String accessToken = '';
   PictureWidgetBloc _pictureWidgetBloc;
 
   @override
@@ -37,6 +39,7 @@ class _PictureWidgetState extends State<PictureWidget> {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         userId = userData.id.toString();
+        accessToken = userData.accessToken.toString();
         getUserWeight();
       }
     });
@@ -49,7 +52,8 @@ class _PictureWidgetState extends State<PictureWidget> {
     }
     Utils.checkConnectivity().then((value) {
       if (value) {
-        _pictureWidgetBloc.getUserProfileImages(userId, context);
+        _pictureWidgetBloc.getUserProfileImages(
+            userId: userId, context: context, accessToken: accessToken);
       } else {
         Navigator.pop(context);
         Utils.showSnackBar(
@@ -374,12 +378,29 @@ class _PictureWidgetState extends State<PictureWidget> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
-            child: FadeInImage(
-                fit: BoxFit.cover,
+            child: CachedNetworkImage(
+              width: Dimens.seventy,
+              height: Dimens.fifty,
+              imageUrl: item.imagePath,
+              imageBuilder: (context, imageProvider) => Container(
                 width: Dimens.seventy,
                 height: Dimens.fifty,
-                image: NetworkImage(item.imagePath),
-                placeholder: AssetImage(Images.DummyFood)),
+                decoration: BoxDecoration(
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
+              ),
+              placeholder: (context, url) =>
+                  Utils.getImagePlaceHolderWidgetProfile(
+                      context: context,
+                      height: Dimens.fifty,
+                      width: Dimens.seventy),
+              errorWidget: (context, url, error) =>
+                  Utils.getImagePlaceHolderWidgetProfile(
+                      context: context,
+                      height: Dimens.fifty,
+                      width: Dimens.seventy),
+            ),
           ),
         ),
       ),
@@ -388,7 +409,10 @@ class _PictureWidgetState extends State<PictureWidget> {
 
   void imageClick(UserProfileImages item) {
     Navigator.pushNamed(context, Strings.FULL_IMAGE_VIEW_SCREEN,
-        arguments: item);
+            arguments: item)
+        .then((value) {
+      getUserWeight();
+    });
   }
 
   void _selectImageButton() {
@@ -398,3 +422,14 @@ class _PictureWidgetState extends State<PictureWidget> {
     });
   }
 }
+
+
+/*
+*  /* FadeInImage(
+                fit: BoxFit.cover,
+                width: Dimens.seventy,
+                height: Dimens.fifty,
+                image: NetworkImage(item.imagePath),
+                placeholder: AssetImage(Images.DummyFood))*/
+*
+* */

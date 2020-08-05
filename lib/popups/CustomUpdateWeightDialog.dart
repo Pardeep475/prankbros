@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/profile/weightcurve/WeightCurveBloc.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
@@ -14,26 +15,28 @@ import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class CustomUpdateWeightDialog extends StatefulWidget {
   final int index;
+  UserProfileWeights item;
 
-  CustomUpdateWeightDialog({this.index});
+  CustomUpdateWeightDialog({this.index, this.item});
 
   @override
   State<StatefulWidget> createState() =>
-      _CustomUpdateWeightDialog(index: index);
+      _CustomUpdateWeightDialog(index: index, item: item);
 }
 
 class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
   static const Key changeLanguageKey = Key(Keys.changeLanguageKey);
   bool isLoading = false;
   int language = 0; // 0 for Deutch, 1 for ENGLISH
-
+  UserProfileWeights item;
   final int index;
 
-  _CustomUpdateWeightDialog({this.index});
+  _CustomUpdateWeightDialog({this.index, this.item});
 
   WeightCurveBloc _weightCurveBloc;
   SessionManager _sessionManager;
   String userId = '';
+  String accessToken = '';
   String weight = '50,0';
   bool _buttonPressed = false;
   bool _loopActive = false;
@@ -49,6 +52,7 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         userId = userData.id.toString();
+        accessToken = userData.accessToken.toString();
       }
     });
   }
@@ -207,21 +211,28 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
 
   void _updateWeight(BuildContext context) {
     print('clicked   $isLoading');
-    setState(() {
-      isLoading = isLoading ? false : true;
-    });
-
     if (userId == null || userId.isEmpty) {
-      Utils.showSnackBar('Something went wrong.', context);
+      Utils.showToast('Something went wrong.', context);
+      return;
+    }
+    if (item == null || item.createdOn == null || item.createdOn.isEmpty) {
+      Utils.showToast('Date not specified', context);
       return;
     }
     Utils.checkConnectivity().then((value) {
       if (value) {
-        _weightCurveBloc.addWeightCurve(userId, weight, context);
+        setState(() {
+          isLoading = isLoading ? false : true;
+        });
+        _weightCurveBloc.addWeightCurve(
+            userId: userId,
+            widget: weight,
+            createdOn: item.createdOn,
+            context: context,
+            accessToken: accessToken);
       } else {
         Navigator.pop(context);
-        Utils.showSnackBar(
-            Strings.please_check_your_internet_connection, context);
+        Utils.showToast(Strings.please_check_your_internet_connection, context);
       }
     });
   }
@@ -348,4 +359,14 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
       ),
     );
   }
+
+/*
+  * "{
+        ""userId"":1,
+        ""weight"":""57,2"",
+        ""createdOn"":""2020-07-29""
+}"
+  *
+  * */
+
 }

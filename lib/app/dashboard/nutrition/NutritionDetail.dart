@@ -24,6 +24,7 @@ class _NutritionDetail extends State<NutritionDetail> {
   NutritionDetailBloc _nutritionDetailBloc;
   SessionManager _sessionManager;
   String userId = '';
+  String accessToken = '';
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _NutritionDetail extends State<NutritionDetail> {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         userId = userData.id.toString();
+        accessToken = userData.accessToken.toString();
       }
     });
   }
@@ -360,9 +362,10 @@ class _NutritionDetail extends State<NutritionDetail> {
         debugPrint(
             'userid----->  $userId   nutritionId----->$nutritionId  nutritionId----->$action');
         _nutritionDetailBloc.nutritionActionModel(
-            NutritionActionModel(
+            nutritionActionModel: NutritionActionModel(
                 userId: userId, nutritionId: nutritionId, favorite: action),
-            context);
+            accessToken: accessToken,
+            context: context);
       } else {
         Utils.showSnackBar(
             Strings.please_check_your_internet_connection, context);

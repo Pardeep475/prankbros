@@ -44,75 +44,74 @@ class ApiRepository {
   }
 
   Future<LoginResponse> getUserDetails(
-    String userId,
-  ) async {
+      {String userId, String accessToken}) async {
     var response = await apiHelper.get(
       apiUrl:
           Strings.BASE_URL + ApiEndPoints.getUserDetails + '?userId=$userId',
+      accessToken: accessToken,
     );
     Map<String, dynamic> data = jsonDecode(response);
     return LoginResponse.fromJson(data);
   }
 
   Future<LoginResponse> resetYourProgram(
-    String userId,
-    String trainingWeek,
-  ) async {
+      {String userId, String trainingWeek, String accessToken}) async {
     var value = {'userId': userId, 'trainingWeek': trainingWeek};
     var response = await apiHelper.postJson(
         apiUrl: Strings.BASE_URL + ApiEndPoints.resetYourProgram,
-        formData: value);
+        formData: value,
+        accessToken: accessToken);
     Map<String, dynamic> data = jsonDecode(response);
     return LoginResponse.fromJson(data);
   }
 
   Future<NutritionsApiResponse> getAllNutrition(
-    String userId,
-  ) async {
+      {String userId, String accessToken}) async {
     var response = await apiHelper.get(
       apiUrl:
           Strings.BASE_URL + ApiEndPoints.getAllNutritions + '?userId=$userId',
+      accessToken: accessToken,
     );
     Map<String, dynamic> data = jsonDecode(response);
     return NutritionsApiResponse.fromJson(data);
   }
 
   Future<LoginResponse> actionFavNutrition(
-    NutritionActionModel nutritationModel,
-  ) async {
+      {NutritionActionModel nutritationModel, String accessToken}) async {
     var json = jsonEncode(nutritationModel.toJson());
 
     var response = await apiHelper.postJson(
         apiUrl: Strings.BASE_URL + ApiEndPoints.nutritionActionModel,
-        formData: json);
+        formData: json,
+        accessToken: accessToken);
     Map<String, dynamic> data = jsonDecode(response);
     return LoginResponse.fromJson(data);
   }
 
-  Future<GetUserWeightApiResponse> getUserWeight({
-    String userId,
-  }) async {
+  Future<GetUserWeightApiResponse> getUserWeight(
+      {String userId, String accessToken}) async {
     var response = await apiHelper.get(
         apiUrl:
-            '${Strings.BASE_URL}${ApiEndPoints.getUserWeight}?userId=$userId');
+            '${Strings.BASE_URL}${ApiEndPoints.getUserWeight}?userId=$userId',
+        accessToken: accessToken);
     Map<String, dynamic> data = jsonDecode(response);
     return GetUserWeightApiResponse.fromJson(data);
   }
 
   Future<MotivationApiResponse> getMotivation({
     String userId,
+    String accessToken,
   }) async {
     var response = await apiHelper.get(
         apiUrl:
-            '${Strings.BASE_URL}${ApiEndPoints.getMotivation}?userId=$userId');
+            '${Strings.BASE_URL}${ApiEndPoints.getMotivation}?userId=$userId',
+        accessToken: accessToken);
     Map<String, dynamic> data = jsonDecode(response);
     return MotivationApiResponse.fromJson(data);
   }
 
-  Future<MotivationActivityApiResponse> getMotivationActivation({
-    String userId,
-    String trainingWeek,
-  }) async {
+  Future<MotivationActivityApiResponse> getMotivationActivation(
+      {String userId, String trainingWeek, String accessToken}) async {
 //    {
 //      "userId":1,
 //    "trainingWeek":1
@@ -122,31 +121,36 @@ class ApiRepository {
 
     var response = await apiHelper.postJson(
         apiUrl: '${Strings.BASE_URL}${ApiEndPoints.getMotivationActivation}',
-        formData: value);
+        formData: value,
+        accessToken: accessToken);
     Map<String, dynamic> data = jsonDecode(response);
     return MotivationActivityApiResponse.fromJson(data);
   }
 
-  Future<AddUserWeightApiResponse> addUserWeight({
-    String userId,
-    String weight,
-  }) async {
+  Future<AddUserWeightApiResponse> addUserWeight(
+      {String userId,
+      String weight,
+      String createdOn,
+      String accessToken}) async {
     var json = {
       "userId": userId,
       "weight": weight,
+      "createdOn": createdOn,
     };
     var response = await apiHelper.postJson(
-        apiUrl: Strings.BASE_URL + ApiEndPoints.addUserWeight, formData: json);
+        apiUrl: Strings.BASE_URL + ApiEndPoints.addUserWeight,
+        formData: json,
+        accessToken: accessToken);
     Map<String, dynamic> data = jsonDecode(response);
     return AddUserWeightApiResponse.fromJson(data);
   }
 
-  Future<List<PictureFinalModel>> getUserProfileImages({
-    String userId,
-  }) async {
+  Future<List<PictureFinalModel>> getUserProfileImages(
+      {String userId, String accessToken}) async {
     var response = await apiHelper.get(
         apiUrl:
-            '${Strings.BASE_URL}${ApiEndPoints.getUserProfileImages}?userId=$userId');
+            '${Strings.BASE_URL}${ApiEndPoints.getUserProfileImages}?userId=$userId',
+        accessToken: accessToken);
     Map<String, dynamic> parsed = jsonDecode(response);
 
 //   final parsed =  data['userProfileImages'];
@@ -172,9 +176,9 @@ class ApiRepository {
           if (j == 0) {
             title = UserProfileImages.fromJson(map[j]).createdOn;
           }
-          _userProfileImagesList
-              .add(UserProfileImages.fromJson(map[j]));
-          debugPrint("parsedvalueis   9----   ${_userProfileImagesList.length}");
+          _userProfileImagesList.add(UserProfileImages.fromJson(map[j]));
+          debugPrint(
+              "parsedvalueis   9----   ${_userProfileImagesList.length}");
         }
       }
       _list.add(PictureFinalModel(title: title, list: _userProfileImagesList));
@@ -183,10 +187,18 @@ class ApiRepository {
     return _list;
   }
 
-  Future<AddProfileImagesApiResponse> addUserProfileImage({
-    String userId,
-    String path,
-  }) async {
+  Future<GetUserWeightApiResponse> deleteUserImage(
+      {String userId, String id, String accessToken}) async {
+    var response = await apiHelper.get(
+        apiUrl:
+            '${Strings.BASE_URL}${ApiEndPoints.deleteUserImage}?userId=$userId&id=$id',
+        accessToken: accessToken);
+    Map<String, dynamic> data = jsonDecode(response);
+    return GetUserWeightApiResponse.fromJson(data);
+  }
+
+  Future<AddProfileImagesApiResponse> addUserProfileImage(
+      {String userId, String path, String accessToken}) async {
     FormData formData = new FormData.fromMap({
       'userId': userId,
       'file': path == null
@@ -197,29 +209,29 @@ class ApiRepository {
 
     var response = await apiHelper.postJson(
         apiUrl: Strings.BASE_URL + ApiEndPoints.addUserProfileImages,
-        formData: formData);
+        formData: formData,
+        accessToken: accessToken);
     Map<String, dynamic> data = jsonDecode(response);
     return AddProfileImagesApiResponse.fromJson(data);
   }
 
   Future<LoginResponse> changeLanguage(
-    String userId,
-    String language,
-  ) async {
+      {String userId, String language, String accessToken}) async {
     var value = {'userId': userId, 'language': language};
     var response = await apiHelper.postJson(
         apiUrl: Strings.BASE_URL + ApiEndPoints.changeLanguage,
-        formData: value);
+        formData: value,
+        accessToken: accessToken);
     Map<String, dynamic> data = jsonDecode(response);
     return LoginResponse.fromJson(data);
   }
 
   Future<UpdateProfileApiResponse> updateUserProfile(
-    String userId,
-    String firstName,
-    String lastName,
-    String email,
-  ) async {
+      {String userId,
+      String firstName,
+      String lastName,
+      String email,
+      String accessToken}) async {
     var value = {
       'id': userId,
       'firstName': firstName,
@@ -227,7 +239,9 @@ class ApiRepository {
       'email': email
     };
     var response = await apiHelper.postJson(
-        apiUrl: Strings.BASE_URL + ApiEndPoints.updateProfile, formData: value);
+        apiUrl: Strings.BASE_URL + ApiEndPoints.updateProfile,
+        formData: value,
+        accessToken: accessToken);
     Map<String, dynamic> data = jsonDecode(response);
     return UpdateProfileApiResponse.fromJson(data);
   }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/motivation/MotivationBloc.dart';
@@ -135,7 +136,7 @@ class _MotivationWidgetState extends State<MotivationWidget> {
 
   Widget _motivationNormalWidget(int position) {
     return Builder(
-      builder: (BuildContext context){
+      builder: (BuildContext context) {
         return Material(
           color: AppColors.transparent,
           child: InkWell(
@@ -178,12 +179,34 @@ class _MotivationWidgetState extends State<MotivationWidget> {
       )),
       child: Stack(
         children: <Widget>[
-          FadeInImage(
-              fit: BoxFit.cover,
+//          FadeInImage(
+//              fit: BoxFit.cover,
+//              width: MediaQuery.of(context).size.width,
+//              height: MediaQuery.of(context).size.height,
+//              image: NetworkImage(titleList[position].imgPath),
+//              placeholder: AssetImage(Images.DummyFood)),
+          CachedNetworkImage(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            imageUrl: titleList[position].imgPath,
+            imageBuilder: (context, imageProvider) => Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              image: NetworkImage(titleList[position].imgPath),
-              placeholder: AssetImage(Images.DummyFood)),
+              decoration: BoxDecoration(
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+              ),
+            ),
+            placeholder: (context, url) =>
+                Utils.getImagePlaceHolderWidgetProfile(
+                    context: context,
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width),
+            errorWidget: (context, url, error) =>
+                Utils.getImagePlaceHolderWidgetProfile(
+                    context: context,
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width),
+          ),
           Material(
             color: AppColors.transparent,
             child: InkWell(

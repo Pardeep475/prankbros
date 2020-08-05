@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:prankbros2/utils/AppColors.dart';
+import 'package:prankbros2/utils/Dimens.dart';
+import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:toast/toast.dart';
 
@@ -58,7 +60,7 @@ class Utils {
               //...bottom card part,
               Container(
                 padding:
-                    EdgeInsets.only(left: 60, right: 60, top: 50, bottom: 20),
+                EdgeInsets.only(left: 60, right: 60, top: 50, bottom: 20),
                 margin: EdgeInsets.only(top: 30, bottom: 100),
                 decoration: new BoxDecoration(
                   color: Colors.white,
@@ -167,6 +169,18 @@ class Utils {
 
     print(date.toString());
   }
+
+  static Widget getImagePlaceHolderWidgetProfile({BuildContext context,double height,double width}) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage(Images.DummyFood), fit: BoxFit.cover),
+      ),
+    );
+  }
+
 
 //  return str.length() < 2 ? str : str.substring(0, 2);
 }
