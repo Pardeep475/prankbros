@@ -14,6 +14,7 @@ import 'package:prankbros2/models/profileimage/PictureFinalModel.dart';
 import 'package:prankbros2/models/updateprofile/UpdateProfileApiResponse.dart';
 import 'package:prankbros2/models/userweight/AddUserWeightApiResponse.dart';
 import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
+import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/utils/network/ApiEndPoints.dart';
 import '../Strings.dart';
 import 'ApiHelper.dart';
@@ -244,5 +245,23 @@ class ApiRepository {
         accessToken: accessToken);
     Map<String, dynamic> data = jsonDecode(response);
     return UpdateProfileApiResponse.fromJson(data);
+  }
+
+  Future<GetUserTrainingResponseApi> getUserTraining(
+      {String screenType,
+      String trainingWeek,
+      String influencerId,
+      String accessToken}) async {
+    var value = {
+      "influencerId": influencerId,
+      "trainingWeek": trainingWeek,
+      "trainingType": screenType
+    };
+    var response = await apiHelper.postJson(
+        apiUrl: Strings.BASE_URL + ApiEndPoints.getUserTraining,
+        formData: value,
+        accessToken: accessToken);
+    Map<String, dynamic> data = jsonDecode(response);
+    return GetUserTrainingResponseApi.fromJson(data);
   }
 }

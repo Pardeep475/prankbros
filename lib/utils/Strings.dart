@@ -70,4 +70,5 @@ without losing your data''';
   static const String NUTRITION_DETAIL_ROUTE = '/nutrition_detail_route';
   static const String VIDEO_PLAYER_ROUTE = '/video_player_route';
   static const String FULL_IMAGE_VIEW_SCREEN = '/full_image_view_screen';
+  static const String WORKOUT_DETAILS_FIRST_ROUTE = '/workout_detail_first_route';
 }

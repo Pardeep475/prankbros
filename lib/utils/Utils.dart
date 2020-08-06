@@ -171,7 +171,10 @@ class Utils {
   }
 
   static Widget getImagePlaceHolderWidgetProfile(
-      {BuildContext context, double height, double width}) {
+      {BuildContext context,
+      double height,
+      double width,
+      String img = Images.DummyFood}) {
     return Container(
       width: width,
       height: height,

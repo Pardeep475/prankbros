@@ -1,12 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/workouts/WorkoutDetails2.dart';
+import 'package:prankbros2/app/dashboard/workouts/workoutdetails/WorkoutDetailBloc.dart';
+import 'package:prankbros2/models/login/LoginResponse.dart';
+import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
+import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/popups/CustomChangeWeekDialog.dart';
 import 'package:prankbros2/popups/CustomResetRedDialog.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
+import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 
 class WorkoutDetails extends StatefulWidget {
   WorkoutDetails({this.onPush});
@@ -22,6 +29,19 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   _WorkoutDetailsState({this.onPush});
 
   final ValueChanged<int> onPush;
+  SessionManager _sessionManager;
+  String _screenName = "Gym";
+  String _accessToken = "";
+  String _traingWeek = "";
+  String _influencerId = "";
+  WorkoutDetailBloc _workoutDetailBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _workoutDetailBloc = new WorkoutDetailBloc();
+    _sessionManager = new SessionManager();
+  }
 
   void _backPressed() {
     print('back button pressed');
@@ -39,6 +59,46 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     }
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _screenName = ModalRoute.of(context).settings.arguments;
+    _sessionManager.getUserModel().then((value) {
+      debugPrint("userdata   :        ${value}");
+      if (value != null) {
+        UserDetails userData = UserDetails.fromJson(value);
+        debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
+        _accessToken = userData.accessToken.toString();
+        _influencerId = userData.influencerId.toString();
+        _traingWeek = userData.trainingWeek.toString();
+        _traingWeek = 1.toString();
+        debugPrint('screen name --->   $_screenName');
+        debugPrint('training week --->   $_traingWeek');
+        debugPrint('influencer id --->   $_influencerId');
+        debugPrint('access token --->   $_accessToken');
+
+        _getUserTraining();
+      }
+    });
+  }
+
+  void _getUserTraining() {
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        _workoutDetailBloc.getWorkoutDetail(
+            screenType: _screenName,
+            influencerId: _influencerId,
+            trainingWeek: _traingWeek,
+            context: context,
+            accessToken: _accessToken);
+      } else {
+        Navigator.pop(context);
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
+    });
+  }
+
   void _editButtonPressed() {
     showDialog(context: context, builder: (_) => CustomResetRedDialog());
   }
@@ -49,7 +109,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: Container(
         color: AppColors.white,
@@ -84,7 +143,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                             Images.ArrowBackWhite,
                             color: AppColors.white,
                             height: Dimens.fifteen,
-
                           ),
                         ),
                       ),
@@ -150,54 +208,80 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 ],
               ),
             ),
-            SizedBox(
-              height: Dimens.eighty,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  calendarItemUnselected('MO', '01'),
-                  calendarItemUnselected('DI', '02'),
-                  calendarItemUnselected('MI', '03'),
-                  calendarItemSelected('DO', '04'),
-                  calendarItemUnselected('FR', '05'),
-                  calendarItemUnselected('SA', '06'),
-                  calendarItemUnselected('SO', '07'),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: Dimens.eight,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimens.twentyFive),
-              child: Text(
-                'Workouts this week'.toUpperCase(),
-                style: TextStyle(
-                    color: AppColors.black_text,
-                    fontSize: Dimens.eighteen,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: Strings.EXO_FONT),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                  padding: EdgeInsets.only(top: Dimens.fifteen),
-                  itemCount: 2,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                        onTap: () {
-                          _mainItemClick(index);
-                        },
-                        child: mainListItem());
-                  }),
-            ),
+            StreamBuilder<GetUserTrainingResponseApi>(
+                initialData: null,
+                stream: _workoutDetailBloc.contentStream,
+                builder: (context, snapshot) {
+                  if (snapshot.data != null)
+                    return Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            height: Dimens.eighty,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: <Widget>[
+                                calendarItemUnselected('MO', '01'),
+                                calendarItemUnselected('DI', '02'),
+                                calendarItemUnselected('MI', '03'),
+                                calendarItemSelected('DO', '04'),
+                                calendarItemUnselected('FR', '05'),
+                                calendarItemUnselected('SA', '06'),
+                                calendarItemUnselected('SO', '07'),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: Dimens.eight,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimens.twentyFive),
+                            child: Text(
+                              'Workouts this week'.toUpperCase(),
+                              style: TextStyle(
+                                  color: AppColors.black_text,
+                                  fontSize: Dimens.eighteen,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: Strings.EXO_FONT),
+                            ),
+                          ),
+                          if (snapshot.data.trainings != null &&
+                              snapshot.data.trainings.length > 0)
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Dimens.twentyFive),
+                                child: ListView.builder(
+                                    padding:
+                                        EdgeInsets.only(top: Dimens.fifteen),
+                                    itemCount: snapshot.data.trainings.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                          onTap: () {
+                                            _mainItemClick(
+                                                snapshot.data.trainings[index]);
+                                          },
+                                          child: mainListItem(
+                                              snapshot.data.trainings[index]));
+                                    }),
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
+                  else {
+                    return SizedBox();
+                  }
+                })
           ],
         ),
       ),
     );
   }
 
-  void _mainItemClick(int index) {
+  void _mainItemClick(Trainings trainings) {
 //    onPush(index);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => WorkoutDetails2()));
@@ -205,7 +289,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
 
   Widget calendarItemSelected(String day, String date) {
     return Container(
-      width: MediaQuery.of(context).size.width/7,
+      width: MediaQuery.of(context).size.width / 7,
       height: MediaQuery.of(context).size.height,
       child: Stack(
         children: <Widget>[
@@ -266,7 +350,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
 
   Widget calendarItemUnselected(String day, String date) {
     return Container(
-      width: MediaQuery.of(context).size.width/7,
+      width: MediaQuery.of(context).size.width / 7,
       color: AppColors.white,
       padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
       child: Column(
@@ -312,84 +396,118 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     );
   }
 
-  Widget mainListItem() {
+  Widget mainListItem(Trainings trainings) {
+    if (trainings == null) return SizedBox();
     return Column(
       children: <Widget>[
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(Dimens.fifteen)),
           ),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
           child: Container(
             height: Dimens.oneHundredEightyFive,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(Dimens.fifteen)),
-                image: DecorationImage(
-                  image: AssetImage(Images.DUMMY_WORKOUT),
-                  fit: BoxFit.cover,
-                )),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: Dimens.thirty, vertical: Dimens.twentyFive),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'FULL BODY WORKOUT',
-                    style: TextStyle(
-                        color: AppColors.white,
-                        fontFamily: Strings.EXO_FONT,
-                        fontStyle: FontStyle.italic,
-                        fontSize: Dimens.twentySix,
-                        letterSpacing: .75,
-                        fontWeight: FontWeight.w900),
+//            decoration: BoxDecoration(
+//                borderRadius: BorderRadius.all(Radius.circular(Dimens.fifteen)),
+//                image: DecorationImage(
+//                  image: AssetImage(Images.DUMMY_WORKOUT),
+//                  fit: BoxFit.cover,
+//                )),
+            child: Stack(
+              children: <Widget>[
+                CachedNetworkImage(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  imageUrl:
+                      trainings.imagePath != null ? trainings.imagePath : "",
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
+                    ),
                   ),
-                  Row(
+                  placeholder: (context, url) =>
+                      Utils.getImagePlaceHolderWidgetProfile(
+                          context: context,
+                          img: Images.DUMMY_WORKOUT,
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width),
+                  errorWidget: (context, url, error) =>
+                      Utils.getImagePlaceHolderWidgetProfile(
+                          context: context,
+                          img: Images.DUMMY_WORKOUT,
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimens.thirty, vertical: Dimens.twentyFive),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Expanded(
-                        child: Row(
-                          children: <Widget>[
-                            Image.asset(
-                              Images.ICON_CALENDAR,
-                            ),
-                            SizedBox(
-                              width: Dimens.seven,
-                            ),
-                            Text(
-                              'Training 1',
-                              style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: Dimens.forteen,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: Strings.EXO_FONT),
-                            )
-                          ],
-                        ),
+                      Text(
+                        trainings.nameEN != null ? trainings.nameEN : "",
+                        style: TextStyle(
+                            color: AppColors.white,
+                            fontFamily: Strings.EXO_FONT,
+                            fontStyle: FontStyle.italic,
+                            fontSize: Dimens.twentySix,
+                            letterSpacing: .75,
+                            fontWeight: FontWeight.w900),
                       ),
-                      Expanded(
-                        child: Row(
-                          children: <Widget>[
-                            Image.asset(
-                              Images.ICON_TIMER,
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Row(
+                              children: <Widget>[
+                                Image.asset(
+                                  Images.ICON_CALENDAR,
+                                ),
+                                SizedBox(
+                                  width: Dimens.seven,
+                                ),
+                                Text(
+                                  trainings.nameEN != null
+                                      ? 'Training ${trainings.trainingNumber}'
+                                      : "",
+                                  style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: Dimens.forteen,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: Strings.EXO_FONT),
+                                )
+                              ],
                             ),
-                            SizedBox(
-                              width: Dimens.seven,
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: <Widget>[
+                                Image.asset(
+                                  Images.ICON_TIMER,
+                                ),
+                                SizedBox(
+                                  width: Dimens.seven,
+                                ),
+                                Text(
+                                  '30 min',
+                                  style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: Dimens.forteen,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: Strings.EXO_FONT),
+                                )
+                              ],
                             ),
-                            Text(
-                              '30 min',
-                              style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: Dimens.forteen,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: Strings.EXO_FONT),
-                            )
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                )
+              ],
             ),
           ),
         ),

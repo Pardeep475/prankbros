@@ -145,13 +145,17 @@ class Workouts extends StatelessWidget {
 
   void _homeWorkoutClick(BuildContext context) {
 //    onPush('Home');
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => WorkoutDetails()));
+    Navigator.pushNamed(context, Strings.WORKOUT_DETAILS_FIRST_ROUTE,
+        arguments: "Home");
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => WorkoutDetails()));
   }
 
   void _gymWorkoutClick(BuildContext context) {
 //    onPush('gym');
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => WorkoutDetails()));
+    Navigator.pushNamed(context, Strings.WORKOUT_DETAILS_FIRST_ROUTE,
+        arguments: "Gym");
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => WorkoutDetails()));
   }
 }

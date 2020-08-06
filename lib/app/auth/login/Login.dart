@@ -28,7 +28,7 @@ class _LoginState extends State<Login> {
     super.initState();
     _loginBloc = new LoginBloc();
     _emailController =
-        TextEditingController(text: 'test@yopmail.com');
+        TextEditingController(text: 'johnmartin@yopmail.com');
     _passwordController = TextEditingController(text: '12345');
   }
 //pardeepsharma475@yopmail.com
