@@ -60,7 +60,7 @@ class Utils {
               //...bottom card part,
               Container(
                 padding:
-                EdgeInsets.only(left: 60, right: 60, top: 50, bottom: 20),
+                    EdgeInsets.only(left: 60, right: 60, top: 50, bottom: 20),
                 margin: EdgeInsets.only(top: 30, bottom: 100),
                 decoration: new BoxDecoration(
                   color: Colors.white,
@@ -170,7 +170,8 @@ class Utils {
     print(date.toString());
   }
 
-  static Widget getImagePlaceHolderWidgetProfile({BuildContext context,double height,double width}) {
+  static Widget getImagePlaceHolderWidgetProfile(
+      {BuildContext context, double height, double width}) {
     return Container(
       width: width,
       height: height,
@@ -181,6 +182,25 @@ class Utils {
     );
   }
 
+  static bool checkCurrentDate2(String value) {
+    try {
+      final DateFormat oldFormatter = DateFormat('yyyy-MM-dd');
 
-//  return str.length() < 2 ? str : str.substring(0, 2);
+      DateTime date = oldFormatter.parse(value);
+
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+      final aDate = DateTime(date.year, date.month, date.day);
+      print(date.toString());
+      if (aDate == today) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      debugPrint("parsing error:   $e");
+      return false;
+    }
+  }
 }

@@ -69,7 +69,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Future.delayed(Duration(milliseconds: 60), (){
+    Future.delayed(Duration(milliseconds: 60), () {
       _historyBloc.getMotivationActivationStart(motivationData, context);
     });
   }
@@ -93,7 +93,6 @@ class _HistoryWidgetState extends State<HistoryWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return _historyWidget();
   }
 
@@ -203,7 +202,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                       child: Row(
                         children: <Widget>[
                           Text(
-                            '01-07 aug 2019',
+                            _weekNameList(),
                             style: TextStyle(
                                 fontSize: Dimens.sixteen,
                                 fontFamily: Strings.EXO_FONT,
@@ -245,6 +244,12 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   }
 
   void _openChangeWeekDialog() {
+    if (motivationData == null) return;
+
+    if (motivationData.weekNameList == null) return;
+
+    if (motivationData.weekNameList.length <= 1) return;
+
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -326,27 +331,27 @@ class _HistoryWidgetState extends State<HistoryWidget> {
             Expanded(
               child: motivationHistoryItem.title != null
                   ? Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: Dimens.twentyFive,
-                    vertical: Dimens.fifteen),
-                decoration: BoxDecoration(
-                  color: AppColors.light_gray,
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(Dimens.hundred)),
-                ),
-                child: Text(
-                  motivationHistoryItem.title,
-                  style: TextStyle(
-                      fontSize: Dimens.eighteen,
-                      fontFamily: Strings.EXO_FONT,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.light_text),
-                ),
-              )
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Dimens.twentyFive,
+                          vertical: Dimens.fifteen),
+                      decoration: BoxDecoration(
+                        color: AppColors.light_gray,
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(Dimens.hundred)),
+                      ),
+                      child: Text(
+                        motivationHistoryItem.title,
+                        style: TextStyle(
+                            fontSize: Dimens.eighteen,
+                            fontFamily: Strings.EXO_FONT,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.light_text),
+                      ),
+                    )
                   : SizedBox(
-                height: 0,
-                width: 0,
-              ),
+                      height: 0,
+                      width: 0,
+                    ),
             ),
             SizedBox(
               width: Dimens.thirtySix,
@@ -485,5 +490,15 @@ class _HistoryWidgetState extends State<HistoryWidget> {
         ),
       ],
     );
+  }
+
+  String _weekNameList() {
+    if (motivationData == null) return "";
+
+    if (motivationData.weekNameList == null) return "";
+
+    if (motivationData.weekNameList.length <= 0) return "";
+
+    return motivationData.weekNameList[0];
   }
 }

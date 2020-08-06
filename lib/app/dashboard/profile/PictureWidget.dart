@@ -349,7 +349,7 @@ class _PictureWidgetState extends State<PictureWidget> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
       child: Text(
-        item,
+        Utils.checkCurrentDate2(item) ? "Today" : item,
         style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: Dimens.twenty,
@@ -422,7 +422,6 @@ class _PictureWidgetState extends State<PictureWidget> {
     });
   }
 }
-
 
 /*
 *  /* FadeInImage(

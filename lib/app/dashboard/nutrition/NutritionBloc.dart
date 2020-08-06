@@ -8,7 +8,7 @@ import 'package:prankbros2/utils/network/AppConstantHelper.dart';
 import 'package:rxdart/rxdart.dart';
 
 class NutritionBloc {
-  final BehaviorSubject progressController = BehaviorSubject<bool>();
+  final BehaviorSubject progressController = BehaviorSubject<int>();
 
   StreamSink get progressSink => progressController.sink;
 
@@ -26,24 +26,28 @@ class NutritionBloc {
 
   void getNutritions(
       {String userId, String accessToken, BuildContext context}) {
-    progressSink.add(true);
+    progressSink.add(0);
     debugPrint('userID  :-- $userId');
     apiRepository
         .getAllNutrition(userId: userId, accessToken: accessToken)
         .then((onResponse) {
       if (onResponse.status == 1) {
         debugPrint("Here is user id   :        ${onResponse}");
-        if (onResponse != null)
+        if (onResponse != null) {
+//          progressSink.add(1);
+          progressSink.add(1);
           nutritionSink.add(onResponse);
-        else
+        } else {
+          progressSink.add(2);
           nutritionSink.add(null);
+        }
       } else {
+        progressSink.add(2);
         nutritionSink.add(null);
         Utils.showSnackBar(onResponse.message, context);
       }
-      progressSink.add(false);
     }).catchError((onError) {
-      progressSink.add(false);
+      progressSink.add(2);
       nutritionSink.add(null);
       print("On_Error" + onError.toString());
       Utils.showSnackBar(onError.toString(), context);

@@ -115,11 +115,11 @@ class _NutritionState extends State<Nutrition> {
                     height: Dimens.thirtyFive,
                   ),
                   _tabBarWidget(),
-                  StreamBuilder<bool>(
-                    initialData: true,
+                  StreamBuilder<int>(
+                    initialData: 0,
                     stream: _nutritionBloc.progressStream,
                     builder: (context, snapshot) {
-                      if (snapshot.data) {
+                      if (snapshot.data == 0) {
                         return Expanded(
                           child: TabBarView(
                             children: <Widget>[
@@ -130,7 +130,8 @@ class _NutritionState extends State<Nutrition> {
                             ],
                           ),
                         );
-                      } else {
+                      }
+                      if (snapshot.data == 1) {
                         return StreamBuilder<NutritionsApiResponse>(
                             initialData: null,
                             stream: _nutritionBloc.nutritionStream,
@@ -141,6 +142,17 @@ class _NutritionState extends State<Nutrition> {
                                 return _tabBarViewWidget(1, null);
                               }
                             });
+                      } else {
+                        return Expanded(
+                          child: TabBarView(
+                            children: <Widget>[
+                              _errorWidget(value: 'No data found'),
+                              _errorWidget(value: 'No data found'),
+                              _errorWidget(value: 'No data found'),
+                              _errorWidget(value: 'No data found'),
+                            ],
+                          ),
+                        );
                       }
                     },
                   ),
@@ -241,7 +253,6 @@ class _NutritionState extends State<Nutrition> {
         }
       }()),
     );
-    ;
   }
 
   Widget _errorWidget({String value = ''}) {
