@@ -8,6 +8,8 @@ import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/models/DailyWorkoutModel.dart';
 import 'package:prankbros2/models/WorkoutDetails2Model.dart';
+import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
+import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
@@ -35,9 +37,19 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
       Key(Keys.downloadWorkoutButtonKey);
   bool _isLoading = false;
 
+  WorkoutDetail2Models _workoutDetail2Models;
+  String _baseUrl = "";
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _workoutDetail2Models = ModalRoute.of(context).settings.arguments;
+    try {
+      _baseUrl = _workoutDetail2Models.baseUrl;
+    } catch (e) {
+      debugPrint('${e.toString()}');
+    }
+
     _workoutListInit();
   }
 
@@ -139,7 +151,9 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
         Padding(
           padding: EdgeInsets.only(left: Dimens.thirtyFive),
           child: Text(
-            'Full Body',
+            _workoutDetail2Models.trainings.nameEN != null
+                ? _workoutDetail2Models.trainings.nameEN
+                : "",
             style: TextStyle(
                 fontSize: Dimens.thirty,
                 fontWeight: FontWeight.w900,
@@ -197,7 +211,9 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: Dimens.thirtyFive),
           child: Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
+            _workoutDetail2Models.trainings.descriptionEN != null
+                ? _workoutDetail2Models.trainings.descriptionEN
+                : "",
             style: TextStyle(
               fontSize: Dimens.fifteen,
               fontWeight: FontWeight.w500,
@@ -433,7 +449,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
     return Stack(
       children: <Widget>[
         BackgroundWidgetWithImage(
-          imagePath: Images.ICON_WORKOUT_HALF,
+          imagePath: '$_baseUrl${_workoutDetail2Models.trainings.imagePath}',
           curveColor: AppColors.workoutDetail2BackColor,
         ),
         Scaffold(

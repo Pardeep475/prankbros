@@ -1,26 +1,41 @@
 class GetUserTrainingResponseApi {
+  List<String> weekNameList;
+  String awsEndpointUrl;
   List<Trainings> trainings;
+  int trainingWeek;
   String message;
   int status;
 
-  GetUserTrainingResponseApi({this.trainings, this.message, this.status});
+  GetUserTrainingResponseApi(
+      {this.weekNameList,
+        this.awsEndpointUrl,
+        this.trainings,
+        this.trainingWeek,
+        this.message,
+        this.status});
 
   GetUserTrainingResponseApi.fromJson(Map<String, dynamic> json) {
+    weekNameList = json['weekNameList'].cast<String>();
+    awsEndpointUrl = json['awsEndpointUrl'];
     if (json['trainings'] != null) {
       trainings = new List<Trainings>();
       json['trainings'].forEach((v) {
         trainings.add(new Trainings.fromJson(v));
       });
     }
+    trainingWeek = json['trainingWeek'];
     message = json['message'];
     status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['weekNameList'] = this.weekNameList;
+    data['awsEndpointUrl'] = this.awsEndpointUrl;
     if (this.trainings != null) {
       data['trainings'] = this.trainings.map((v) => v.toJson()).toList();
     }
+    data['trainingWeek'] = this.trainingWeek;
     data['message'] = this.message;
     data['status'] = this.status;
     return data;
@@ -35,8 +50,8 @@ class Trainings {
   String imagePath;
   String nameEN;
   String createdOn;
-  bool deleted;
   String nameDE;
+  bool deleted;
   List<Exercises> exercises;
   int trainingNumber;
   String descriptionDE;
@@ -50,8 +65,8 @@ class Trainings {
         this.imagePath,
         this.nameEN,
         this.createdOn,
-        this.deleted,
         this.nameDE,
+        this.deleted,
         this.exercises,
         this.trainingNumber,
         this.descriptionDE,
@@ -65,8 +80,8 @@ class Trainings {
     imagePath = json['imagePath'];
     nameEN = json['nameEN'];
     createdOn = json['createdOn'];
-    deleted = json['deleted'];
     nameDE = json['nameDE'];
+    deleted = json['deleted'];
     if (json['exercises'] != null) {
       exercises = new List<Exercises>();
       json['exercises'].forEach((v) {
@@ -87,8 +102,8 @@ class Trainings {
     data['imagePath'] = this.imagePath;
     data['nameEN'] = this.nameEN;
     data['createdOn'] = this.createdOn;
-    data['deleted'] = this.deleted;
     data['nameDE'] = this.nameDE;
+    data['deleted'] = this.deleted;
     if (this.exercises != null) {
       data['exercises'] = this.exercises.map((v) => v.toJson()).toList();
     }
@@ -101,48 +116,48 @@ class Trainings {
 
 class Exercises {
   String descriptionEN;
-  int trainingId;
   int sets;
-  String imagePath;
+  int trainingId;
   String exerciseType;
+  String imagePath;
   String workoutTime;
   String nameEN;
   String createdOn;
   int repetitions;
-  String videoPath;
   String exerciseTime;
+  String videoPath;
   String nameDE;
   String descriptionDE;
   int id;
 
   Exercises(
       {this.descriptionEN,
-        this.trainingId,
         this.sets,
-        this.imagePath,
+        this.trainingId,
         this.exerciseType,
+        this.imagePath,
         this.workoutTime,
         this.nameEN,
         this.createdOn,
         this.repetitions,
-        this.videoPath,
         this.exerciseTime,
+        this.videoPath,
         this.nameDE,
         this.descriptionDE,
         this.id});
 
   Exercises.fromJson(Map<String, dynamic> json) {
     descriptionEN = json['descriptionEN'];
-    trainingId = json['trainingId'];
     sets = json['sets'];
-    imagePath = json['imagePath'];
+    trainingId = json['trainingId'];
     exerciseType = json['exerciseType'];
+    imagePath = json['imagePath'];
     workoutTime = json['workoutTime'];
     nameEN = json['nameEN'];
     createdOn = json['createdOn'];
     repetitions = json['repetitions'];
-    videoPath = json['videoPath'];
     exerciseTime = json['exerciseTime'];
+    videoPath = json['videoPath'];
     nameDE = json['nameDE'];
     descriptionDE = json['descriptionDE'];
     id = json['id'];
@@ -151,16 +166,16 @@ class Exercises {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['descriptionEN'] = this.descriptionEN;
-    data['trainingId'] = this.trainingId;
     data['sets'] = this.sets;
-    data['imagePath'] = this.imagePath;
+    data['trainingId'] = this.trainingId;
     data['exerciseType'] = this.exerciseType;
+    data['imagePath'] = this.imagePath;
     data['workoutTime'] = this.workoutTime;
     data['nameEN'] = this.nameEN;
     data['createdOn'] = this.createdOn;
     data['repetitions'] = this.repetitions;
-    data['videoPath'] = this.videoPath;
     data['exerciseTime'] = this.exerciseTime;
+    data['videoPath'] = this.videoPath;
     data['nameDE'] = this.nameDE;
     data['descriptionDE'] = this.descriptionDE;
     data['id'] = this.id;

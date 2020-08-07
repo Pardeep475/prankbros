@@ -11,6 +11,7 @@ import 'package:prankbros2/app/dashboard/nutrition/NutritionDetail.dart';
 import 'package:prankbros2/app/dashboard/videoplayer/VideoPlayerScreen.dart';
 import 'package:prankbros2/app/dashboard/workouts/WarmUpScreen.dart';
 import 'package:prankbros2/app/dashboard/workouts/WorkoutDetails.dart';
+import 'package:prankbros2/app/dashboard/workouts/WorkoutDetails2.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/SizeConfig.dart';
 import 'package:prankbros2/utils/Strings.dart';
@@ -96,6 +97,7 @@ class MyApp extends StatelessWidget {
     Strings.VIDEO_PLAYER_ROUTE: (BuildContext context) => new VideoPlayerScreen(),
     Strings.FULL_IMAGE_VIEW_SCREEN: (BuildContext context) => new FullImageViewScreen(),
     Strings.WORKOUT_DETAILS_FIRST_ROUTE: (BuildContext context) => new WorkoutDetails(),
+    Strings.WORKOUT_DETAILS_SECOND_ROUTE: (BuildContext context) => new WorkoutDetails2(),
   };
 }
 

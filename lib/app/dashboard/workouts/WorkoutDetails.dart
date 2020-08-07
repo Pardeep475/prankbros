@@ -6,6 +6,7 @@ import 'package:prankbros2/app/dashboard/workouts/workoutdetails/WorkoutDetailBl
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
 import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
+import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:prankbros2/popups/CustomChangeWeekDialog.dart';
 import 'package:prankbros2/popups/CustomResetRedDialog.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -35,6 +36,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   String _traingWeek = "";
   String _influencerId = "";
   WorkoutDetailBloc _workoutDetailBloc;
+  String _baseUrl = "";
 
   @override
   void initState() {
@@ -212,13 +214,14 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 initialData: null,
                 stream: _workoutDetailBloc.contentStream,
                 builder: (context, snapshot) {
-                  if (snapshot.data != null)
+                  if (snapshot.data != null) {
+                    _baseUrl = snapshot.data.awsEndpointUrl;
                     return Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(
-                            height: Dimens.eighty,
+                            height: Dimens.seventy,
                             child: ListView(
                               scrollDirection: Axis.horizontal,
                               children: <Widget>[
@@ -271,7 +274,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                         ],
                       ),
                     );
-                  else {
+                  } else {
                     return SizedBox();
                   }
                 })
@@ -282,20 +285,23 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   }
 
   void _mainItemClick(Trainings trainings) {
-//    onPush(index);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => WorkoutDetails2()));
+    Navigator.pushNamed(context, Strings.WORKOUT_DETAILS_SECOND_ROUTE,
+        arguments:
+            WorkoutDetail2Models(baseUrl: _baseUrl, trainings: trainings));
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => WorkoutDetails2()));
   }
 
   Widget calendarItemSelected(String day, String date) {
     return Container(
+      color: Colors.yellow,
       width: MediaQuery.of(context).size.width / 7,
       height: MediaQuery.of(context).size.height,
       child: Stack(
         children: <Widget>[
           Image.asset(
             Images.ICON_ACTIVE_DAY,
-            fit: BoxFit.fitHeight,
+            fit: BoxFit.fill,
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
           ),
@@ -418,8 +424,9 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 CachedNetworkImage(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  imageUrl:
-                      trainings.imagePath != null ? trainings.imagePath : "",
+                  imageUrl: trainings.imagePath != null
+                      ? '$_baseUrl${trainings.imagePath}'
+                      : "",
                   imageBuilder: (context, imageProvider) => Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
@@ -440,6 +447,11 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                           img: Images.DUMMY_WORKOUT,
                           height: MediaQuery.of(context).size.height,
                           width: MediaQuery.of(context).size.width),
+                ),
+                Container(
+                  color: Colors.black.withOpacity(0.5),
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
