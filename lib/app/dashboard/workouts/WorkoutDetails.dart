@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prankbros2/app/dashboard/workouts/WorkoutDetails2.dart';
 import 'package:prankbros2/app/dashboard/workouts/workoutdetails/WorkoutDetailBloc.dart';
+import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
+import 'package:prankbros2/models/MotivationHistoryModel.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
-import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
 import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:prankbros2/popups/CustomChangeWeekDialog.dart';
@@ -37,6 +37,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   String _influencerId = "";
   WorkoutDetailBloc _workoutDetailBloc;
   String _baseUrl = "";
+  GetUserTrainingResponseApi _getUserTrainingResponseApi;
 
   @override
   void initState() {
@@ -64,9 +65,13 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    debugPrint('size/7    ${MediaQuery.of(context).size.width}');
+    debugPrint('size/7    ${MediaQuery.of(context).size.width / 8}');
+    debugPrint('size/7    ${MediaQuery.of(context).size.width / 6}');
     _screenName = ModalRoute.of(context).settings.arguments;
     _sessionManager.getUserModel().then((value) {
-      debugPrint("userdata   :        ${value}");
+      debugPrint("userdata   :        $value");
       if (value != null) {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
@@ -102,11 +107,29 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   }
 
   void _editButtonPressed() {
-    showDialog(context: context, builder: (_) => CustomResetRedDialog());
+    if (_getUserTrainingResponseApi == null) return;
+    if (_getUserTrainingResponseApi.weekNameList == null) return;
+    if (_getUserTrainingResponseApi.weekNameList.length > 0) return;
+    showDialog(
+        context: context,
+        builder: (_) => CustomResetRedDialog(
+              endRange: _getUserTrainingResponseApi.weekNameList.length,
+            ));
   }
 
   void _selectWeeksPressed() {
-    showDialog(context: context, builder: (_) => CustomChangeWeekDialog());
+    if (_getUserTrainingResponseApi == null) return;
+    if (_getUserTrainingResponseApi.weekNameList == null) return;
+    if (_getUserTrainingResponseApi.weekNameList.length > 0) return;
+    List<String> _list = new List();
+    for (int i = 0; i < _list.length; i++) {
+      _list.add('${i + 1}');
+    }
+    showDialog(
+        context: context,
+        builder: (_) => CustomChangeWeekDialog(
+              list: _list,
+            ));
   }
 
   @override
@@ -114,172 +137,287 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     return Scaffold(
       body: Container(
         color: AppColors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                colors: [
-                  AppColors.blueGradientColor,
-                  AppColors.pinkGradientColor
-                ],
-                begin: Alignment.bottomLeft,
-              )),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: Dimens.forty,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: _backPressed,
-                        splashColor: AppColors.light_gray,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimens.twenty,
-                              horizontal: Dimens.twenty),
-                          child: Image.asset(
-                            Images.ArrowBackWhite,
-                            color: AppColors.white,
-                            height: Dimens.fifteen,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'home Workout'.toUpperCase(),
-                        style: TextStyle(
-                            color: AppColors.white,
-                            fontFamily: Strings.EXO_FONT,
-                            fontSize: Dimens.forteen,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      InkWell(
-                        onTap: _editButtonPressed,
-                        splashColor: AppColors.light_gray,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimens.twenty,
-                              horizontal: Dimens.fifteen),
-                          child: Image.asset(
-                            Images.ICON_EDIT,
-                            color: AppColors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Divider(
-                    height: Dimens.one,
-                    color: AppColors.divider_color,
-                  ),
-                  SizedBox(
-                    height: Dimens.twentySix,
-                  ),
-                  InkWell(
-                    onTap: _selectWeeksPressed,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Week 1',
-                          style: TextStyle(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: Dimens.twentySeven,
-                              fontFamily: Strings.EXO_FONT),
-                        ),
-                        SizedBox(
-                          width: Dimens.twenty,
-                        ),
-                        Image.asset(
-                          Images.ICON_DOWN_ARROW,
-                          height: Dimens.sixteen,
-                          width: Dimens.sixteen,
-                          color: AppColors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: Dimens.forty,
-                  ),
-                ],
-              ),
-            ),
-            StreamBuilder<GetUserTrainingResponseApi>(
-                initialData: null,
-                stream: _workoutDetailBloc.contentStream,
-                builder: (context, snapshot) {
-                  if (snapshot.data != null) {
-                    _baseUrl = snapshot.data.awsEndpointUrl;
-                    return Expanded(
+        child: StreamBuilder<int>(
+            initialData: 0,
+            stream: _workoutDetailBloc.progressStream,
+            builder: (context, snapshot) {
+              if (snapshot.data == 0) {
+                return CommonProgressIndicator(true);
+              } else if (snapshot.data == 1) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                        colors: [
+                          AppColors.blueGradientColor,
+                          AppColors.pinkGradientColor
+                        ],
+                        begin: Alignment.bottomLeft,
+                      )),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(
-                            height: Dimens.seventy,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
+                            height: Dimens.forty,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: _backPressed,
+                                splashColor: AppColors.light_gray,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: Dimens.twenty,
+                                      horizontal: Dimens.twenty),
+                                  child: Image.asset(
+                                    Images.ArrowBackWhite,
+                                    color: AppColors.white,
+                                    height: Dimens.fifteen,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                '$_screenName Workout'.toUpperCase(),
+                                style: TextStyle(
+                                    color: AppColors.white,
+                                    fontFamily: Strings.EXO_FONT,
+                                    fontSize: Dimens.forteen,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              InkWell(
+                                onTap: _editButtonPressed,
+                                splashColor: AppColors.light_gray,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: Dimens.twenty,
+                                      horizontal: Dimens.fifteen),
+                                  child: Image.asset(
+                                    Images.ICON_EDIT,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Divider(
+                            height: Dimens.one,
+                            color: AppColors.divider_color,
+                          ),
+                          SizedBox(
+                            height: Dimens.twentySix,
+                          ),
+                          InkWell(
+                            onTap: _selectWeeksPressed,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                calendarItemUnselected('MO', '01'),
-                                calendarItemUnselected('DI', '02'),
-                                calendarItemUnselected('MI', '03'),
-                                calendarItemSelected('DO', '04'),
-                                calendarItemUnselected('FR', '05'),
-                                calendarItemUnselected('SA', '06'),
-                                calendarItemUnselected('SO', '07'),
+                                SizedBox(
+                                  width: Dimens.twentyFive,
+                                ),
+                                Text(
+                                  'Week $_traingWeek',
+                                  style: TextStyle(
+                                      color: AppColors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: Dimens.twentySeven,
+                                      fontFamily: Strings.EXO_FONT),
+                                ),
+                                SizedBox(
+                                  width: Dimens.twenty,
+                                ),
+                                Image.asset(
+                                  Images.ICON_DOWN_ARROW,
+                                  height: Dimens.sixteen,
+                                  width: Dimens.sixteen,
+                                  color: AppColors.white,
+                                ),
                               ],
                             ),
                           ),
                           SizedBox(
-                            height: Dimens.eight,
+                            height: Dimens.forty,
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: Dimens.twentyFive),
-                            child: Text(
-                              'Workouts this week'.toUpperCase(),
-                              style: TextStyle(
-                                  color: AppColors.black_text,
-                                  fontSize: Dimens.eighteen,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: Strings.EXO_FONT),
-                            ),
-                          ),
-                          if (snapshot.data.trainings != null &&
-                              snapshot.data.trainings.length > 0)
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: Dimens.twentyFive),
-                                child: ListView.builder(
-                                    padding:
-                                        EdgeInsets.only(top: Dimens.fifteen),
-                                    itemCount: snapshot.data.trainings.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                          onTap: () {
-                                            _mainItemClick(
-                                                snapshot.data.trainings[index]);
-                                          },
-                                          child: mainListItem(
-                                              snapshot.data.trainings[index]));
-                                    }),
-                              ),
-                            ),
                         ],
                       ),
-                    );
-                  } else {
-                    return SizedBox();
-                  }
-                })
-          ],
-        ),
+                    ),
+                    StreamBuilder<GetUserTrainingResponseApi>(
+                        initialData: null,
+                        stream: _workoutDetailBloc.contentStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            _getUserTrainingResponseApi = snapshot.data;
+                            _baseUrl = snapshot.data.awsEndpointUrl;
+
+                            List<MotivationHistoryItem> _list =
+                                _calanderData(snapshot.data.workoutActivities);
+
+                            return Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: Dimens.seventy,
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: _list.length,
+                                        itemBuilder: (BuildContext context,
+                                            int position) {
+                                          if (_list[position].isSelected) {
+                                            return calendarItemSelected(
+                                                _list[position]
+                                                    .weekDay
+                                                    .toUpperCase(),
+                                                _list[position].date);
+                                          } else {
+                                            return calendarItemUnselected(
+                                                _list[position]
+                                                    .weekDay
+                                                    .toUpperCase(),
+                                                _list[position].date);
+                                          }
+                                        }),
+//                                    child: ListView(
+//                                      scrollDirection: Axis.horizontal,
+//                                      children: <Widget>[
+//                                        calendarItemUnselected('MO', '01'),
+//                                        calendarItemUnselected('DI', '02'),
+//                                        calendarItemUnselected('MI', '03'),
+//                                        calendarItemSelected('DO', '04'),
+//                                        calendarItemUnselected('FR', '05'),
+//                                        calendarItemUnselected('SA', '06'),
+//                                        calendarItemUnselected('SO', '07'),
+//                                      ],
+//                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Dimens.eight,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: Dimens.twentySeven),
+                                    child: Text(
+                                      'Workouts this week'.toUpperCase(),
+                                      style: TextStyle(
+                                          color: AppColors.black_text,
+                                          fontSize: Dimens.eighteen,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: Strings.EXO_FONT),
+                                    ),
+                                  ),
+                                  if (snapshot.data.trainings != null &&
+                                      snapshot.data.trainings.length > 0)
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: Dimens.twentyFive),
+                                        child: ListView.builder(
+                                            padding: EdgeInsets.only(
+                                                top: Dimens.fifteen),
+                                            itemCount:
+                                                snapshot.data.trainings.length,
+                                            itemBuilder: (context, index) {
+                                              return GestureDetector(
+                                                  onTap: () {
+                                                    _mainItemClick(snapshot
+                                                        .data.trainings[index]);
+                                                  },
+                                                  child: mainListItem(snapshot
+                                                      .data.trainings[index]));
+                                            }),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return SizedBox();
+                          }
+                        })
+                  ],
+                );
+              } else {
+                return Column(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                        colors: [
+                          AppColors.blueGradientColor,
+                          AppColors.pinkGradientColor
+                        ],
+                        begin: Alignment.bottomLeft,
+                      )),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: Dimens.forty,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: _backPressed,
+                                splashColor: AppColors.light_gray,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: Dimens.twenty,
+                                      horizontal: Dimens.twenty),
+                                  child: Image.asset(
+                                    Images.ArrowBackWhite,
+                                    color: AppColors.white,
+                                    height: Dimens.fifteen,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                '$_screenName Workout'.toUpperCase(),
+                                style: TextStyle(
+                                    color: AppColors.white,
+                                    fontFamily: Strings.EXO_FONT,
+                                    fontSize: Dimens.forteen,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              InkWell(
+                                onTap: _editButtonPressed,
+                                splashColor: AppColors.light_gray,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: Dimens.twenty,
+                                      horizontal: Dimens.fifteen),
+                                  child: Image.asset(
+                                    Images.ICON_EDIT,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Divider(
+                            height: Dimens.one,
+                            color: AppColors.divider_color,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'No value found',
+                          style: TextStyle(
+                              color: AppColors.black_text,
+                              fontFamily: Strings.EXO_FONT,
+                              fontWeight: FontWeight.w700,
+                              fontSize: Dimens.thirty),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+            }),
       ),
     );
   }
@@ -294,8 +432,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
 
   Widget calendarItemSelected(String day, String date) {
     return Container(
-      color: Colors.yellow,
-      width: MediaQuery.of(context).size.width / 7,
+      width: MediaQuery.of(context).size.width / 5,
       height: MediaQuery.of(context).size.height,
       child: Stack(
         children: <Widget>[
@@ -305,8 +442,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
+          Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -317,11 +453,11 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                       letterSpacing: 1.43,
                       color: AppColors.white,
                       fontFamily: Strings.EXO_FONT,
-                      fontWeight: FontWeight.w500,
-                      fontSize: Dimens.eight),
+                      fontWeight: FontWeight.w600,
+                      fontSize: Dimens.ten),
                 ),
                 SizedBox(
-                  height: Dimens.seven,
+                  height: Dimens.six,
                 ),
                 Text(
                   date,
@@ -332,7 +468,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                       fontSize: Dimens.thrteen),
                 ),
                 SizedBox(
-                  height: Dimens.seven,
+                  height: Dimens.six,
                 ),
                 Container(
                   height: Dimens.eight,
@@ -342,9 +478,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                     borderRadius:
                         BorderRadius.all(Radius.circular(Dimens.twenty)),
                   ),
-                ),
-                SizedBox(
-                  height: Dimens.seventeen,
                 ),
               ],
             ),
@@ -356,48 +489,45 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
 
   Widget calendarItemUnselected(String day, String date) {
     return Container(
-      width: MediaQuery.of(context).size.width / 7,
-      color: AppColors.white,
-      padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            day,
-            style: TextStyle(
-                letterSpacing: 1.43,
-                color: AppColors.calendarWeekNameColor,
-                fontFamily: Strings.EXO_FONT,
-                fontWeight: FontWeight.w500,
-                fontSize: Dimens.eight),
-          ),
-          SizedBox(
-            height: Dimens.seven,
-          ),
-          Text(
-            date,
-            style: TextStyle(
-                color: AppColors.calendarDateNameColor,
-                fontFamily: Strings.EXO_FONT,
-                fontWeight: FontWeight.w700,
-                fontSize: Dimens.thrteen),
-          ),
-          SizedBox(
-            height: Dimens.seven,
-          ),
-          Container(
-            height: Dimens.eight,
-            width: Dimens.eight,
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.all(Radius.circular(Dimens.twenty)),
+      width: MediaQuery.of(context).size.width / 7.3,
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              day,
+              style: TextStyle(
+                  letterSpacing: 1.43,
+                  color: AppColors.calendarWeekNameColor,
+                  fontFamily: Strings.EXO_FONT,
+                  fontWeight: FontWeight.w500,
+                  fontSize: Dimens.ten),
             ),
-          ),
-          SizedBox(
-            height: Dimens.seventeen,
-          ),
-        ],
+            SizedBox(
+              height: Dimens.six,
+            ),
+            Text(
+              date,
+              style: TextStyle(
+                  color: AppColors.calendarDateNameColor,
+                  fontFamily: Strings.EXO_FONT,
+                  fontWeight: FontWeight.w700,
+                  fontSize: Dimens.thrteen),
+            ),
+            SizedBox(
+              height: Dimens.six,
+            ),
+            Container(
+              height: Dimens.eight,
+              width: Dimens.eight,
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.twenty)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -528,5 +658,25 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
         ),
       ],
     );
+  }
+
+  List<MotivationHistoryItem> _calanderData(
+      List<WorkoutActivities> _workoutActivitiesList) {
+    List<MotivationHistoryItem> _list = new List();
+
+    for (int i = 0; i < _workoutActivitiesList.length; i++) {
+      debugPrint("date   :        ${_workoutActivitiesList[i].createdOnStr}");
+
+      _list.add(MotivationHistoryItem(
+          date: Utils.getMonthFromDate(_workoutActivitiesList[i].createdOnStr),
+          weekDay:
+              Utils.getMonthFromDay(_workoutActivitiesList[i].createdOnStr),
+          title: _workoutActivitiesList[i].workoutName,
+          isSelected:
+              Utils.checkCurrentDate(_workoutActivitiesList[i].createdOnStr)));
+      debugPrint(
+          'date  :   ${_list[i].date}   week  :   ${_list[i].weekDay}   name:   ${_list[i].title}    isselected:   ${_list[i].isSelected}');
+    }
+    return _list;
   }
 }

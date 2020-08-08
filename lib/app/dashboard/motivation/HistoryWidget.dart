@@ -253,7 +253,9 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     showDialog(
         context: context,
         barrierDismissible: true,
-        builder: (context) => CustomChangeWeekDialog());
+        builder: (context) => CustomChangeWeekDialog(
+              list: motivationData.weekNameList,
+            ));
   }
 
   Widget _selectedListItem(

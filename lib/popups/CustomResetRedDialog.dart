@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
@@ -9,17 +11,23 @@ import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/Strings.dart';
 
 class CustomResetRedDialog extends StatefulWidget {
+  int endRange;
+  CustomResetRedDialog({this.endRange});
+
   @override
-  State<StatefulWidget> createState() => _CustomResetRedDialogState();
+  State<StatefulWidget> createState() =>
+      _CustomResetRedDialogState(endRange: endRange);
 }
 
 class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
   static const Key resetMyProgramKey = Key(Keys.resetMyProgramKey);
   bool isLoading = false;
+  int endRange = 1;
+
+  _CustomResetRedDialogState({this.endRange});
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       margin: EdgeInsets.symmetric(horizontal: Dimens.TWENTY),
       child: Center(
@@ -178,11 +186,10 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
         adapter: NumberPickerAdapter(data: [
           NumberPickerColumn(
             begin: 1,
-            end: 3,
+            end: endRange,
           )
         ]),
-        columnPadding: EdgeInsets.symmetric(
-            horizontal: Dimens.TWENTY_FIVE),
+        columnPadding: EdgeInsets.symmetric(horizontal: Dimens.TWENTY_FIVE),
         selectedTextStyle: TextStyle(
             color: AppColors.black_text,
             fontFamily: Strings.EXO_FONT,
@@ -202,8 +209,6 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
         onSelect: (Picker picker, int index, List<int> selecteds) {
           print(selecteds.toString());
           print(picker.getSelectedValues());
-        })
-        .makePicker();
+        }).makePicker();
   }
-
 }
