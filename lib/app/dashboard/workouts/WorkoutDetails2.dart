@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/workouts/ComingUp.dart';
@@ -8,6 +9,7 @@ import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/models/DailyWorkoutModel.dart';
 import 'package:prankbros2/models/WorkoutDetails2Model.dart';
+import 'package:prankbros2/models/workout/CommingUpMainModel.dart';
 import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -15,6 +17,7 @@ import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 
 class WorkoutDetails2 extends StatefulWidget {
   WorkoutDetails2({this.onPush});
@@ -39,18 +42,22 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
 
   WorkoutDetail2Models _workoutDetail2Models;
   String _baseUrl = "";
+  List<Exercises> _exercisesList = new List();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _workoutDetail2Models = ModalRoute.of(context).settings.arguments;
+
     try {
+      if(_workoutDetail2Models != null && _workoutDetail2Models.trainings != null && _workoutDetail2Models.trainings.exercises != null && _workoutDetail2Models.trainings.exercises.length > 0)
+        _exercisesList.addAll(_workoutDetail2Models.trainings.exercises);
       _baseUrl = _workoutDetail2Models.baseUrl;
     } catch (e) {
       debugPrint('${e.toString()}');
     }
 
-    _workoutListInit();
+//    _workoutListInit();
   }
 
   void _workoutListInit() {
@@ -247,26 +254,18 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                      return _mainItemBuilder(
-                          context,
-                          index,
-                          _workoutList[0].warmUpList[index],
-                          _workoutList[0].warmUpList.length);
-                    }, childCount: _workoutList[0].warmUpList.length),
+                      return _mainItemBuilder(_exercisesList[index],_exercisesList.length,index);
+                    }, childCount: _exercisesList.length),
                   ),
-                  SliverPadding(
-                    padding: EdgeInsets.only(top: Dimens.twenty),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                      return _mainItemBuilder(
-                          context,
-                          index,
-                          _workoutList[0].workoutList[index],
-                          _workoutList[0].workoutList.length);
-                    }, childCount: _workoutList[0].workoutList.length),
-                  ),
+//                  SliverPadding(
+//                    padding: EdgeInsets.only(top: Dimens.twenty),
+//                  ),
+//                  SliverList(
+//                    delegate: SliverChildBuilderDelegate(
+//                        (BuildContext context, int index) {
+//                      return _mainItemBuilder();
+//                    }, childCount: _workoutList[0].workoutList.length),
+//                  ),
                 ],
               ),
             ),
@@ -276,19 +275,21 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
     );
   }
 
-  void _mainItemClick() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ComingUp()));
+  void _mainItemClick(Exercises item) {
+    Navigator.pushNamed(context, Strings.COMING_UP_ROUTE,
+        arguments:
+        CommingUpMainModel(baseUrl: _baseUrl,exercises: item));
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => ComingUp()));
   }
 
-  Widget _mainItemBuilder(BuildContext context, int index,
-      DailyWorkoutModel dailyWorkoutModel, int size) {
-    debugPrint(
-        'index--:  $index   title--:   ${dailyWorkoutModel.rest}  size--:  $size');
+  Widget _mainItemBuilder(Exercises item,int size, int index) {
     return Material(
       color: AppColors.transparent,
       child: InkWell(
-        onTap: _mainItemClick,
+        onTap: (){
+          _mainItemClick(item);
+        },
         child: Container(
           margin: EdgeInsets.only(
               left: Dimens.twenty,
@@ -297,34 +298,55 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(
-                child: dailyWorkoutModel.mainTitle == ''
-                    ? Text(
-                        dailyWorkoutModel.mainTitle.toUpperCase(),
-                        style: TextStyle(
-                            letterSpacing: 1.04,
-                            fontWeight: FontWeight.w600,
-                            fontSize: Dimens.fifteen,
-                            color: AppColors.unSelectedTextRadioColor,
-                            fontFamily: Strings.EXO_FONT),
-                      )
-                    : SizedBox(
-                        height: 0,
-                      ),
-              ),
-              SizedBox(
-                height: Dimens.eight,
-              ),
+//              SizedBox(
+//                child: item.nameEN != null || item.nameEN != ''
+//                    ? Text(
+//                  item.nameEN.toUpperCase(),
+//                        style: TextStyle(
+//                            letterSpacing: 1.04,
+//                            fontWeight: FontWeight.w600,
+//                            fontSize: Dimens.fifteen,
+//                            color: AppColors.unSelectedTextRadioColor,
+//                            fontFamily: Strings.EXO_FONT),
+//                      )
+//                    : SizedBox(
+//                        height: 0,
+//                      ),
+//              ),
+//              SizedBox(
+//                height: Dimens.eight,
+//              ),
               Row(
                 children: <Widget>[
                   ClipRRect(
                     borderRadius:
                         BorderRadius.all(Radius.circular(Dimens.eight)),
-                    child: Image.asset(
-                      Images.DummyFood,
-                      height: Dimens.eighty,
-                      width: Dimens.eighty,
-                      fit: BoxFit.cover,
+                    child: CachedNetworkImage(
+                      width: Dimens.ninety,
+                      height: Dimens.ninety,
+                      imageUrl: item.imagePath != null
+                          ? '$_baseUrl${item.imagePath}'
+                          : "",
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: Dimens.ninety,
+                        height: Dimens.ninety,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      ),
+                      placeholder: (context, url) =>
+                          Utils.getImagePlaceHolderWidgetProfile(
+                              context: context,
+                              img: Images.DUMMY_WORKOUT,
+                            width: Dimens.ninety,
+                            height: Dimens.ninety,),
+                      errorWidget: (context, url, error) =>
+                          Utils.getImagePlaceHolderWidgetProfile(
+                              context: context,
+                              img: Images.DUMMY_WORKOUT,
+                            width: Dimens.ninety,
+                            height: Dimens.ninety,),
                     ),
                   ),
                   SizedBox(
@@ -335,7 +357,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        dailyWorkoutModel.title,
+                        item.nameEN,
                         style: TextStyle(
                             letterSpacing: 1.04,
                             fontWeight: FontWeight.w600,
@@ -347,7 +369,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                         height: Dimens.ten,
                       ),
                       Text(
-                        dailyWorkoutModel.timing,
+                        item.exerciseTime,
                         style: TextStyle(
                             letterSpacing: 1.04,
                             fontWeight: FontWeight.w500,
@@ -359,51 +381,51 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                   )
                 ],
               ),
-              SizedBox(
-                child: size - 1 != index
-                    ? Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Divider(
-                              height: Dimens.one,
-                              color: AppColors.divider_color_2,
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(Dimens.twenty)),
-                                border: Border.all(
-                                    color: AppColors.divider_color_2,
-                                    width: Dimens.one)),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: Dimens.twenty,
-                                  vertical: Dimens.eight),
-                              child: Text(
-                                dailyWorkoutModel.rest,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: Dimens.forteen,
-                                    letterSpacing: 1.04,
-                                    fontFamily: Strings.EXO_FONT,
-                                    color: AppColors.unSelectedTextRadioColor),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: Dimens.twentyFive,
-                            child: Divider(
-                              height: Dimens.one,
-                              color: AppColors.divider_color_2,
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        height: 0,
-                      ),
-              )
+//              SizedBox(
+//                child: size - 1 != index
+//                    ? Row(
+//                        children: <Widget>[
+//                          Expanded(
+//                            child: Divider(
+//                              height: Dimens.one,
+//                              color: AppColors.divider_color_2,
+//                            ),
+//                          ),
+//                          Container(
+//                            decoration: BoxDecoration(
+//                                borderRadius: BorderRadius.all(
+//                                    Radius.circular(Dimens.twenty)),
+//                                border: Border.all(
+//                                    color: AppColors.divider_color_2,
+//                                    width: Dimens.one)),
+//                            child: Padding(
+//                              padding: EdgeInsets.symmetric(
+//                                  horizontal: Dimens.twenty,
+//                                  vertical: Dimens.eight),
+//                              child: Text(
+//                                dailyWorkoutModel.rest,
+//                                style: TextStyle(
+//                                    fontWeight: FontWeight.w500,
+//                                    fontSize: Dimens.forteen,
+//                                    letterSpacing: 1.04,
+//                                    fontFamily: Strings.EXO_FONT,
+//                                    color: AppColors.unSelectedTextRadioColor),
+//                              ),
+//                            ),
+//                          ),
+//                          SizedBox(
+//                            width: Dimens.twentyFive,
+//                            child: Divider(
+//                              height: Dimens.one,
+//                              color: AppColors.divider_color_2,
+//                            ),
+//                          ),
+//                        ],
+//                      )
+//                    : SizedBox(
+//                        height: 0,
+//                      ),
+//              )
             ],
           ),
         ),

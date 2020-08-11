@@ -72,4 +72,5 @@ without losing your data''';
   static const String FULL_IMAGE_VIEW_SCREEN = '/full_image_view_screen';
   static const String WORKOUT_DETAILS_FIRST_ROUTE = '/workout_detail_first_route';
   static const String WORKOUT_DETAILS_SECOND_ROUTE = '/workout_detail_second_route';
+  static const String COMING_UP_ROUTE = '/comming_up_route';
 }

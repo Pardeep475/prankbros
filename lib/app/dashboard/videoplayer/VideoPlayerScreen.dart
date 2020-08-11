@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/videoplayer/VideoScreenBloc.dart';
 import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
@@ -12,96 +13,160 @@ class VideoPlayerScreen extends StatefulWidget {
 }
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-  VideoPlayerController _controller;
-  bool isPlaying = true;
+  VideoPlayerController _videoPlayerController;
+  bool startedPlaying = false;
+  VideoScreenBloc _videoScreenBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _videoScreenBloc = new VideoScreenBloc();
+
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final String videoPath = ModalRoute.of(context).settings.arguments;
-    _controller = VideoPlayerController.network(videoPath)
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        isPlaying = false;
-        setState(() {});
-      });
+
+    String _videoPath = ModalRoute.of(context).settings.arguments;
+
+    _videoPlayerController = VideoPlayerController.network(_videoPath);
+    _videoPlayerController.addListener(() {
+//      if (startedPlaying && !_videoPlayerController.value.isPlaying) {
+//        Navigator.pop(context);
+//      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    super.dispose();
+  }
+
+  Future<bool> started() async {
+    await _videoPlayerController.setLooping(true);
+    await _videoPlayerController.initialize();
+    await _videoPlayerController.play();
+    startedPlaying = true;
+    debugPrint('started----------------');
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isPlaying
-          ? Center(child: CommonProgressIndicator(true))
-          : Stack(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
+      backgroundColor: AppColors.white,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          InkWell(
+            onTap: _onBackPressed,
+            child: Container(
+              width: Dimens.FORTY_FIVE,
+              height: Dimens.FORTY_FIVE,
+              margin:
+              EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
+              child: Card(
+                elevation: Dimens.three,
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+                ),
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  decoration: BoxDecoration(
+                    color: AppColors.light_gray,
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+                  ),
                   child: Center(
-                    child: _controller.value.initialized
-                        ? AspectRatio(
-                            aspectRatio: _controller.value.aspectRatio,
-                            child: VideoPlayer(_controller),
-                          )
-                        : Container(),
-                  ),
+                      child: Image.asset(Images.ArrowBackWhite,
+                          height: Dimens.fifteen,
+                          width: Dimens.twenty,
+                          color: AppColors.black)),
                 ),
-                InkWell(
-                  onTap: _onBackPressed,
-                  child: Container(
-                    width: Dimens.FORTY_FIVE,
-                    height: Dimens.FORTY_FIVE,
-                    margin:
-                        EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
-                    child: Card(
-                      elevation: Dimens.three,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-                      ),
-                      child: Container(
-                        alignment: Alignment.topLeft,
-                        decoration: BoxDecoration(
-                          color: AppColors.light_gray,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-                        ),
-                        child: Center(
-                            child: Image.asset(Images.ArrowBackWhite,
-                                height: Dimens.fifteen,
-                                width: Dimens.twenty,
-                                color: AppColors.black)),
-                      ),
-                    ),
-                  ),
-                ),
-
-
-
-              ],
+              ),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _controller.value.isPlaying
-                ? _controller.pause()
-                : _controller.play();
-          });
-        },
-        child: Icon(
-          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-        ),
+          ),
+          Expanded(
+            child: Material(
+              elevation: 0,
+              child: Center(
+                child: FutureBuilder<bool>(
+                  future: started(),
+                  builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                    if (snapshot.data == true) {
+                      return AspectRatio(
+                        aspectRatio: _videoPlayerController.value.aspectRatio,
+                        child: Stack(
+                          children: <Widget>[
+                            VideoPlayer(_videoPlayerController),
+                            _PlayPauseOverlay(
+                              controller: _videoPlayerController,
+                              videoScreenBloc: _videoScreenBloc,
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return const Text('waiting for video to load');
+                    }
+                  },
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
-
   void _onBackPressed() {
     Navigator.pop(context);
   }
 }
+
+class _PlayPauseOverlay extends StatelessWidget {
+  const _PlayPauseOverlay({Key key, this.controller, this.videoScreenBloc})
+      : super(key: key);
+
+  final VideoPlayerController controller;
+  final VideoScreenBloc videoScreenBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 50),
+          reverseDuration: Duration(milliseconds: 200),
+          child: StreamBuilder<int>(
+              initialData: 0,
+              stream: videoScreenBloc.categoriesSearchStream,
+              builder: (context, snapshot) {
+                return controller.value.isPlaying
+                    ? SizedBox.shrink()
+                    : Container(
+                  color: Colors.black26,
+                  child: Center(
+                    child: Icon(
+                      Icons.play_arrow,
+                      color: Colors.white,
+                      size: 100.0,
+                    ),
+                  ),
+                );
+              }),
+        ),
+        GestureDetector(
+          onTap: () {
+            controller.value.isPlaying ? controller.pause() : controller.play();
+            videoScreenBloc.categoriesSearchSink.add(0);
+          },
+        ),
+      ],
+    );
+  }
+}
+
