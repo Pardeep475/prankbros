@@ -73,4 +73,6 @@ without losing your data''';
   static const String WORKOUT_DETAILS_FIRST_ROUTE = '/workout_detail_first_route';
   static const String WORKOUT_DETAILS_SECOND_ROUTE = '/workout_detail_second_route';
   static const String COMING_UP_ROUTE = '/comming_up_route';
+  static const String COMING_UP_NEXT_WORKOUT_ROUTE = '/comming_up_next_workout_route';
+  static const String WARM_UP_SCREEN_ROUTE = '/warm_up_screen_route';
 }

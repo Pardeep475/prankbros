@@ -3,8 +3,6 @@ import 'dart:ffi';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prankbros2/app/dashboard/workouts/ComingUp.dart';
-import 'package:prankbros2/app/dashboard/workouts/ComingUpNextWorkout.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/models/DailyWorkoutModel.dart';
@@ -50,7 +48,10 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
     _workoutDetail2Models = ModalRoute.of(context).settings.arguments;
 
     try {
-      if(_workoutDetail2Models != null && _workoutDetail2Models.trainings != null && _workoutDetail2Models.trainings.exercises != null && _workoutDetail2Models.trainings.exercises.length > 0)
+      if (_workoutDetail2Models != null &&
+          _workoutDetail2Models.trainings != null &&
+          _workoutDetail2Models.trainings.exercises != null &&
+          _workoutDetail2Models.trainings.exercises.length > 0)
         _exercisesList.addAll(_workoutDetail2Models.trainings.exercises);
       _baseUrl = _workoutDetail2Models.baseUrl;
     } catch (e) {
@@ -254,7 +255,8 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                      return _mainItemBuilder(_exercisesList[index],_exercisesList.length,index);
+                      return _mainItemBuilder(
+                          _exercisesList[index], _exercisesList.length, index);
                     }, childCount: _exercisesList.length),
                   ),
 //                  SliverPadding(
@@ -277,17 +279,16 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
 
   void _mainItemClick(Exercises item) {
     Navigator.pushNamed(context, Strings.COMING_UP_ROUTE,
-        arguments:
-        CommingUpMainModel(baseUrl: _baseUrl,exercises: item));
+        arguments: CommingUpMainModel(baseUrl: _baseUrl, exercises: item));
 //    Navigator.push(
 //        context, MaterialPageRoute(builder: (context) => ComingUp()));
   }
 
-  Widget _mainItemBuilder(Exercises item,int size, int index) {
+  Widget _mainItemBuilder(Exercises item, int size, int index) {
     return Material(
       color: AppColors.transparent,
       child: InkWell(
-        onTap: (){
+        onTap: () {
           _mainItemClick(item);
         },
         child: Container(
@@ -337,16 +338,18 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                       ),
                       placeholder: (context, url) =>
                           Utils.getImagePlaceHolderWidgetProfile(
-                              context: context,
-                              img: Images.DUMMY_WORKOUT,
-                            width: Dimens.ninety,
-                            height: Dimens.ninety,),
+                        context: context,
+                        img: Images.DUMMY_WORKOUT,
+                        width: Dimens.ninety,
+                        height: Dimens.ninety,
+                      ),
                       errorWidget: (context, url, error) =>
                           Utils.getImagePlaceHolderWidgetProfile(
-                              context: context,
-                              img: Images.DUMMY_WORKOUT,
-                            width: Dimens.ninety,
-                            height: Dimens.ninety,),
+                        context: context,
+                        img: Images.DUMMY_WORKOUT,
+                        width: Dimens.ninety,
+                        height: Dimens.ninety,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -459,10 +462,16 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
   }
 
   void _downloadButtonPressed(BuildContext context) {
+//    _workoutDetail2Models
+
     setState(() {
       _isLoading = _isLoading ? false : true;
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ComingUpNextWorkout()));
+
+      Navigator.pushNamed(context, Strings.COMING_UP_NEXT_WORKOUT_ROUTE,
+          arguments: _workoutDetail2Models);
+
+//      Navigator.push(context,
+//          MaterialPageRoute(builder: (context) => ComingUpNextWorkout()));
     });
   }
 

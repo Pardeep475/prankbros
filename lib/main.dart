@@ -21,6 +21,8 @@ import 'package:prankbros2/utils/locale/AppLanguage.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 import 'package:provider/provider.dart';
 
+import 'app/dashboard/workouts/ComingUpNextWorkout.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SessionManager sessionManager = new SessionManager();
@@ -100,6 +102,8 @@ class MyApp extends StatelessWidget {
     Strings.WORKOUT_DETAILS_FIRST_ROUTE: (BuildContext context) => new WorkoutDetails(),
     Strings.WORKOUT_DETAILS_SECOND_ROUTE: (BuildContext context) => new WorkoutDetails2(),
     Strings.COMING_UP_ROUTE: (BuildContext context) => new ComingUp(),
+    Strings.COMING_UP_NEXT_WORKOUT_ROUTE: (BuildContext context) => new ComingUpNextWorkout(),
+    Strings.WARM_UP_SCREEN_ROUTE: (BuildContext context) => new WarmUpScreen(),
   };
 }
 

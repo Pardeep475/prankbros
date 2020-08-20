@@ -1,10 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/workouts/WarmUpScreen.dart';
+import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
+import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 
 class ComingUpNextWorkout extends StatefulWidget {
   @override
@@ -12,9 +16,31 @@ class ComingUpNextWorkout extends StatefulWidget {
 }
 
 class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
+  WorkoutDetail2Models _workoutDetail2Models;
+  String _baseUrl = "";
+  List<Exercises> _exercisesList = new List();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _workoutDetail2Models = ModalRoute.of(context).settings.arguments;
+
+    try {
+      if (_workoutDetail2Models != null &&
+          _workoutDetail2Models.trainings != null &&
+          _workoutDetail2Models.trainings.exercises != null &&
+          _workoutDetail2Models.trainings.exercises.length > 0)
+        _exercisesList.addAll(_workoutDetail2Models.trainings.exercises);
+      _baseUrl = _workoutDetail2Models.baseUrl;
+    } catch (e) {
+      debugPrint('${e.toString()}');
+    }
+
+//    _workoutListInit();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -42,7 +68,10 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
               height: Dimens.twenty,
             ),
             Text(
-              '00:56',
+              _exercisesList.length > 0 &&
+                      _exercisesList[0].exerciseTime != null
+                  ? _exercisesList[0].exerciseTime
+                  : "",
               style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: Dimens.fiftySix,
@@ -54,7 +83,9 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
               height: Dimens.twoHundredForteen,
             ),
             Text(
-              'Upright cable row',
+              _exercisesList.length > 0 && _exercisesList[0].nameEN != null
+                  ? _exercisesList[0].nameEN
+                  : "",
               style: TextStyle(
                   fontWeight: FontWeight.w700,
                   color: AppColors.black_text,
@@ -84,11 +115,42 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
                           BorderRadius.all(Radius.circular(Dimens.fifteen)),
                     ),
                     elevation: Dimens.ten,
-                    child: Image.asset(
+                    child:
+                        /*Image.asset(
                       Images.DUMMY_WORKOUT,
                       fit: BoxFit.cover,
                       height: Dimens.oneHundredFiftyTwo,
                       width: Dimens.twoHundredNinetyFive,
+                    ),*/
+                        CachedNetworkImage(
+                      height: Dimens.oneHundredFiftyTwo,
+                      width: Dimens.twoHundredNinetyFive,
+                      imageUrl: _exercisesList.length > 0 &&
+                              _exercisesList[0].imagePath != null
+                          ? '$_baseUrl${_exercisesList[0].imagePath}'
+                          : "",
+                      imageBuilder: (context, imageProvider) => Container(
+                        height: Dimens.oneHundredFiftyTwo,
+                        width: Dimens.twoHundredNinetyFive,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      ),
+                      placeholder: (context, url) =>
+                          Utils.getImagePlaceHolderWidgetProfile(
+                        context: context,
+                        img: Images.DUMMY_WORKOUT,
+                        height: Dimens.oneHundredFiftyTwo,
+                        width: Dimens.twoHundredNinetyFive,
+                      ),
+                      errorWidget: (context, url, error) =>
+                          Utils.getImagePlaceHolderWidgetProfile(
+                        context: context,
+                        img: Images.DUMMY_WORKOUT,
+                        height: Dimens.oneHundredFiftyTwo,
+                        width: Dimens.twoHundredNinetyFive,
+                      ),
                     ),
                   ),
                 ),
@@ -122,8 +184,10 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
   }
 
   void _openWorkoutDetailStepByStep() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => WarmUpScreen()));
-//    Navigator.pushNamed(context, Strings.WARM_UP_ROUTE);
+
+//    Navigator.push(
+//        context, MaterialPageRoute(builder: (context) => WarmUpScreen()));
+    Navigator.pushNamed(context, Strings.WARM_UP_SCREEN_ROUTE,arguments: _workoutDetail2Models);
   }
 
   List<Widget> _getWords() {
