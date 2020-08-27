@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prankbros2/app/dashboard/workouts/WarmUpScreen.dart';
+import 'package:prankbros2/app/dashboard/workouts/WorkoutDetails2.dart';
 import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -184,10 +184,10 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
   }
 
   void _openWorkoutDetailStepByStep() {
-
 //    Navigator.push(
 //        context, MaterialPageRoute(builder: (context) => WarmUpScreen()));
-    Navigator.pushNamed(context, Strings.WARM_UP_SCREEN_ROUTE,arguments: _workoutDetail2Models);
+    Navigator.pushNamed(context, Strings.WARM_UP_SCREEN_ROUTE,
+        arguments: _workoutDetail2Models);
   }
 
   List<Widget> _getWords() {
@@ -210,3 +210,5 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
     return res;
   }
 }
+
+
