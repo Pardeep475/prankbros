@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:prankbros2/app/auth/forgotpassword/ForgotPassword.dart';
 import 'package:prankbros2/app/auth/forgotpassword/SendEmail.dart';
 import 'package:prankbros2/app/auth/intro/Intro.dart';

@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/videoplayer/VideoScreenBloc.dart';
 import 'package:prankbros2/app/dashboard/workouts/WarmUpCompleted.dart';
-import 'package:prankbros2/app/dashboard/workouts/WorkOutCompleted.dart';
 import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:prankbros2/popups/CustomListPopUp.dart';

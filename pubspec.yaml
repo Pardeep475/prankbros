@@ -45,6 +45,7 @@ dependencies:
   video_player: ^0.10.11+2
   intl: ^0.16.1
   cached_network_image: ^2.2.0+1
+  page_transition: ^1.1.6
 
 dev_dependencies:
   flutter_test:
