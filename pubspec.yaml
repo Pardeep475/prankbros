@@ -43,6 +43,8 @@ dependencies:
   image_picker: ^0.6.7+4
   permission_handler: ^5.0.1+1
   video_player: ^0.10.11+2
+  chewie: ^0.9.10
+  flutter_spinkit: "^4.1.2"
   intl: ^0.16.1
   cached_network_image: ^2.2.0+1
 

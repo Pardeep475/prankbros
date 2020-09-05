@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
     Strings.WORKOUT_DETAILS_SECOND_ROUTE: (BuildContext context) => new WorkoutDetails2(),
     Strings.COMING_UP_ROUTE: (BuildContext context) => new ComingUp(),
     Strings.COMING_UP_NEXT_WORKOUT_ROUTE: (BuildContext context) => new ComingUpNextWorkout(),
-    Strings.WARM_UP_SCREEN_ROUTE: (BuildContext context) => new WarmUpScreen(),
+   Strings.WARM_UP_SCREEN_ROUTE: (BuildContext context) => new WarmUpScreen(),
   };
 }
 

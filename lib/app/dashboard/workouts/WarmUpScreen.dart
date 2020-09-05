@@ -12,6 +12,9 @@ import 'package:video_player/video_player.dart';
 
 class WarmUpScreen extends StatefulWidget {
   bool isHomeWorkout;
+  WorkoutDetail2Models workoutDetail2Models;
+
+  WarmUpScreen({this.workoutDetail2Models});
 
   @override
   State<StatefulWidget> createState() => _WarmUpScreenState();
@@ -22,14 +25,15 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
 
   TextEditingController _textEditingController;
 
-  WorkoutDetail2Models _workoutDetail2Models;
-
+  var listCurrentPosition = 0;
   String _baseUrl = "";
+  String videoListUrl = "";
   List<Exercises> _exercisesList = new List();
 
   VideoPlayerController _videoPlayerController;
   bool startedPlaying = false;
   VideoScreenBloc _videoScreenBloc;
+  Future<void> _initializeVideoPlayerFuture;
 
   Timer _timer;
   int _start = 0;
@@ -38,6 +42,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
   @override
   void initState() {
     super.initState();
+
     _textEditingController = new TextEditingController();
     _videoScreenBloc = new VideoScreenBloc();
     _contentListInit();
@@ -48,32 +53,32 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
       _contentList.add(
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat');
     }
+    try {
+      if (widget.workoutDetail2Models != null &&
+          widget.workoutDetail2Models.trainings != null &&
+          widget.workoutDetail2Models.trainings.exercises != null &&
+          widget.workoutDetail2Models.trainings.exercises.length > 0)
+        _exercisesList.addAll(widget.workoutDetail2Models.trainings.exercises);
+      _baseUrl = widget.workoutDetail2Models.baseUrl;
+//      _timing= parseDuration(_exercisesList[0].exerciseTime);
+      videoListUrl = _exercisesList[listCurrentPosition].videoPath;
+
+      _videoPlayerController =
+          VideoPlayerController.network('$_baseUrl${videoListUrl}');
+      _initializeVideoPlayerFuture = _videoPlayerController.initialize();
+
+      _videoPlayerController.setLooping(true);
+      int timeValue = 0;
+      // _workoutDetail2Models = ModalRoute.of(context).settings.arguments;
+
+    } catch (e) {
+      debugPrint('${e.toString()}');
+    }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _workoutDetail2Models = ModalRoute.of(context).settings.arguments;
-
-    try {
-      if (_workoutDetail2Models != null &&
-          _workoutDetail2Models.trainings != null &&
-          _workoutDetail2Models.trainings.exercises != null &&
-          _workoutDetail2Models.trainings.exercises.length > 0)
-        _exercisesList.addAll(_workoutDetail2Models.trainings.exercises);
-      _baseUrl = _workoutDetail2Models.baseUrl;
-//      _timing= parseDuration(_exercisesList[0].exerciseTime);
-
-      _videoPlayerController = VideoPlayerController.network(
-          '$_baseUrl${_exercisesList[0].videoPath}');
-      _videoPlayerController.addListener(() {
-//      if (startedPlaying && !_videoPlayerController.value.isPlaying) {
-//        Navigator.pop(context);
-//      }
-      });
-    } catch (e) {
-      debugPrint('${e.toString()}');
-    }
 
 //    _workoutListInit();
   }
@@ -104,17 +109,25 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
             child: Material(
               elevation: 0,
               child: Center(
-                child: FutureBuilder<bool>(
-                  future: started(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                    if (snapshot.data == true) {
+                child: FutureBuilder(
+                  future: _initializeVideoPlayerFuture,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
                       return Stack(
                         children: <Widget>[
                           VideoPlayer(_videoPlayerController),
                           _PlayPauseOverlay(
                             controller: _videoPlayerController,
                             videoScreenBloc: _videoScreenBloc,
+                            playCLick: (value) {
+                              if (value == 0) {
+                                _videoPlayerController.pause();
+                                startedPlaying = false;
+                                setState(() {});
+                              } else {
+                                _playVideo();
+                              }
+                            },
                           ),
                         ],
                       );
@@ -136,8 +149,8 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                 initialChildSize: 1,
                 minChildSize: 0.30,
                 builder: (BuildContext context, myscrollController) {
-                  return _workoutDetail2Models.isHomeWorkout != null &&
-                          _workoutDetail2Models.isHomeWorkout
+                  return widget.workoutDetail2Models.isHomeWorkout != null &&
+                          widget.workoutDetail2Models.isHomeWorkout
                       ? HomeSheetWorkout(
                           contentList: _contentList,
                           myscrollController: myscrollController,
@@ -167,7 +180,12 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
     debugPrint('timing -- $valueString    $valueInt');
 
     if (!startedPlaying) {
-      await _videoPlayerController.play();
+      _videoPlayerController =
+          VideoPlayerController.network(_baseUrl + videoListUrl)
+            ..initialize().then((_) {
+              _videoPlayerController.play();
+              setState(() {});
+            });
       startedPlaying = true;
       startTimer();
     }
@@ -238,11 +256,12 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
 }
 
 class _PlayPauseOverlay extends StatelessWidget {
-  const _PlayPauseOverlay({Key key, this.controller, this.videoScreenBloc})
-      : super(key: key);
+  _PlayPauseOverlay(
+      {Key key, this.controller, this.videoScreenBloc, this.playCLick});
 
   final VideoPlayerController controller;
   final VideoScreenBloc videoScreenBloc;
+  Function(int) playCLick;
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +290,11 @@ class _PlayPauseOverlay extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            controller.value.isPlaying ? controller.pause() : controller.play();
+            if (controller.value.isPlaying) {
+              playCLick(0);
+            } else {
+              playCLick(1);
+            }
             videoScreenBloc.categoriesSearchSink.add(0);
           },
         ),
