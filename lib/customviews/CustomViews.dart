@@ -51,9 +51,11 @@ class CustomRaisedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EaseInWidget(
+      borderRadius: borderRadius,
       onTap: () {
         onPressed();
       },
+      rippleColor: Color.fromRGBO(0, 0, 0, 0.5),
       child: SizedBox(
         height: height,
         width: width,

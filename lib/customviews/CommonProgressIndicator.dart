@@ -16,30 +16,24 @@ class CommonProgressIndicator extends StatelessWidget {
         return DecoratedBox(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.pink_stroke,
+            color:  AppColors.pink_stroke,
           ),
         );
       },
     );
     return isLoading
-        ? Opacity(
-      opacity: isLoading ? 1.0 : 0,
-      child: Container(
-          alignment: Alignment.center,
-          height: MediaQuery.of(context).size.height,
-          color: Colors.transparent,
-          child: isLoading
-              ? Container(
-            child: spinkit,
-            decoration: BoxDecoration(
-                color: Colors.transparent.withOpacity(0.5)),
-          )
-              : Container()),
-    )
+        ? Container(
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height,
+            color: Colors.transparent.withOpacity(0.1),
+            child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                alignment: Alignment.center,
+                child: spinkit))
         : Container(
-      height: 0.0,
-      width: 0.0,
-    );
+            height: 0.0,
+            width: 0.0,
+          );
   }
 }
-

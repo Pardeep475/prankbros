@@ -4,9 +4,16 @@ class EaseInWidget extends StatefulWidget {
   final Widget child;
   final Function onTap;
   final Function onLongPress;
+  final borderRadius;
+  final rippleColor;
 
-  const EaseInWidget(
-      {Key key, @required this.child, @required this.onTap, this.onLongPress})
+  EaseInWidget(
+      {Key key,
+      @required this.child,
+      @required this.onTap,
+      this.onLongPress,
+      this.borderRadius,
+      this.rippleColor})
       : super(key: key);
 
   @override
@@ -40,7 +47,12 @@ class _EaseInWidgetState extends State<EaseInWidget>
   Widget build(BuildContext context) {
     return FlatButton(
       padding: EdgeInsets.zero,
-      splashColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+        Radius.circular(widget.borderRadius != null ? widget.borderRadius : 0),
+      )),
+      splashColor:
+          widget.rippleColor != null ? widget.rippleColor : Colors.transparent,
       onPressed: () {
         if (widget.onTap == null) {
           return;

@@ -14,6 +14,7 @@ class AppColors {
   static const white = Color(0xFFFFFFFF);
   static const black = Color(0xFF000000);
   static const black_back_dialogs = Color(0xFF000737);
+  static const app_ripple_color = Color.fromRGBO(0, 0, 0, 0.5);
 
   // language color
   static const backRadioColor = Color(0xFFF7F9FE);

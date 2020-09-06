@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/picker/Picker.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -68,14 +69,19 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
                                     fontSize: Dimens.TWENTY_SIX),
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                _dismissLanguagePopUp(context);
-                              },
-                              child: Image.asset(
-                                Images.ICON_CROSS,
-                                height: Dimens.THIRTY,
-                                width: Dimens.THIRTY,
+                            SizedBox(
+                              height: 30.0,
+                              width: 30.0,
+                              child: EaseInWidget(
+                                onTap: () {
+                                  _dismissLanguagePopUp(context);
+                                },
+                                borderRadius: 30.0,
+                                child: Image.asset(
+                                  Images.ICON_CROSS,
+                                  height: Dimens.THIRTY,
+                                  width: Dimens.THIRTY,
+                                ),
                               ),
                             ),
                             SizedBox(

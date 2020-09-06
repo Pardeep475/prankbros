@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/videoplayer/VideoScreenBloc.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/models/workout/CommingUpMainModel.dart';
-import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
@@ -22,6 +22,7 @@ class _ComingUpState extends State<ComingUp> {
   bool startedPlaying = false;
 
   VideoScreenBloc _videoScreenBloc;
+
 //  @override
 //  void initState() {
 //    super.initState();
@@ -32,7 +33,6 @@ class _ComingUpState extends State<ComingUp> {
   void initState() {
     super.initState();
     _videoScreenBloc = new VideoScreenBloc();
-
   }
 
   @override
@@ -40,16 +40,14 @@ class _ComingUpState extends State<ComingUp> {
     super.didChangeDependencies();
     _commingUpMainModel = ModalRoute.of(context).settings.arguments;
 
-
-  
-
     try {
       if (_commingUpMainModel != null &&
           _commingUpMainModel.exercises != null &&
           _commingUpMainModel.exercises.descriptionEN != null)
         _methodList.add(_commingUpMainModel.exercises.descriptionEN);
       _baseUrl = _commingUpMainModel.baseUrl;
-      _videoPlayerController = VideoPlayerController.network('$_baseUrl${_commingUpMainModel.exercises.videoPath}');
+      _videoPlayerController = VideoPlayerController.network(
+          '$_baseUrl${_commingUpMainModel.exercises.videoPath}');
       _videoPlayerController.addListener(() {
 //      if (startedPlaying && !_videoPlayerController.value.isPlaying) {
 //        Navigator.pop(context);
@@ -61,7 +59,6 @@ class _ComingUpState extends State<ComingUp> {
 
 //    _workoutListInit();
   }
-
 
   @override
   void dispose() {
@@ -96,9 +93,6 @@ class _ComingUpState extends State<ComingUp> {
     }
   }
 
-
-
-
   Widget _comingUpWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,26 +101,24 @@ class _ComingUpState extends State<ComingUp> {
         SizedBox(
           height: Dimens.forty,
         ),
-        InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
+        Container(
+          width: Dimens.FORTY_FIVE,
+          height: Dimens.FORTY_FIVE,
+          margin: EdgeInsets.only(top: Dimens.twenty, left: Dimens.TWENTY),
           child: Container(
-            width: Dimens.FORTY_FIVE,
-            height: Dimens.FORTY_FIVE,
-            margin: EdgeInsets.only(top: Dimens.twenty, left: Dimens.TWENTY),
-            child: Container(
-              alignment: Alignment.topLeft,
-              decoration: BoxDecoration(
-                color: AppColors.light_gray,
-                borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-              ),
-              child: Center(
-                  child: Image.asset(Images.ArrowBackWhite,
-                      height: Dimens.fifteen,
-                      width: Dimens.twenty,
-                      color: AppColors.black)),
+            alignment: Alignment.topLeft,
+            decoration: BoxDecoration(
+              color: AppColors.light_gray,
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
             ),
+            child: EaseInWidget(
+                onTap: () => Navigator.pop(context),
+                borderRadius: Dimens.fifteen,
+                rippleColor: Color.fromRGBO(0, 0, 0, 0.5),
+                child: Image.asset(Images.ArrowBackWhite,
+                    height: Dimens.fifteen,
+                    width: Dimens.twenty,
+                    color: AppColors.black)),
           ),
         ),
         SizedBox(
@@ -241,7 +233,6 @@ class _ComingUpState extends State<ComingUp> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height / 3,
@@ -313,15 +304,15 @@ class _PlayPauseOverlay extends StatelessWidget {
                 return controller.value.isPlaying
                     ? SizedBox.shrink()
                     : Container(
-                  color: Colors.black26,
-                  child: Center(
-                    child: Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                      size: 100.0,
-                    ),
-                  ),
-                );
+                        color: Colors.black26,
+                        child: Center(
+                          child: Icon(
+                            Icons.play_arrow,
+                            color: Colors.white,
+                            size: 100.0,
+                          ),
+                        ),
+                      );
               }),
         ),
         GestureDetector(

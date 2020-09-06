@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/videoplayer/VideoScreenBloc.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
@@ -61,32 +62,33 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          InkWell(
-            onTap: _onBackPressed,
-            child: Container(
-              width: Dimens.FORTY_FIVE,
-              height: Dimens.FORTY_FIVE,
-              margin:
-              EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
-              child: Card(
-                elevation: Dimens.three,
-                shape: RoundedRectangleBorder(
+          Container(
+            width: Dimens.FORTY_FIVE,
+            height: Dimens.FORTY_FIVE,
+            margin:
+            EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
+            child: Card(
+              elevation: Dimens.three,
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+              ),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                  color: AppColors.light_gray,
                   borderRadius:
                   BorderRadius.all(Radius.circular(Dimens.THIRTY)),
                 ),
-                child: Container(
-                  alignment: Alignment.topLeft,
-                  decoration: BoxDecoration(
-                    color: AppColors.light_gray,
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-                  ),
-                  child: Center(
+                child: Center(
+                    child:  EaseInWidget(
+                      onTap: _onBackPressed,
+                      borderRadius: 30.0,
                       child: Image.asset(Images.ArrowBackWhite,
                           height: Dimens.fifteen,
                           width: Dimens.twenty,
-                          color: AppColors.black)),
-                ),
+                          color: AppColors.black),
+                    )),
               ),
             ),
           ),

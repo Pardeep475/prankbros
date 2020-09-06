@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/nutrition/NutritionDetailBloc.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
 import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
@@ -82,25 +83,26 @@ class _NutritionDetail extends State<NutritionDetail> {
             SizedBox(
               height: Dimens.ten,
             ),
-            InkWell(
-              onTap: _onBackPressed,
+            Container(
+              width: Dimens.FORTY_FIVE,
+              height: Dimens.FORTY_FIVE,
+              margin: EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
               child: Container(
-                width: Dimens.FORTY_FIVE,
-                height: Dimens.FORTY_FIVE,
-                margin: EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
-                child: Container(
-                  alignment: Alignment.topLeft,
-                  decoration: BoxDecoration(
-                    color: AppColors.light_gray,
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-                  ),
-                  child: Center(
-                      child: Image.asset(Images.ArrowBackWhite,
-                          height: Dimens.fifteen,
-                          width: Dimens.twenty,
-                          color: AppColors.black)),
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                  color: AppColors.light_gray,
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimens.THIRTY)),
                 ),
+                child: Center(
+                    child: EaseInWidget(
+                  onTap: _onBackPressed,
+                  borderRadius: 30.0,
+                  child: Image.asset(Images.ArrowBackWhite,
+                      height: Dimens.fifteen,
+                      width: Dimens.twenty,
+                      color: AppColors.black),
+                )),
               ),
             ),
             SizedBox(

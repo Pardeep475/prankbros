@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/profile/changelanguage/ChangeLanguageBloc.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -89,14 +90,23 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
                                     fontSize: Dimens.TWENTY_SIX),
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                _dismissLanguagePopUp(context);
-                              },
-                              child: Image.asset(
-                                Images.ICON_CROSS,
-                                height: Dimens.THIRTY,
-                                width: Dimens.THIRTY,
+                            SizedBox(
+                              height: Dimens.THIRTY,
+                              width: Dimens.THIRTY,
+                              child: EaseInWidget(
+                                onTap: () {
+                                  _dismissLanguagePopUp(context);
+                                },
+                                borderRadius: Dimens.THIRTY,
+                                rippleColor: Color.fromRGBO(0, 0, 0, 0.5),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Image.asset(
+                                    Images.ICON_CROSS,
+                                    height: Dimens.THIRTY,
+                                    width: Dimens.THIRTY,
+                                  ),
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -256,7 +266,10 @@ class _CustomLanguageDialog extends State<CustomLanguageDialog> {
     Utils.checkConnectivity().then((value) {
       if (value) {
         _changeLanguageBloc.changeLanguage(
-            userId: userId, language: language.toString(), context: context,accessToken: accessToken);
+            userId: userId,
+            language: language.toString(),
+            context: context,
+            accessToken: accessToken);
       } else {
         Navigator.pop(context);
         Utils.showSnackBar(

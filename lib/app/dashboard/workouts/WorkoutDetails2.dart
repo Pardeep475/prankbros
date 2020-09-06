@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/models/DailyWorkoutModel.dart';
@@ -129,10 +130,8 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
         SizedBox(
           height: Dimens.forty,
         ),
-        InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
+        ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
           child: Container(
             width: Dimens.FORTY_FIVE,
             height: Dimens.FORTY_FIVE,
@@ -144,10 +143,20 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                 borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
               ),
               child: Center(
-                  child: Image.asset(Images.ArrowBackWhite,
-                      height: Dimens.fifteen,
-                      width: Dimens.twenty,
-                      color: AppColors.black)),
+                  child: FlatButton(
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Image.asset(Images.ArrowBackWhite,
+                    height: Dimens.fifteen,
+                    width: Dimens.twenty,
+                    color: AppColors.black),
+              )),
             ),
           ),
         ),
@@ -285,7 +294,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
   Widget _mainItemBuilder(Exercises item, int size, int index) {
     return Material(
       color: AppColors.transparent,
-      child: InkWell(
+      child: EaseInWidget(
         onTap: () {
           _mainItemClick(item);
         },
@@ -353,32 +362,34 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                   SizedBox(
                     width: Dimens.fifteen,
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        item.nameEN,
-                        style: TextStyle(
-                            letterSpacing: 1.04,
-                            fontWeight: FontWeight.w600,
-                            fontSize: Dimens.twenty,
-                            color: AppColors.black_text,
-                            fontFamily: Strings.EXO_FONT),
-                      ),
-                      SizedBox(
-                        height: Dimens.ten,
-                      ),
-                      Text(
-                        item.exerciseTime,
-                        style: TextStyle(
-                            letterSpacing: 1.04,
-                            fontWeight: FontWeight.w500,
-                            fontSize: Dimens.fifteen,
-                            color: AppColors.light_text,
-                            fontFamily: Strings.EXO_FONT),
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          item.nameEN,
+                          style: TextStyle(
+                              letterSpacing: 1.04,
+                              fontWeight: FontWeight.w600,
+                              fontSize: Dimens.twenty,
+                              color: AppColors.black_text,
+                              fontFamily: Strings.EXO_FONT),
+                        ),
+                        SizedBox(
+                          height: Dimens.ten,
+                        ),
+                        Text(
+                          item.exerciseTime,
+                          style: TextStyle(
+                              letterSpacing: 1.04,
+                              fontWeight: FontWeight.w500,
+                              fontSize: Dimens.fifteen,
+                              color: AppColors.light_text,
+                              fontFamily: Strings.EXO_FONT),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -470,7 +481,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
           _workoutDetail2Models.isHomeWorkout
               ? Strings.COMING_UP_NEXT_WORKOUT_ROUTE
               : Strings.WARM_UP_SCREEN_ROUTE,
-          arguments:_workoutDetail2Models);
+          arguments: _workoutDetail2Models);
 
 //      Navigator.push(context,
 //          MaterialPageRoute(builder: (context) => ComingUpNextWorkout()));
@@ -493,5 +504,3 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
     );
   }
 }
-
-
