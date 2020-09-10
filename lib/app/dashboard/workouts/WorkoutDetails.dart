@@ -32,6 +32,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   final ValueChanged<int> onPush;
   SessionManager _sessionManager;
   String _screenName = "Gym";
+  bool isHomeWorkout = false;
   String _accessToken = "";
   String _traingWeek = "";
   String _influencerId = "";
@@ -70,6 +71,11 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     debugPrint('size/7    ${MediaQuery.of(context).size.width / 8}');
     debugPrint('size/7    ${MediaQuery.of(context).size.width / 6}');
     _screenName = ModalRoute.of(context).settings.arguments;
+    if(_screenName=="Gym"){
+      isHomeWorkout=false;
+    }else{
+      isHomeWorkout=true;
+    }
     _sessionManager.getUserModel().then((value) {
       debugPrint("userdata   :        $value");
       if (value != null) {
@@ -425,7 +431,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   void _mainItemClick(Trainings trainings) {
     Navigator.pushNamed(context, Strings.WORKOUT_DETAILS_SECOND_ROUTE,
         arguments:
-            WorkoutDetail2Models(baseUrl: _baseUrl, trainings: trainings));
+            WorkoutDetail2Models(baseUrl: _baseUrl, trainings: trainings,isHomeWorkout: isHomeWorkout));
 //    Navigator.push(
 //        context, MaterialPageRoute(builder: (context) => WorkoutDetails2()));
   }

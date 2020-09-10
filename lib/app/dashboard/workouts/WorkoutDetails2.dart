@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -467,8 +465,12 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
     setState(() {
       _isLoading = _isLoading ? false : true;
 
-      Navigator.pushNamed(context, Strings.COMING_UP_NEXT_WORKOUT_ROUTE,
-          arguments: _workoutDetail2Models);
+      Navigator.pushNamed(
+          context,
+          _workoutDetail2Models.isHomeWorkout
+              ? Strings.COMING_UP_NEXT_WORKOUT_ROUTE
+              : Strings.WARM_UP_SCREEN_ROUTE,
+          arguments:_workoutDetail2Models);
 
 //      Navigator.push(context,
 //          MaterialPageRoute(builder: (context) => ComingUpNextWorkout()));
@@ -491,3 +493,5 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
     );
   }
 }
+
+
