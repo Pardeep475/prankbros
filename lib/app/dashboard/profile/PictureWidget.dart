@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/profile/picturewidget/PictureWidgetBloc.dart';
-import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
+import 'package:prankbros2/app/dashboard/profile/shimmer_layout.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/profileimage/GetProfileImagesApiResponse.dart';
 import 'package:prankbros2/models/profileimage/PictureFinalModel.dart';
@@ -14,6 +14,7 @@ import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PictureWidget extends StatefulWidget {
   @override
@@ -74,10 +75,7 @@ class _PictureWidgetState extends State<PictureWidget> {
         builder: (context, snapshot) {
           if (snapshot != null && snapshot.data != null) {
             if (snapshot.data == 0) {
-              return Container(
-                height: MediaQuery.of(context).size.height * 0.62,
-                child: Center(child: CommonProgressIndicator(true)),
-              );
+              return ProfilePictureShimmer();
             } else if (snapshot.data == 1) {
               return Container(
                 child: StreamBuilder<List<PictureFinalModel>>(
@@ -305,11 +303,8 @@ class _PictureWidgetState extends State<PictureWidget> {
               );
             }
           } else {
-            return Container(
-              height: MediaQuery.of(context).size.height * 0.62,
-              child: Center(child: CommonProgressIndicator(true)),
-            );
-          }
+            return ProfilePictureShimmer();
+          };
         });
   }
 

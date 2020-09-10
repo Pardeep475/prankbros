@@ -4,7 +4,6 @@ import 'package:prankbros2/app/dashboard/motivation/HistoryWidget.dart';
 import 'package:prankbros2/app/dashboard/motivation/MotivationBloc.dart';
 import 'package:prankbros2/app/dashboard/motivation/MotivationWidget.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithColor.dart';
-import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/models/MotivationModel.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/motivation/MotivationApiResponse.dart';
@@ -14,6 +13,7 @@ import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Motivation extends StatefulWidget {
   @override
@@ -79,8 +79,14 @@ class _MotivationState extends State<Motivation> {
       body: Stack(
         children: <Widget>[
           Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             child: BackgroundWidgetWithColor(
               curveColor: AppColors.white,
             ),
@@ -314,7 +320,35 @@ class _MotivationState extends State<Motivation> {
   }
 
   Widget _progressBarData() {
-    return Expanded(child: Center(child: CommonProgressIndicator(true)));
+    return Expanded(
+      child: GridView.builder(
+        padding: EdgeInsets.only(
+            top: 50, left: 12, right: 12, bottom: Dimens.twenty),
+        itemBuilder: (context, position) {
+          return Card(
+            margin: EdgeInsets.all(Dimens.seven),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            color: AppColors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.twenty))),
+            child: Shimmer.fromColors(
+              child: Container(
+                height: 140,
+                width: 150,
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
+              ),
+              baseColor: Colors.grey[400],
+              highlightColor: Colors.white,
+            ),
+          );
+        },
+        itemCount: 3,
+        gridDelegate:
+        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+      ),
+    );
   }
 
   Widget _contentData() {
@@ -335,14 +369,15 @@ class _MotivationState extends State<Motivation> {
                 snapshot.data.motivationData.week != null
                     ? snapshot.data.motivationData.week.toString()
                     : '1');
-            return Expanded(
-              child: _tabClickIndex == 0
-                  ? MotivationWidget(
-                      motivationData: snapshot.data.motivationData,
-                    )
-                  : HistoryWidget(
-                      motivationData: snapshot.data,
-                    ),
+            return snapshot.data == null && snapshot.data.motivationData == null
+                ? Container()
+                :
+            Expanded(
+              child: _tabClickIndex == 0 ? MotivationWidget(
+                motivationData: snapshot.data.motivationData,
+              ) : HistoryWidget(
+                motivationData: snapshot.data,
+              ),
             );
           } else {
             return SizedBox(

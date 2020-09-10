@@ -113,7 +113,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         ),
                       );
                     } else {
-                      return const Text('waiting for video to load');
+                      return CommonProgressIndicator(true);
                     }
                   },
                 ),

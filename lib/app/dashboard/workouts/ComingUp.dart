@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/videoplayer/VideoScreenBloc.dart';
 import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
+import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/models/workout/CommingUpMainModel.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
@@ -152,7 +153,7 @@ class _ComingUpState extends State<ComingUp> {
                     height: Dimens.fifteen,
                   ),
                   Text(
-                    'abdominals, clutes, \nhamstrings'.toUpperCase(),
+                    '',
                     style: TextStyle(
                         letterSpacing: 1.04,
                         fontFamily: Strings.EXO_FONT,
@@ -253,7 +254,7 @@ class _ComingUpState extends State<ComingUp> {
                       ],
                     );
                   } else {
-                    return const Text('waiting for video to load');
+                    return  CommonProgressIndicator(true);;
                   }
                 },
               ),

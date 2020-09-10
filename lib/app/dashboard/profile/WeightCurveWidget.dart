@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/profile/shimer_layout_weight_curve.dart';
 import 'package:prankbros2/app/dashboard/profile/weightcurve/WeightCurveBloc.dart';
-import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
+
 import 'package:prankbros2/models/WeightCurveModel.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/userweight/GetUserWeightApiResponse.dart';
@@ -81,7 +82,8 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
           } else {
             return Container(
               height: MediaQuery.of(context).size.height * .57,
-              child: Center(child: CommonProgressIndicator(true)),
+              margin: EdgeInsets.only(top: 50),
+              child: WeightCurveShimerLaout(),
             );
           }
         });

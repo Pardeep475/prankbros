@@ -16,6 +16,7 @@ import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 class WorkoutDetails extends StatefulWidget {
   WorkoutDetails({this.onPush});
@@ -147,10 +148,119 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
         child: StreamBuilder<int>(
             initialData: 0,
             stream: _workoutDetailBloc.progressStream,
-            builder: (context, snapshot) {
-              if (snapshot.data == 0) {
-                return CommonProgressIndicator(true);
-              } else if (snapshot.data == 1) {
+            builder: (context, progressIndicatorSnapshot) {
+              if (progressIndicatorSnapshot.data == 0) {
+                return Stack(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                            colors: [
+                              AppColors.blueGradientColor,
+                              AppColors.pinkGradientColor
+                            ],
+                            begin: Alignment.bottomLeft,
+                          )),
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: Dimens.forty,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  InkWell(
+                                    onTap: _backPressed,
+                                    splashColor: AppColors.light_gray,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: Dimens.twenty,
+                                          horizontal: Dimens.twenty),
+                                      child: Image.asset(
+                                        Images.ArrowBackWhite,
+                                        color: AppColors.white,
+                                        height: Dimens.fifteen,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    '$_screenName Workout'.toUpperCase(),
+                                    style: TextStyle(
+                                        color: AppColors.white,
+                                        fontFamily: Strings.EXO_FONT,
+                                        fontSize: Dimens.forteen,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  InkWell(
+                                    onTap: _editButtonPressed,
+                                    splashColor: AppColors.light_gray,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: Dimens.twenty,
+                                          horizontal: Dimens.fifteen),
+                                      child: Image.asset(
+                                        Images.ICON_EDIT,
+                                        color: AppColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                height: Dimens.one,
+                                color: AppColors.divider_color,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: Dimens.twentySeven,
+                            right: Dimens.twentySeven,
+                            top: Dimens.twentySeven,
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Workouts this week'.toUpperCase(),
+                              style: TextStyle(
+                                  color: AppColors.black_text,
+                                  fontSize: Dimens.eighteen,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: Strings.EXO_FONT),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                              itemCount: 3,
+                              itemBuilder: (context, pos) {
+                                return Shimmer.fromColors(
+                                  child: Container(
+                                    height:  Dimens.oneHundredEightyFive,
+                                    decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 25),
+                                    margin: EdgeInsets.only(
+                                        right: 25, left: 25, top: 15),
+                                  ),
+                                  baseColor: Colors.grey[400],
+                                  highlightColor: Colors.white,
+                                );
+                              }),
+                        )
+                      ],
+                    ),
+                    CommonProgressIndicator(true),
+                  ],
+                );
+              } else if (progressIndicatorSnapshot.data == 1) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -339,7 +449,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                                                         .data.trainings[index]);
                                                   },
                                                   child: mainListItem(snapshot
-                                                      .data.trainings[index]));
+                                                      .data.trainings[index],data: snapshot.data));
                                             }),
                                       ),
                                     ),
@@ -548,7 +658,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     );
   }
 
-  Widget mainListItem(Trainings trainings) {
+  Widget mainListItem(Trainings trainings,{GetUserTrainingResponseApi data}) {
     if (trainings == null) return SizedBox();
     return Column(
       children: <Widget>[
@@ -650,7 +760,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                                   width: Dimens.seven,
                                 ),
                                 Text(
-                                  '30 min',
+                                  '${trainings.workoutTime}',
                                   style: TextStyle(
                                       color: AppColors.white,
                                       fontSize: Dimens.forteen,

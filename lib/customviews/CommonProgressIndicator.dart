@@ -25,7 +25,7 @@ class CommonProgressIndicator extends StatelessWidget {
         ? Container(
             alignment: Alignment.center,
             height: MediaQuery.of(context).size.height,
-            color: Colors.transparent.withOpacity(0.1),
+            color: Colors.transparent,
             child: Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,

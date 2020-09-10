@@ -6,6 +6,7 @@ import 'package:prankbros2/app/bottomsheet/gym_workout_bottomsheet.dart';
 import 'package:prankbros2/app/bottomsheet/home_work_out_bottomsheet.dart';
 import 'package:prankbros2/app/dashboard/videoplayer/VideoScreenBloc.dart';
 import 'package:prankbros2/commonwidgets/commontwidgets.dart';
+import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:video_player/video_player.dart';
@@ -99,76 +100,81 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Material(
-              elevation: 0,
-              child: Center(
-                child: FutureBuilder(
-                  future: _initializeVideoPlayerFuture,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return Stack(
-                        children: <Widget>[
-                          VideoPlayer(_videoPlayerController),
-                          _PlayPauseOverlay(
-                            controller: _videoPlayerController,
-                            videoScreenBloc: _videoScreenBloc,
-                            playCLick: (value) {
-                              if (value == 0) {
-                                _videoPlayerController.pause();
-                                startedPlaying = false;
-                                setState(() {});
-                              } else {
-                                _playVideo();
-                              }
+      body: WillPopScope(
+        onWillPop: (){
+          Navigator.pop(context,true);
+        },
+        child: Stack(
+          children: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Material(
+                elevation: 0,
+                child: Center(
+                  child: FutureBuilder(
+                    future: _initializeVideoPlayerFuture,
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return Stack(
+                          children: <Widget>[
+                            VideoPlayer(_videoPlayerController),
+                            _PlayPauseOverlay(
+                              controller: _videoPlayerController,
+                              videoScreenBloc: _videoScreenBloc,
+                              playCLick: (value) {
+                                if (value == 0) {
+                                  _videoPlayerController.pause();
+                                  startedPlaying = false;
+                                  setState(() {});
+                                } else {
+                                  _playVideo();
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      } else {
+                        return CommonProgressIndicator(true);
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 270,
+                child: DraggableScrollableSheet(
+                  initialChildSize: 1,
+                  minChildSize: 0.30,
+                  builder: (BuildContext context, myscrollController) {
+                    return widget.workoutDetail2Models.isHomeWorkout != null &&
+                            widget.workoutDetail2Models.isHomeWorkout
+                        ? HomeSheetWorkout(
+                            contentList: _contentList,
+                            myscrollController: myscrollController,
+                            start: _start,
+                            playVideo: () {
+                              _playVideo();
                             },
-                          ),
-                        ],
-                      );
-                    } else {
-                      return const Text('waiting for video to load');
-                    }
+                          )
+                        : GymWorkoutBottomSheet(
+                            contentList: _contentList,
+                            myscrollController: myscrollController,
+                          );
                   },
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 270,
-              child: DraggableScrollableSheet(
-                initialChildSize: 1,
-                minChildSize: 0.30,
-                builder: (BuildContext context, myscrollController) {
-                  return widget.workoutDetail2Models.isHomeWorkout != null &&
-                          widget.workoutDetail2Models.isHomeWorkout
-                      ? HomeSheetWorkout(
-                          contentList: _contentList,
-                          myscrollController: myscrollController,
-                          start: _start,
-                          playVideo: () {
-                            _playVideo();
-                          },
-                        )
-                      : GymWorkoutBottomSheet(
-                          contentList: _contentList,
-                          myscrollController: myscrollController,
-                        );
-                },
-              ),
-            ),
-          ),
-          backButton(context)
-        ],
+            backButton(context)
+          ],
+        ),
       ),
     );
   }

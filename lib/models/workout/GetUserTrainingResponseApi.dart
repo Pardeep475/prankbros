@@ -81,6 +81,7 @@ class Trainings {
   String imagePath;
   String nameEN;
   String createdOn;
+  String workoutTime;
   bool deleted;
   String nameDE;
   List<Exercises> exercises;
@@ -95,6 +96,7 @@ class Trainings {
         this.week,
         this.imagePath,
         this.nameEN,
+        this.workoutTime,
         this.createdOn,
         this.deleted,
         this.nameDE,
@@ -109,6 +111,7 @@ class Trainings {
     influencerId = json['influencerId'];
     week = json['week'];
     imagePath = json['imagePath'];
+    workoutTime = json['workoutTime'];
     nameEN = json['nameEN'];
     createdOn = json['createdOn'];
     deleted = json['deleted'];

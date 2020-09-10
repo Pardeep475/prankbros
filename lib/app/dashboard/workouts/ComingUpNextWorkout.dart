@@ -156,7 +156,7 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
             Expanded(
               child: Align(
                 alignment: Alignment.bottomRight,
-                child: EaseInWidget(
+                child: InkWell(
                   onTap: _openWorkoutDetailStepByStep,
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -183,13 +183,16 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
     );
   }
 
-  void _openWorkoutDetailStepByStep() {
-    Navigator.push(
+  void _openWorkoutDetailStepByStep() async{
+    var pushed= await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => WarmUpScreen(
                   workoutDetail2Models: _workoutDetail2Models,
                 )));
+    if(pushed){
+      Navigator.pop(context);
+    }
   }
 
   List<Widget> _getWords() {
