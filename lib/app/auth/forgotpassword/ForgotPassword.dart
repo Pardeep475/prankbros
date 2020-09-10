@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prankbros2/app/auth/forgotpassword/ForgotPasswordBloc.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -36,7 +37,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   bool _validation(BuildContext context) {
     if (Utils.checkNullOrEmpty(_emailController.text)) {
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Please enter your email.')));
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Please enter your email.')));
       return false;
     }
     return true;
@@ -74,26 +76,26 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              InkWell(
-                onTap: _backPressed,
+              Container(
+                width: Dimens.FORTY_FIVE,
+                height: Dimens.FORTY_FIVE,
+                margin: EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
                 child: Container(
-                  width: Dimens.FORTY_FIVE,
-                  height: Dimens.FORTY_FIVE,
-                  margin:
-                      EdgeInsets.only(top: Dimens.FIFTY, left: Dimens.TWENTY),
-                  child: Container(
-                    alignment: Alignment.topLeft,
-                    decoration: BoxDecoration(
-                      color: AppColors.light_gray,
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-                    ),
-                    child: Center(
-                        child: Image.asset(Images.ArrowBackWhite,
-                            height: Dimens.fifteen,
-                            width: Dimens.twenty,
-                            color: AppColors.black)),
+                  alignment: Alignment.topLeft,
+                  decoration: BoxDecoration(
+                    color: AppColors.light_gray,
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(Dimens.THIRTY)),
                   ),
+                  child: Center(
+                      child: EaseInWidget(
+                    onTap: _backPressed,
+                    borderRadius: Dimens.THIRTY,
+                    child: Image.asset(Images.ArrowBackWhite,
+                        height: Dimens.fifteen,
+                        width: Dimens.twenty,
+                        color: AppColors.black),
+                  )),
                 ),
               ),
               Container(

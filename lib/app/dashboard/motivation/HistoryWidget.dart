@@ -98,6 +98,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
 
   Widget _historyWidget() {
     return CustomScrollView(
+      controller: ScrollController(),
       slivers: <Widget>[
         SliverPadding(
           padding: EdgeInsets.only(top: Dimens.sixty),

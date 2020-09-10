@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
@@ -49,26 +50,32 @@ class CustomRaisedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: width,
-      child: RaisedButton(
-        padding: EdgeInsets.all(0),
-        elevation: 0,
-        child: loading
-            ? buildSpinner(context)
-            : isGradient ? gradientWidget() : textWidget(),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(borderRadius),
+    return EaseInWidget(
+      borderRadius: borderRadius,
+      onTap: () {
+        onPressed();
+      },
+      rippleColor: Color.fromRGBO(0, 0, 0, 0.5),
+      child: SizedBox(
+        height: height,
+        width: width,
+        child: RaisedButton(
+          padding: EdgeInsets.all(0),
+          elevation: 0,
+          child: loading
+              ? buildSpinner(context)
+              : isGradient ? gradientWidget() : textWidget(),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(borderRadius),
+            ),
           ),
-        ),
-        // height / 2
+          // height / 2
 
-        color: backgroundColor,
-        focusColor: backgroundColor,
-        disabledColor: backgroundColor,
-        onPressed: onPressed,
+          color: backgroundColor,
+          focusColor: backgroundColor,
+          disabledColor: backgroundColor,
+        ),
       ),
     );
   }
@@ -107,7 +114,10 @@ class CustomSettingButton extends StatelessWidget {
         onTap: onPressed,
         child: Container(
           padding: EdgeInsets.only(
-              top: Dimens.seventeen,bottom: Dimens.seventeen, left: Dimens.twenty,right: Dimens.thirty),
+              top: Dimens.seventeen,
+              bottom: Dimens.seventeen,
+              left: Dimens.twenty,
+              right: Dimens.thirty),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

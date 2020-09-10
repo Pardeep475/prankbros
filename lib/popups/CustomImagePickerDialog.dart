@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:prankbros2/app/dashboard/profile/picturewidget/PictureWidgetBloc.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -209,11 +210,14 @@ class _CustomImagePickerDialogState extends State<CustomImagePickerDialog> {
                           Positioned(
                             right: 30,
                             top: 15,
-                            child: Material(
-                              child: InkWell(
+                            child: SizedBox(
+                              height: 30.0,
+                              width: 30.0,
+                              child: EaseInWidget(
                                 onTap: () {
                                   _dismissLanguagePopUp(context);
                                 },
+                                borderRadius: 30.0,
                                 child: Image.asset(
                                   Images.ICON_CROSS,
                                   height: Dimens.THIRTY,

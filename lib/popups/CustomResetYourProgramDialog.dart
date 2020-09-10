@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
-import 'package:prankbros2/picker/Picker.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
@@ -55,22 +55,27 @@ class _CustomResetYourProgramDialog
           child: Wrap(
             children: <Widget>[
               Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: InkWell(
-                      onTap: () {
-                        _dismissLanguagePopUp(context);
-                      },
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(Dimens.FORTY)),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            top: Dimens.TWENTY, right: Dimens.TWENTY_FIVE),
-                        child: Image.asset(
-                          Images.ICON_CROSS,
-                          height: Dimens.THIRTY,
-                          width: Dimens.THIRTY,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20,top: 17),
+                    child: SizedBox(
+                      height: Dimens.THIRTY,
+                      width: Dimens.THIRTY,
+                      child: EaseInWidget(
+                        onTap: () {
+                          _dismissLanguagePopUp(context);
+                        },
+                        rippleColor: Color.fromRGBO(0, 0, 0, 0.5),
+                        borderRadius: Dimens.SIXTY,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Image.asset(
+                            Images.ICON_CROSS,
+                            height: Dimens.THIRTY,
+                            width: Dimens.THIRTY,
+                          ),
                         ),
                       ),
                     ),
@@ -156,9 +161,9 @@ class _CustomResetYourProgramDialog
         height: Dimens.FIFTY,
         width: MediaQuery.of(context).size.width,
         borderRadius: Dimens.THIRTY,
-        onPressed: (){
+        onPressed: () {
           setState(() {
-          isLoading = true;
+            isLoading = true;
           });
           yesPressed();
         },

@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prankbros2/app/dashboard/workouts/WorkoutDetails2.dart';
+import 'package:prankbros2/app/dashboard/workouts/WarmUpScreen.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -106,15 +107,11 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
                 SizedBox(
                   width: Dimens.fifteen,
                 ),
-                GestureDetector(
+                EaseInWidget(
                   onTap: _openWorkoutDetailStepByStep,
-                  child: Card(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(Dimens.fifteen)),
-                    ),
-                    elevation: Dimens.ten,
+                  child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(Dimens.fifteen)),
                     child:
                         /*Image.asset(
                       Images.DUMMY_WORKOUT,
@@ -157,22 +154,25 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
               ],
             ),
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    top: Dimens.twenty,
-                    left: Dimens.twenty,
-                    right: Dimens.twentyFive,
-                    bottom: Dimens.thirtyFive),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Text(
-                    'SKIP',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.white,
-                        fontSize: Dimens.forteen,
-                        letterSpacing: 1.12,
-                        fontFamily: Strings.EXO_FONT),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: InkWell(
+                  onTap: _openWorkoutDetailStepByStep,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: Dimens.twenty,
+                        left: Dimens.twenty,
+                        right: Dimens.twentyFive,
+                        bottom: Dimens.thirtyFive),
+                    child: Text(
+                      'SKIP',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.white,
+                          fontSize: Dimens.forteen,
+                          letterSpacing: 1.12,
+                          fontFamily: Strings.EXO_FONT),
+                    ),
                   ),
                 ),
               ),
@@ -183,11 +183,16 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
     );
   }
 
-  void _openWorkoutDetailStepByStep() {
-//    Navigator.push(
-//        context, MaterialPageRoute(builder: (context) => WarmUpScreen()));
-    Navigator.pushNamed(context, Strings.WARM_UP_SCREEN_ROUTE,
-        arguments: _workoutDetail2Models);
+  void _openWorkoutDetailStepByStep() async{
+    var pushed= await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WarmUpScreen(
+                  workoutDetail2Models: _workoutDetail2Models,
+                )));
+    if(pushed){
+      Navigator.pop(context);
+    }
   }
 
   List<Widget> _getWords() {
@@ -210,5 +215,3 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
     return res;
   }
 }
-
-

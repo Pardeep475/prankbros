@@ -3,18 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/nutrition/NutritionBloc.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithColor.dart';
-import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/models/NutritionRecipeModel.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/models/nutrition/NutritionsApiResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
-import 'package:prankbros2/utils/Images.dart';
-import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Nutrition extends StatefulWidget {
   Nutrition({this.onPush});
@@ -207,7 +205,35 @@ class _NutritionState extends State<Nutrition> {
   }
 
   Widget progressWidget() {
-    return Center(child: CommonProgressIndicator(true));
+    return Expanded(
+      child: GridView.builder(
+        padding: EdgeInsets.only(
+            top: 50, bottom: Dimens.twenty),
+        itemBuilder: (context, position) {
+          return Card(
+            margin: EdgeInsets.all(Dimens.seven),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            color: AppColors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.twenty))),
+            child: Shimmer.fromColors(
+              child: Container(
+                height: Dimens.ONE_TWO_FIVE,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
+              ),
+              baseColor: Colors.grey[400],
+              highlightColor: Colors.white,
+            ),
+          );
+        },
+        itemCount: 4,
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+      ),
+    );
   }
 
   Widget _tabBarViewWidget(int index, NutritionsApiResponse item) {

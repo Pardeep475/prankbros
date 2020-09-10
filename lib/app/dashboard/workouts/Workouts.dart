@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prankbros2/app/dashboard/workouts/WorkoutDetails.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
@@ -112,7 +113,7 @@ class Workouts extends StatelessWidget {
                 height: Dimens.hundred,
               ),
               Expanded(
-                child: GestureDetector(
+                child: EaseInWidget(
                   onTap: () {
                     _homeWorkoutClick(context);
                   },
@@ -123,7 +124,7 @@ class Workouts extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: GestureDetector(
+                child: EaseInWidget(
                   onTap: () {
                     _gymWorkoutClick(context);
                   },

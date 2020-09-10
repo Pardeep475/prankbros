@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/customloaders/ColorLoader.dart';
 
@@ -10,6 +11,16 @@ class CommonProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final spinkit = SpinKitFadingCircle(
+      itemBuilder: (BuildContext context, int index) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color:  AppColors.pink_stroke,
+          ),
+        );
+      },
+    );
     return isLoading
         ? Container(
             alignment: Alignment.center,
@@ -19,10 +30,7 @@ class CommonProgressIndicator extends StatelessWidget {
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 alignment: Alignment.center,
-                child: ColorLoader(
-                  colors: [AppColors.pink_stroke],
-                  duration: Duration(seconds: 1),
-                )))
+                child: spinkit))
         : Container(
             height: 0.0,
             width: 0.0,

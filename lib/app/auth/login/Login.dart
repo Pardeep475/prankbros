@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prankbros2/app/auth/login/LoginBloc.dart';
+import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/utils/AppColors.dart';
@@ -27,10 +28,10 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _loginBloc = new LoginBloc();
-    _emailController =
-        TextEditingController(text: 'johnmartin@yopmail.com');
+    _emailController = TextEditingController(text: 'johnmartin@yopmail.com');
     _passwordController = TextEditingController(text: '12345');
   }
+
 //pardeepsharma475@yopmail.com
   // 12345
   void dispose() {
@@ -260,18 +261,22 @@ class _LoginState extends State<Login> {
                       ),
                       Align(
                         alignment: Alignment.bottomRight,
-                        child: GestureDetector(
-                          onTap: _forgotPasswordPressed,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.dark_gray,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(Dimens.THIRTY)),
-                            ),
+                        child: Container(
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: AppColors.dark_gray,
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Dimens.THIRTY)),
+                          ),
+                          child: EaseInWidget(
+                            onTap: _forgotPasswordPressed,
+                            borderRadius: Dimens.THIRTY,
+                            rippleColor: AppColors.app_ripple_color,
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: Dimens.THIRTY,
-                                  vertical: Dimens.thrteen),
+                              padding: EdgeInsets.only(
+                                left: Dimens.THIRTY,
+                                right: Dimens.THIRTY,
+                              ),
                               child: Text(
                                 AppLocalizations.of(context)
                                     .translate(Strings.forgot_password),
