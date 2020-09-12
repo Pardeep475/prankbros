@@ -92,20 +92,153 @@ class MyApp extends StatelessWidget {
   var routes = <String, WidgetBuilder>{
     Strings.LOGIN_ROUTE: (BuildContext context) => new Login(),
     Strings.INTRO_ROUTE: (BuildContext context) => new Intro(),
-    Strings.FORGOT_PASSWORD_ROUTE: (BuildContext context) => new ForgotPassword(),
+    Strings.FORGOT_PASSWORD_ROUTE: (BuildContext context) =>
+    new ForgotPassword(),
     Strings.SEND_EMAIL_ROUTE: (BuildContext context) => new SendEmail(),
     Strings.DASHBOARD_ROUTE: (BuildContext context) => new Dashboard(),
-    Strings.CUSTOM_DASHBOARD_ROUTE: (BuildContext context) => new CustomDashboardBottomNestedBar(),
+    Strings.CUSTOM_DASHBOARD_ROUTE: (BuildContext context) =>
+    new CustomDashboardBottomNestedBar(),
     Strings.WARM_UP_ROUTE: (BuildContext context) => new WarmUpScreen(),
-    Strings.NUTRITION_DETAIL_ROUTE: (BuildContext context) => new NutritionDetail(),
-    Strings.VIDEO_PLAYER_ROUTE: (BuildContext context) => new VideoPlayerScreen(),
-    Strings.FULL_IMAGE_VIEW_SCREEN: (BuildContext context) => new FullImageViewScreen(),
-    Strings.WORKOUT_DETAILS_FIRST_ROUTE: (BuildContext context) => new WorkoutDetails(),
-    Strings.WORKOUT_DETAILS_SECOND_ROUTE: (BuildContext context) => new WorkoutDetails2(),
+    Strings.NUTRITION_DETAIL_ROUTE: (BuildContext context) =>
+    new NutritionDetail(),
+    Strings.VIDEO_PLAYER_ROUTE: (BuildContext context) =>
+    new VideoPlayerScreen(),
+    Strings.FULL_IMAGE_VIEW_SCREEN: (BuildContext context) =>
+    new FullImageViewScreen(),
+    Strings.WORKOUT_DETAILS_FIRST_ROUTE: (BuildContext context) =>
+    new WorkoutDetails(),
+    Strings.WORKOUT_DETAILS_SECOND_ROUTE: (BuildContext context) =>
+    new WorkoutDetails2(),
     Strings.COMING_UP_ROUTE: (BuildContext context) => new ComingUp(),
-    Strings.COMING_UP_NEXT_WORKOUT_ROUTE: (BuildContext context) => new ComingUpNextWorkout(),
-   Strings.WARM_UP_SCREEN_ROUTE: (BuildContext context) => new WarmUpScreen(),
+    Strings.COMING_UP_NEXT_WORKOUT_ROUTE: (BuildContext context) =>
+    new ComingUpNextWorkout(),
+    Strings.WARM_UP_SCREEN_ROUTE: (BuildContext context) => new WarmUpScreen(),
   };
+
+  Route<dynamic> customGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case Strings.LOGIN_ROUTE:
+        return PageTransition(
+          child: Login(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.INTRO_ROUTE:
+        return PageTransition(
+          child: Intro(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.FORGOT_PASSWORD_ROUTE:
+        return PageTransition(
+          child: ForgotPassword(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.SEND_EMAIL_ROUTE:
+        return PageTransition(
+          child: SendEmail(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.FORGOT_PASSWORD_ROUTE:
+        return PageTransition(
+          child: ForgotPassword(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.DASHBOARD_ROUTE:
+        return PageTransition(
+          child: Dashboard(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.CUSTOM_DASHBOARD_ROUTE:
+        return PageTransition(
+          child: CustomDashboardBottomNestedBar(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.WARM_UP_ROUTE:
+        return PageTransition(
+          child: WarmUpScreen(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.NUTRITION_DETAIL_ROUTE:
+        return PageTransition(
+          child: NutritionDetail(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.VIDEO_PLAYER_ROUTE:
+        return PageTransition(
+          child: VideoPlayerScreen(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.FULL_IMAGE_VIEW_SCREEN:
+        return PageTransition(
+          child: FullImageViewScreen(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.WORKOUT_DETAILS_FIRST_ROUTE:
+        return PageTransition(
+          child: WorkoutDetails(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.WORKOUT_DETAILS_SECOND_ROUTE:
+        return PageTransition(
+          child: WorkoutDetails2(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.COMING_UP_ROUTE:
+        return PageTransition(
+          child: ComingUp(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.COMING_UP_NEXT_WORKOUT_ROUTE:
+        return PageTransition(
+          child: ComingUpNextWorkout(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      case Strings.WARM_UP_SCREEN_ROUTE:
+        return PageTransition(
+          child: WarmUpScreen(),
+          type: PageTransitionType.rightToLeft,
+          settings: settings,
+        );
+        break;
+      default:
+        {
+          return PageTransition(
+            child: Login(),
+            type: PageTransitionType.rightToLeft,
+            settings: settings,
+          );
+        }
+    }
+  }
 }
 
 

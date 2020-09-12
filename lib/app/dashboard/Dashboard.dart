@@ -4,11 +4,42 @@ import 'package:prankbros2/app/dashboard/profile/Profile.dart';
 import 'package:prankbros2/app/dashboard/workouts/Workouts.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Images.dart';
+
 import 'motivation/Motivation.dart';
 import 'nutrition/Nutrition.dart';
 
 class Dashboard extends StatefulWidget {
   Dashboard({Key key}) : super(key: key);
+
+  List<Widget> screens = new List<Widget>.generate(4, (index) {
+    switch (index) {
+      case 0:
+        {
+          return Workouts();
+        }
+        break;
+      case 1:
+        {
+          return Motivation();
+        }
+        break;
+      case 2:
+        {
+          return Nutrition();
+        }
+        break;
+      case 3:
+        {
+          return Profile();
+        }
+        break;
+      default:
+        {
+          return Workouts();
+        }
+        break;
+    }
+  });
 
   @override
   _BottomNavigationBarItem createState() => _BottomNavigationBarItem();
@@ -25,8 +56,6 @@ class _BottomNavigationBarItem extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     Widget _callPages(int index) {
       switch (index) {
         case 0:
@@ -58,7 +87,13 @@ class _BottomNavigationBarItem extends State<Dashboard> {
     }
 
     return Scaffold(
-      body: _callPages(_selectedIndex),
+//      body: _callPages(_selectedIndex),
+
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: widget.screens,
+      ),
+
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         elevation: 10,
@@ -91,5 +126,3 @@ class _BottomNavigationBarItem extends State<Dashboard> {
     );
   }
 }
-
-

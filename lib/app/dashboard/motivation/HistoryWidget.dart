@@ -11,7 +11,6 @@ import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
-import 'package:prankbros2/utils/Utils.dart';
 
 class HistoryWidget extends StatefulWidget {
   final MotivationApiResponse motivationData;
@@ -69,7 +68,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Future.delayed(Duration(milliseconds: 60), () {
+    Future.delayed(Duration(milliseconds: 100), () {
       _historyBloc.getMotivationActivationStart(motivationData, context);
     });
   }
@@ -97,68 +96,66 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   }
 
   Widget _historyWidget() {
-    return CustomScrollView(
-      controller: ScrollController(),
-      slivers: <Widget>[
-        SliverPadding(
+    return Column(
+      children: <Widget>[
+        Padding(
           padding: EdgeInsets.only(top: Dimens.sixty),
-        ),
-        SliverToBoxAdapter(
           child: _headerWidget(),
         ),
-        StreamBuilder<int>(
-            initialData: 0,
-            stream: _historyBloc.progressStream,
-            builder: (context, snapshot) {
-              if (snapshot.data == 0) {
-                return _progressBarData();
-              } else if (snapshot.data == 1) {
-                return StreamBuilder<List<MotivationHistoryItem>>(
-                    stream: _historyBloc.weightStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.data != null) {
-                        return SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                            if (snapshot.data[index].isSelected) {
-                              return _selectedListItem(
-                                  snapshot.data[index], index);
-                            } else {
-                              return _unSelectedListItem(
-                                  snapshot.data[index], index);
-                            }
-                          }, childCount: snapshot.data.length),
-                        );
-                      } else {
-                        return _errorData();
-                      }
-                    });
-              } else {
-                return _errorData();
-              }
-            }),
+        Expanded(
+          child: StreamBuilder<int>(
+              initialData: 0,
+              stream: _historyBloc.progressStream,
+              builder: (context, progress) {
+                if (progress.data == 0) {
+                  return _progressBarData();
+                } else if (progress.data == 1) {
+                  return StreamBuilder<List<MotivationHistoryItem>>(
+                      stream: _historyBloc.weightStream,
+                      initialData: [],
+                      builder: (context, snapshot) {
+                        if (snapshot.data != null) {
+                          return ListView.builder(
+                            itemBuilder: (BuildContext context, int index) {
+                              if (snapshot.data[index].isSelected) {
+                                return _selectedListItem(
+                                    snapshot.data[index], index);
+                              } else {
+                                return _unSelectedListItem(
+                                    snapshot.data[index], index);
+                              }
+                            },
+                            itemCount: snapshot.data.length,
+                          );
+                        } else {
+                          return _errorData();
+                        }
+                      });
+                } else {
+                  return _errorData();
+                }
+              }),
+        ),
+        SizedBox(height:  Dimens.sixty,)
       ],
     );
   }
 
   Widget _errorData() {
-    return SliverFillRemaining(
-      child: Center(
-        child: Text(
-          'No data found',
-          style: TextStyle(
-              color: AppColors.black_text,
-              fontFamily: Strings.EXO_FONT,
-              fontWeight: FontWeight.w700,
-              fontSize: Dimens.thirty),
-        ),
+    return Center(
+      child: Text(
+        'No data found',
+        style: TextStyle(
+            color: AppColors.black_text,
+            fontFamily: Strings.EXO_FONT,
+            fontWeight: FontWeight.w700,
+            fontSize: Dimens.thirty),
       ),
     );
   }
 
   Widget _progressBarData() {
-    return SliverFillRemaining(
-        child: Center(child: CommonProgressIndicator(true)));
+    return Center(child: CommonProgressIndicator(true));
   }
 
   Widget _headerWidget() {

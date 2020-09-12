@@ -26,44 +26,27 @@ class ProfilePictureShimmer extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                  //  _selectImageButton();
+                    //  _selectImageButton();
                   },
-                  borderRadius:
-                  BorderRadius.all(
-                      Radius.circular(
-                          Dimens.fifty)),
+                  borderRadius: BorderRadius.all(Radius.circular(Dimens.fifty)),
                   child: Card(
-                    color:
-                    AppColors.light_gray,
-                    shape:
-                    RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius
-                          .circular(Dimens
-                          .fifty),
+                    color: AppColors.light_gray,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(Dimens.fifty),
                     ),
                     elevation: Dimens.three,
                     child: Container(
-                      height:
-                      Dimens.seventyFour,
-                      width:
-                      Dimens.seventyFour,
-
+                      height: Dimens.seventyFour,
+                      width: Dimens.seventyFour,
                       decoration: BoxDecoration(
                           borderRadius:
-                          BorderRadius.all(
-                              Radius.circular(
-                                  Dimens
-                                      .fifty)),
-                          color: AppColors
-                              .light_gray),
+                              BorderRadius.all(Radius.circular(Dimens.fifty)),
+                          color: AppColors.light_gray),
                       child: Center(
                         child: Image.asset(
                           Images.ICON_PLUS,
-                          height: Dimens
-                              .twentyFour,
-                          width: Dimens
-                              .twentyFour,
+                          height: Dimens.twentyFour,
+                          width: Dimens.twentyFour,
                         ),
                       ),
                     ),
@@ -77,6 +60,7 @@ class ProfilePictureShimmer extends StatelessWidget {
             Shimmer.fromColors(
               baseColor: Colors.grey[400],
               highlightColor: Colors.white,
+              enabled: true,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                 child: SizedBox(
@@ -113,6 +97,7 @@ class ProfilePictureShimmer extends StatelessWidget {
                       ),
                       baseColor: Colors.grey[400],
                       highlightColor: Colors.white,
+                      enabled: true,
                     );
                   }),
             ),

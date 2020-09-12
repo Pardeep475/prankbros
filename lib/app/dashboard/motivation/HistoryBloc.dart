@@ -16,12 +16,11 @@ class HistoryBloc {
 
   StreamSink get progressSink => progressController.sink;
 
-  final BehaviorSubject weightController =
-      BehaviorSubject<List<MotivationHistoryItem>>();
+  final PublishSubject weightController = PublishSubject<List<MotivationHistoryItem>>();
 
-  Stream get weightStream => weightController.stream;
+  Stream<List<MotivationHistoryItem>> get weightStream => weightController.stream;
 
-  StreamSink get weightSink => weightController.sink;
+  StreamSink<List<MotivationHistoryItem>> get weightSink => weightController.sink;
 
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();

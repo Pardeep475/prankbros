@@ -236,7 +236,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                         ),
                         Expanded(
                           child: ListView.builder(
-                              itemCount: 3,
+                              itemCount: 2,
                               itemBuilder: (context, pos) {
                                 return Shimmer.fromColors(
                                   child: Container(
@@ -257,7 +257,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                         )
                       ],
                     ),
-                    CommonProgressIndicator(true),
+
                   ],
                 );
               } else if (progressIndicatorSnapshot.data == 1) {

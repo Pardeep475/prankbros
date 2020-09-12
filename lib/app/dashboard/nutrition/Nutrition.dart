@@ -207,8 +207,7 @@ class _NutritionState extends State<Nutrition> {
   Widget progressWidget() {
     return Expanded(
       child: GridView.builder(
-        padding: EdgeInsets.only(
-            top: 50, bottom: Dimens.twenty),
+        padding: EdgeInsets.only(top: 50, bottom: Dimens.twenty),
         itemBuilder: (context, position) {
           return Card(
             margin: EdgeInsets.all(Dimens.seven),
@@ -226,6 +225,7 @@ class _NutritionState extends State<Nutrition> {
               ),
               baseColor: Colors.grey[400],
               highlightColor: Colors.white,
+              enabled: true,
             ),
           );
         },

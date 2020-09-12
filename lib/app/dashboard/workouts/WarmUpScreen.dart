@@ -154,7 +154,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                   initialChildSize: 1,
                   minChildSize: 0.30,
                   builder: (BuildContext context, myscrollController) {
-                    return widget.workoutDetail2Models.isHomeWorkout != null &&
+                    return widget.workoutDetail2Models!=null&&widget.workoutDetail2Models.isHomeWorkout != null &&
                             widget.workoutDetail2Models.isHomeWorkout
                         ? HomeSheetWorkout(
                             contentList: _contentList,
@@ -251,6 +251,18 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
         () {
           if (_start == _timing) {
             timer.cancel();
+            if(listCurrentPosition+1<_exercisesList.length){
+              listCurrentPosition=listCurrentPosition+1;
+              videoListUrl = _exercisesList[listCurrentPosition].videoPath;
+              _videoPlayerController =
+              VideoPlayerController.network(_baseUrl + videoListUrl)
+                ..initialize();
+              startedPlaying=false;
+              _start=0;
+              _videoPlayerController.pause();
+            }
+
+
           } else {
             _start = _start + 1;
             _textEditingController.text = Duration(seconds: _start).toString();
