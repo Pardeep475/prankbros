@@ -310,7 +310,7 @@ class _NutritionState extends State<Nutrition> {
         },
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.73,
+          childAspectRatio: 0.78,
         ),
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
@@ -337,26 +337,7 @@ class _NutritionState extends State<Nutrition> {
         elevation: Dimens.five,
         child: Column(
           children: <Widget>[
-//            FadeInImage(
-//                fit: BoxFit.cover,
-//                width: MediaQuery.of(context).size.width,
-//                height: Dimens.ONE_TWO_FIVE,
-////                image: NetworkImage(item.imagePath),
-//                image: CachedNetworkImage(
-//                  imageUrl: "http://via.placeholder.com/200x150",
-//                  imageBuilder: (context, imageProvider) => Container(
-//                    decoration: BoxDecoration(
-//                      image: DecorationImage(
-//                          image: imageProvider,
-//                          fit: BoxFit.cover,
-//                          colorFilter:
-//                          ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
-//                    ),
-//                  ),
-//                  placeholder: (context, url) => CircularProgressIndicator(),
-//                  errorWidget: (context, url, error) => Icon(Icons.error),
-//                ),
-//                placeholder: AssetImage(Images.DummyFood)),
+
 
             CachedNetworkImage(
               width: MediaQuery.of(context).size.width,

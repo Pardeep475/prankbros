@@ -80,24 +80,28 @@ class ProfilePictureShimmer extends StatelessWidget {
             Container(
               height: 80,
               child: ListView.builder(
-                  itemCount: 2,
+                  itemCount: 4,
                   shrinkWrap: true,
                   primary: false,
+                  padding: EdgeInsets.zero,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int position) {
-                    return Shimmer.fromColors(
-                      child: Container(
-                        height: 80,
-                        width: 80,
-                        margin: EdgeInsets.only(top: 0, left: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
+                    return Padding(
+                      padding: EdgeInsets.only(top: 0, left:  position==0?20:10,right: position==3?10:0),
+                      child: Shimmer.fromColors(
+                        child: Container(
+                          height: 70,
+                          width: 70,
+
+                          decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                        ),
+                        baseColor: Colors.grey[400],
+                        highlightColor: Colors.white,
+                        enabled: true,
                       ),
-                      baseColor: Colors.grey[400],
-                      highlightColor: Colors.white,
-                      enabled: true,
                     );
                   }),
             ),
@@ -122,26 +126,31 @@ class ProfilePictureShimmer extends StatelessWidget {
             Container(
               height: 80,
               child: ListView.builder(
-                  itemCount: 2,
+                  itemCount: 4,
                   shrinkWrap: true,
                   primary: false,
+                  padding: EdgeInsets.zero,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int position) {
-                    return Shimmer.fromColors(
-                      child: Container(
-                        height: 80,
-                        width: 80,
-                        margin: EdgeInsets.only(top: 5, left: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
+                    return Padding(
+                      padding: EdgeInsets.only(top: 0, left:  position==0?20:10,right: position==3?10:0),
+                      child: Shimmer.fromColors(
+                        child: Container(
+                          height: 70,
+                          width: 70,
+
+                          decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(15))),
+                        ),
+                        baseColor: Colors.grey[400],
+                        highlightColor: Colors.white,
+                        enabled: true,
                       ),
-                      baseColor: Colors.grey[400],
-                      highlightColor: Colors.white,
                     );
                   }),
-            )
+            ),
           ],
         ),
       ),

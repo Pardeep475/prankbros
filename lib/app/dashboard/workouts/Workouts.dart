@@ -113,7 +113,7 @@ class Workouts extends StatelessWidget {
                 height: Dimens.hundred,
               ),
               Expanded(
-                child: EaseInWidget(
+                child: GestureDetector(
                   onTap: () {
                     _homeWorkoutClick(context);
                   },
@@ -124,7 +124,7 @@ class Workouts extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: EaseInWidget(
+                child: GestureDetector(
                   onTap: () {
                     _gymWorkoutClick(context);
                   },

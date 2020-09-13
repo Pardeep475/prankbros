@@ -52,7 +52,7 @@ class HistoryBloc {
               'date  :   ${_list[i].date}   week  :   ${_list[i].weekDay}   name:   ${_list[i].title}    isselected:   ${_list[i].isSelected}');
         }
         progressSink.add(1);
-        weightController.add(_list);
+        weightSink.add(_list);
       } else {
         progressSink.add(2);
         print("Error From Server  " + onResponse.message);
@@ -94,7 +94,7 @@ class HistoryBloc {
               'date  :   ${_list[i].date}   week  :   ${_list[i].weekDay}   name:   ${_list[i].title}    isselected:   ${_list[i].isSelected}');
         }
         progressSink.add(1);
-        weightController.add(_list);
+        weightSink.add(_list);
       }
     } catch (e) {
       progressSink.add(2);

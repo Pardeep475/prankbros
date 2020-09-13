@@ -106,14 +106,15 @@ class _HistoryWidgetState extends State<HistoryWidget> {
           child: StreamBuilder<int>(
               initialData: 0,
               stream: _historyBloc.progressStream,
-              builder: (context, progress) {
-                if (progress.data == 0) {
+              builder: (context, snapshot) {
+                if (snapshot.data == 0) {
                   return _progressBarData();
-                } else if (progress.data == 1) {
+                } else if (snapshot.data == 1) {
                   return StreamBuilder<List<MotivationHistoryItem>>(
                       stream: _historyBloc.weightStream,
-                      initialData: [],
+                      initialData: null,
                       builder: (context, snapshot) {
+                        print("DataList${snapshot.data}");
                         if (snapshot.data != null) {
                           return ListView.builder(
                             itemBuilder: (BuildContext context, int index) {

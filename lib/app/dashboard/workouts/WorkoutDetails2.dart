@@ -130,34 +130,31 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
         SizedBox(
           height: Dimens.forty,
         ),
-        ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+        Container(
+          width: Dimens.FORTY_FIVE,
+          height: Dimens.FORTY_FIVE,
+          margin: EdgeInsets.only(top: Dimens.twenty, left: Dimens.TWENTY),
           child: Container(
-            width: Dimens.FORTY_FIVE,
-            height: Dimens.FORTY_FIVE,
-            margin: EdgeInsets.only(top: Dimens.twenty, left: Dimens.TWENTY),
-            child: Container(
-              alignment: Alignment.topLeft,
-              decoration: BoxDecoration(
-                color: AppColors.light_gray,
-                borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-              ),
-              child: Center(
-                  child: FlatButton(
-                padding: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Image.asset(Images.ArrowBackWhite,
-                    height: Dimens.fifteen,
-                    width: Dimens.twenty,
-                    color: AppColors.black),
-              )),
+            alignment: Alignment.topLeft,
+            decoration: BoxDecoration(
+              color: AppColors.light_gray,
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
             ),
+            child: Center(
+                child: FlatButton(
+              padding: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Image.asset(Images.ArrowBackWhite,
+                  height: Dimens.fifteen,
+                  width: Dimens.twenty,
+                  color: AppColors.black),
+            )),
           ),
         ),
         SizedBox(
@@ -204,7 +201,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
               Wrap(
                 children: <Widget>[
                   Text(
-                    '30 min',
+                    '${_workoutDetail2Models.trainings.workoutTime} min',
                     style: TextStyle(
                       fontSize: Dimens.forteen,
                       fontWeight: FontWeight.w700,
@@ -474,7 +471,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
 //    _workoutDetail2Models
 
     setState(() {
-      _isLoading = _isLoading ? false : true;
+      _isLoading = false;
 
       Navigator.pushNamed(
           context,
