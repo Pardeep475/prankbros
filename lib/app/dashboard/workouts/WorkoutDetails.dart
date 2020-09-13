@@ -116,7 +116,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   void _editButtonPressed() {
     if (_getUserTrainingResponseApi == null) return;
     if (_getUserTrainingResponseApi.weekNameList == null) return;
-    if (_getUserTrainingResponseApi.weekNameList.length > 0) return;
+    if (_getUserTrainingResponseApi.weekNameList.length <= 0) return;
     showDialog(
         context: context,
         builder: (_) => CustomResetRedDialog(
@@ -127,7 +127,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   void _selectWeeksPressed() {
     if (_getUserTrainingResponseApi == null) return;
     if (_getUserTrainingResponseApi.weekNameList == null) return;
-    if (_getUserTrainingResponseApi.weekNameList.length > 0) return;
+    if (_getUserTrainingResponseApi.weekNameList.length <= 0) return;
     List<String> _list = new List();
     for (int i = 0; i < _list.length; i++) {
       _list.add('${i + 1}');

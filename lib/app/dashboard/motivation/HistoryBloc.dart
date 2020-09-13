@@ -19,28 +19,31 @@ class HistoryBloc {
   //final PublishSubject<List<MotivationHistoryItem>> weightController = PublishSubject<List<MotivationHistoryItem>>();
 
   Stream<List<MotivationHistoryItem>> get weightStream => weightSink.stream;
-  List<MotivationHistoryItem> Weightlist=[];
-  PublishSubject<List<MotivationHistoryItem>>  weightSink =  PublishSubject<List<MotivationHistoryItem>>();
+  List<MotivationHistoryItem> Weightlist = [];
+  PublishSubject<List<MotivationHistoryItem>> weightSink =
+      PublishSubject<List<MotivationHistoryItem>>();
 
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
 
   void getMotivationActivation(
-      {String userId, String trainingWeek,String accessToken, BuildContext context}) {
-    debugPrint('userID  :-- $userId');
+      {String userId,
+      String trainingWeek,
+      String accessToken,
+      BuildContext context}) {
+    debugPrint('userID  :-- $userId, traning week : ---  $trainingWeek');
     progressSink.add(0);
-    Weightlist=[];
+    Weightlist = [];
     apiRepository
-        .getMotivationActivation(userId: userId, trainingWeek: trainingWeek,accessToken: accessToken)
+        .getMotivationActivation(
+            userId: userId,
+            trainingWeek: trainingWeek,
+            accessToken: accessToken)
         .then((onResponse) {
       if (onResponse.status == 1) {
-        debugPrint("Here is user id   :        $userId");
         List<MotivationHistoryItem> _list = new List();
 
         for (int i = 0; i < onResponse.workoutActivities.length; i++) {
-          debugPrint(
-              "date   :        ${onResponse.workoutActivities[i].createdOnStr}");
-
           _list.add(MotivationHistoryItem(
               date: Utils.getMonthFromDate(
                   onResponse.workoutActivities[i].createdOnStr),
@@ -49,8 +52,6 @@ class HistoryBloc {
               title: onResponse.workoutActivities[i].workoutName,
               isSelected: Utils.checkCurrentDate(
                   onResponse.workoutActivities[i].createdOnStr)));
-          debugPrint(
-              'date  :   ${_list[i].date}   week  :   ${_list[i].weekDay}   name:   ${_list[i].title}    isselected:   ${_list[i].isSelected}');
         }
         progressSink.add(1);
 
