@@ -112,18 +112,18 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                 } else if (snapshot.data == 1) {
                   return StreamBuilder<List<MotivationHistoryItem>>(
                       stream: _historyBloc.weightStream,
-                      initialData: null,
+                      initialData: _historyBloc.Weightlist,
                       builder: (context, snapshot) {
                         print("DataList${snapshot.data}");
-                        if (snapshot.data != null) {
+                        if (_historyBloc.Weightlist != null) {
                           return ListView.builder(
                             itemBuilder: (BuildContext context, int index) {
-                              if (snapshot.data[index].isSelected) {
+                              if (_historyBloc.Weightlist[index].isSelected) {
                                 return _selectedListItem(
-                                    snapshot.data[index], index);
+                                    _historyBloc.Weightlist[index], index);
                               } else {
                                 return _unSelectedListItem(
-                                    snapshot.data[index], index);
+                                    _historyBloc.Weightlist[index], index);
                               }
                             },
                             itemCount: snapshot.data.length,
@@ -137,7 +137,8 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                 }
               }),
         ),
-        SizedBox(height:  Dimens.sixty,)
+
+        SizedBox(height:  Dimens.ten,)
       ],
     );
   }

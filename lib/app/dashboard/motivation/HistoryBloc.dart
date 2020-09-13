@@ -16,11 +16,11 @@ class HistoryBloc {
 
   StreamSink get progressSink => progressController.sink;
 
-  final PublishSubject weightController = PublishSubject<List<MotivationHistoryItem>>();
+  //final PublishSubject<List<MotivationHistoryItem>> weightController = PublishSubject<List<MotivationHistoryItem>>();
 
-  Stream<List<MotivationHistoryItem>> get weightStream => weightController.stream;
-
-  StreamSink<List<MotivationHistoryItem>> get weightSink => weightController.sink;
+  Stream<List<MotivationHistoryItem>> get weightStream => weightSink.stream;
+  List<MotivationHistoryItem> Weightlist=[];
+  PublishSubject<List<MotivationHistoryItem>>  weightSink =  PublishSubject<List<MotivationHistoryItem>>();
 
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
@@ -29,6 +29,7 @@ class HistoryBloc {
       {String userId, String trainingWeek,String accessToken, BuildContext context}) {
     debugPrint('userID  :-- $userId');
     progressSink.add(0);
+    Weightlist=[];
     apiRepository
         .getMotivationActivation(userId: userId, trainingWeek: trainingWeek,accessToken: accessToken)
         .then((onResponse) {
@@ -52,7 +53,9 @@ class HistoryBloc {
               'date  :   ${_list[i].date}   week  :   ${_list[i].weekDay}   name:   ${_list[i].title}    isselected:   ${_list[i].isSelected}');
         }
         progressSink.add(1);
-        weightSink.add(_list);
+
+        Weightlist.addAll(_list);
+        weightSink.sink.add(_list);
       } else {
         progressSink.add(2);
         print("Error From Server  " + onResponse.message);
@@ -94,7 +97,8 @@ class HistoryBloc {
               'date  :   ${_list[i].date}   week  :   ${_list[i].weekDay}   name:   ${_list[i].title}    isselected:   ${_list[i].isSelected}');
         }
         progressSink.add(1);
-        weightSink.add(_list);
+        Weightlist.addAll(_list);
+        weightSink.sink.add(_list);
       }
     } catch (e) {
       progressSink.add(2);
