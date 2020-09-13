@@ -228,9 +228,10 @@ class _HistoryWidgetState extends State<HistoryWidget> {
             )).then((value) {
       debugPrint('back value is ----> $value');
       if (value != null) {
-        setState(() {
-          _weekNameList(pos: value);
-        });
+
+        _weekNameList(pos: value);
+        setState(() {});
+
         _historyBloc.getMotivationActivation(
             userId: userId,
             trainingWeek: value.toString(),
@@ -477,6 +478,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   }
 
   String _weekNameList({int pos}) {
+    debugPrint('posissomething--->$pos');
     if (motivationData == null) return "";
 
     if (motivationData.weekNameList == null) return "";
