@@ -10,9 +10,9 @@ import 'package:prankbros2/utils/Strings.dart';
 class HomeSheetWorkout extends StatelessWidget{
   ScrollController myscrollController;
   List<String> contentList;
-  int start;
+  String time_start;
   VoidCallback playVideo;
-  HomeSheetWorkout({this.myscrollController,this.contentList,this.start,this.playVideo});
+  HomeSheetWorkout({this.myscrollController,this.contentList,this.time_start,this.playVideo});
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -93,7 +93,7 @@ class HomeSheetWorkout extends StatelessWidget{
                       height: 25,
                     ),
                     Text(
-                      '$start',
+                      '$time_start',
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontFamily: Strings.EXO_FONT,

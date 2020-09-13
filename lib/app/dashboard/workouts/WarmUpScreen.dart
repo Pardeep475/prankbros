@@ -44,7 +44,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
   void initState() {
     super.initState();
 
-    _textEditingController = new TextEditingController();
+    _textEditingController = new TextEditingController(text: '00:00:00');
     _videoScreenBloc = new VideoScreenBloc();
     _contentListInit();
   }
@@ -159,7 +159,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                         ? HomeSheetWorkout(
                             contentList: _contentList,
                             myscrollController: myscrollController,
-                            start: _start,
+                      time_start:  _textEditingController.text,
                             playVideo: () {
                               _playVideo();
                             },
@@ -264,8 +264,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
           } else {
             _start = _start + 1;
 
-            _textEditingController.text =
-                splitToComponentTimes(Duration(seconds: _start));
+            _textEditingController.text = splitToComponentTimes(Duration(seconds: _start));
           }
         },
       ),
@@ -278,10 +277,28 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
         "${duration.inHours}:${duration.inMinutes.remainder(60)}:${(duration.inSeconds.remainder(60))}";
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitHours = twoDigits(duration.inHours.remainder(60));
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    //return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+    if (twoDigitMinutes == 0) {
+      twoDigitMinutes = "00:";
+    }
+    if (twoDigitMinutes.length == 0||twoDigitMinutes.length==1) {
+      if(twoDigitMinutes==0)
+        twoDigitMinutes = "00";
+      if(twoDigitMinutes.length==1){
+        twoDigitMinutes = "0$twoDigitMinutes";
+      }
+    } if (twoDigitHours.length == 0||twoDigitHours.length==1) {
+      if(twoDigitHours==0)
+        twoDigitHours = "00";
+      if(twoDigitHours.length==1){
+        twoDigitHours = "0$twoDigitHours:";
+      }
+    }
+    print("TimeTeest$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds");
+    return "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
 
-    return sDuration;
+    //return sDuration;
   }
 }
 
