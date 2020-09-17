@@ -190,7 +190,7 @@ class _ComingUpNextWorkoutState extends State<ComingUpNextWorkout> {
             builder: (context) => WarmUpScreen(
                   workoutDetail2Models: _workoutDetail2Models,
                 )));
-    if(pushed){
+    if(pushed!=null&&pushed){
       Navigator.pop(context);
     }
   }

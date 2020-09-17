@@ -1,6 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:prankbros2/app/dashboard/workouts/WarmUpScreen.dart';
 import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
@@ -40,6 +50,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
   WorkoutDetail2Models _workoutDetail2Models;
   String _baseUrl = "";
   List<Exercises> _exercisesList = new List();
+  String _progress = "-";
 
   @override
   void didChangeDependencies() {
@@ -58,6 +69,22 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
     }
 
 //    _workoutListInit();
+  }
+
+  Future<void> _onSelectNotification(String json) async {
+    final obj = jsonDecode(json);
+
+    if (obj['isSuccess']) {
+      //OpenFile.open(obj['filePath']);
+    } else {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Error'),
+          content: Text('${obj['error']}'),
+        ),
+      );
+    }
   }
 
   void _workoutListInit() {
@@ -144,8 +171,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                 child: FlatButton(
               padding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -467,22 +493,139 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
     );
   }
 
+  var currentDownloadingPos = 0;
+  var totalLength = 0;
+
   void _downloadButtonPressed(BuildContext context) {
 //    _workoutDetail2Models
 
+    var baseUrl = _workoutDetail2Models.baseUrl;
+    var fileUrl = _exercisesList[currentDownloadingPos].videoPath;
+    totalLength = _exercisesList.length;
+    ;
     setState(() {
-      _isLoading = false;
-
-      Navigator.pushNamed(
-          context,
-          _workoutDetail2Models.isHomeWorkout
-              ? Strings.COMING_UP_NEXT_WORKOUT_ROUTE
-              : Strings.WARM_UP_SCREEN_ROUTE,
-          arguments: _workoutDetail2Models);
-
-//      Navigator.push(context,
-//          MaterialPageRoute(builder: (context) => ComingUpNextWorkout()));
+      _isLoading = true;
     });
+
+    downloadFile(
+            url: baseUrl + "${fileUrl}",
+            fileName: "${fileUrl.split('/').last}",
+            dir: "prankpros")
+        .then((filePath) {
+      print("filePath${filePath}");
+    });
+  }
+
+  Future<String> getFilePath(uniqueFileName) async {
+    String path = '';
+
+    Directory dir = await getApplicationDocumentsDirectory();
+
+    path = '${dir.path}/$uniqueFileName.mp4';
+
+    return path;
+  }
+
+  Future<Directory> _getDownloadDirectory() async {
+    if (Platform.isAndroid) {
+      return await DownloadsPathProvider.downloadsDirectory;
+    }
+
+    // in this example we are using only Android and iOS so I can assume
+    // that you are not trying it for other platforms and the if statement
+    // for iOS is unnecessary
+
+    // iOS directory visible to user
+    return await getApplicationDocumentsDirectory();
+  }
+
+  Future<bool> requestPermission(
+    Permission permission,
+  ) async {
+    Map<Permission, PermissionStatus> statuses = await [permission].request();
+    PermissionStatus permissionStatus = statuses[permission];
+    if (permissionStatus == PermissionStatus.granted) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  final Dio _dio = Dio();
+
+  Future<bool> _startDownload(String savePath, String _fileUrl) async {
+    Map<String, dynamic> result = {
+      'isSuccess': false,
+      'filePath': null,
+      'error': null,
+    };
+
+    try {
+      final response = await _dio.download(_fileUrl, savePath,
+          onReceiveProgress: _onReceiveProgress);
+      print("DownloadedFilePath$savePath");
+      result['isSuccess'] = response.statusCode == 200;
+      result['filePath'] = savePath;
+      localPaths.add(savePath);
+      return response.statusCode == 200;
+    } catch (ex) {
+      result['error'] = ex.toString();
+    } finally {
+      print("Downloaded");
+    }
+  }
+
+  void _onReceiveProgress(int received, int total) {
+    if (total != -1) {
+      setState(() {
+        _progress = (received / total * 100).toStringAsFixed(0) + "%";
+        print("_progress$_progress");
+      });
+    }
+  }
+
+  List<String> localPaths = [];
+
+  Future<bool> downloadFile({String url, String fileName, String dir}) async {
+    print("url${url}");
+
+    final dir = await _getDownloadDirectory();
+    final isPermissionStatusGranted =
+        await requestPermission(Permission.storage);
+
+    if (isPermissionStatusGranted) {
+      final savePath = path.join(dir.path, fileName);
+
+      File(savePath).exists().then((isExist) {
+        if (isExist) {
+          localPaths.add(savePath);
+          if (totalLength - 1 == currentDownloadingPos) {
+            setState(() {
+              _isLoading = false;
+            });
+            _workoutDetail2Models.localPaths = localPaths;
+            print(
+                "_workoutDetail2Models.localPaths${_workoutDetail2Models.localPaths.length}");
+           navigateToNextScreen();
+          } else {
+            print("NextUrl$currentDownloadingPos");
+
+            var baseUrl = _workoutDetail2Models.baseUrl;
+            currentDownloadingPos = currentDownloadingPos + 1;
+            var fileUrl = _exercisesList[currentDownloadingPos].videoPath;
+            print("NextUrl$fileUrl");
+            downloadFile(
+                url: baseUrl + fileUrl,
+                fileName: "${fileUrl.split('/').last}",
+                dir: "prankpros");
+          }
+        } else {
+          downoadNewFile(savePath, url);
+        }
+      });
+    } else {
+      // handle the scenario when user declines the permissions
+    }
   }
 
   @override
@@ -499,5 +642,49 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
         ),
       ],
     );
+  }
+
+  void downoadNewFile(String savePath, String url) async {
+    var isDownloaded = await _startDownload(savePath, url);
+
+    if (isDownloaded != null &&
+        isDownloaded &&
+        totalLength - 1 == currentDownloadingPos) {
+      setState(() {
+        _isLoading = false;
+      });
+      _workoutDetail2Models.localPaths = localPaths;
+      navigateToNextScreen();
+    } else if (isDownloaded != null && isDownloaded) {
+      print("NextUrl$currentDownloadingPos");
+      isDownloaded = false;
+      var baseUrl = _workoutDetail2Models.baseUrl;
+      currentDownloadingPos = currentDownloadingPos + 1;
+      var fileUrl = _exercisesList[currentDownloadingPos].videoPath;
+      print("NextUrl$fileUrl");
+      downloadFile(
+          url: baseUrl + fileUrl,
+          fileName: "${fileUrl.split('/').last}",
+          dir: "prankpros");
+    }
+  }
+
+  void navigateToNextScreen() {
+    if (_workoutDetail2Models.isHomeWorkout) {
+      Navigator.pushNamed(
+          context,
+          _workoutDetail2Models.isHomeWorkout
+              ? Strings.COMING_UP_NEXT_WORKOUT_ROUTE
+              : Strings.WARM_UP_SCREEN_ROUTE,
+          arguments: _workoutDetail2Models);
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => WarmUpScreen(
+                workoutDetail2Models: _workoutDetail2Models,
+              )));
+
+    }
   }
 }

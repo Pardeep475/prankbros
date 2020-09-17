@@ -4,7 +4,7 @@ class WorkoutDetail2Models {
   String baseUrl;
   Trainings trainings;
   bool isHomeWorkout=false;
-
-  WorkoutDetail2Models({this.baseUrl, this.trainings,this.isHomeWorkout});
+List<String> localPaths;
+  WorkoutDetail2Models({this.baseUrl, this.trainings,this.isHomeWorkout,this.localPaths});
 
 }
