@@ -140,7 +140,7 @@ packages:
     source: hosted
     version: "4.0.1"
   flutter_cache_manager:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_cache_manager
       url: "https://pub.dartlang.org"

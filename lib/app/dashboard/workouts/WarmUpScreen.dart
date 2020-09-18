@@ -85,7 +85,6 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-
 //    _workoutListInit();
   }
 
@@ -170,6 +169,8 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                             },
                           )
                         : GymWorkoutBottomSheet(
+                            exercises:
+                                widget.workoutDetail2Models.trainings.exercises,
                             contentList: _contentList,
                             myscrollController: myscrollController,
                           );
@@ -185,7 +186,6 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
   }
 
   void _playVideo() async {
-
     print("Position$listCurrentPosition");
     String valueString =
         parseDurationString(_exercisesList[listCurrentPosition].exerciseTime);
@@ -257,13 +257,13 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
       oneSec,
       (Timer timer) => setState(
         () {
-          print("CheckTime$_timing "+"Start $_start");
+          print("CheckTime$_timing " + "Start $_start");
           if (_start == _timing) {
             timer.cancel();
             if (listCurrentPosition + 1 < localVideoPaths.length) {
               if (_exercisesList.length - 1 == listCurrentPosition) {
                 listCurrentPosition = 0;
-              }else{
+              } else {
                 listCurrentPosition = listCurrentPosition + 1;
               }
 
@@ -276,26 +276,29 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
               _videoPlayerController.pause();
 
               print("Position$listCurrentPosition");
-              String valueString =
-              parseDurationString(_exercisesList[listCurrentPosition].exerciseTime);
-              int valueInt = parseDurationInt(_exercisesList[listCurrentPosition].exerciseTime);
+              String valueString = parseDurationString(
+                  _exercisesList[listCurrentPosition].exerciseTime);
+              int valueInt = parseDurationInt(
+                  _exercisesList[listCurrentPosition].exerciseTime);
               _timing = valueInt;
               print("PositionTiming> $_timing");
-            }else{
+            } else {
               if (_exercisesList.length - 1 == listCurrentPosition) {
                 listCurrentPosition = 0;
                 videoListUrl = localVideoPaths[listCurrentPosition];
                 _videoPlayerController =
-                VideoPlayerController.file(File(videoListUrl))..initialize();
+                    VideoPlayerController.file(File(videoListUrl))
+                      ..initialize();
                 startedPlaying = false;
                 _start = 0;
                 _textEditingController.text = "00:00:00";
                 _videoPlayerController.pause();
 
                 print("Position$listCurrentPosition");
-                String valueString =
-                parseDurationString(_exercisesList[listCurrentPosition].exerciseTime);
-                int valueInt = parseDurationInt(_exercisesList[listCurrentPosition].exerciseTime);
+                String valueString = parseDurationString(
+                    _exercisesList[listCurrentPosition].exerciseTime);
+                int valueInt = parseDurationInt(
+                    _exercisesList[listCurrentPosition].exerciseTime);
                 _timing = valueInt;
                 print("PositionTiming> $_timing");
               }
@@ -303,7 +306,8 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
           } else {
             _start = _start + 1;
 
-            _textEditingController.text = splitToComponentTimes(Duration(seconds: _start));
+            _textEditingController.text =
+                splitToComponentTimes(Duration(seconds: _start));
           }
         },
       ),
