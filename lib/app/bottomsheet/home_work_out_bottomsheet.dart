@@ -53,8 +53,7 @@ class HomeSheetWorkout extends StatelessWidget{
                       ),
                     ),
                     SizedBox(
-                      height: 5,
-                    ),
+                      height: 5,),
                     GestureDetector(
                       onTap: (){
                         _completedDetectClick(context);

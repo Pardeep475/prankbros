@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:video_player/video_player.dart';
+
+var isHomeWorkOutDownloaded = false;
 
 class WarmUpScreen extends StatefulWidget {
   bool isHomeWorkout;
@@ -35,7 +38,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
   bool startedPlaying = false;
   VideoScreenBloc _videoScreenBloc;
   Future<void> _initializeVideoPlayerFuture;
-
+  List<String> localVideoPaths = [];
   Timer _timer;
   int _start = 0;
   int _timing = 0;
@@ -60,12 +63,13 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
           widget.workoutDetail2Models.trainings.exercises != null &&
           widget.workoutDetail2Models.trainings.exercises.length > 0)
         _exercisesList.addAll(widget.workoutDetail2Models.trainings.exercises);
+      localVideoPaths = widget.workoutDetail2Models.localPaths;
+      print("localVideoPaths${localVideoPaths.length}");
       _baseUrl = widget.workoutDetail2Models.baseUrl;
 //      _timing= parseDuration(_exercisesList[0].exerciseTime);
-      videoListUrl = _exercisesList[listCurrentPosition].videoPath;
+      videoListUrl = localVideoPaths[listCurrentPosition];
 
-      _videoPlayerController =
-          VideoPlayerController.network('$_baseUrl${videoListUrl}');
+      _videoPlayerController = VideoPlayerController.file(File(videoListUrl));
       _initializeVideoPlayerFuture = _videoPlayerController.initialize();
 
       _videoPlayerController.setLooping(true);
@@ -73,7 +77,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
       // _workoutDetail2Models = ModalRoute.of(context).settings.arguments;
 
     } catch (e) {
-      debugPrint('${e.toString()}');
+      debugPrint('Error${e.toString()}');
     }
   }
 
@@ -159,12 +163,14 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                         ? HomeSheetWorkout(
                             contentList: _contentList,
                             myscrollController: myscrollController,
-                      time_start:  _textEditingController.text,
+                            time_start: _textEditingController.text,
                             playVideo: () {
                               _playVideo();
                             },
                           )
                         : GymWorkoutBottomSheet(
+                            exercises:
+                                widget.workoutDetail2Models.trainings.exercises,
                             contentList: _contentList,
                             myscrollController: myscrollController,
                           );
@@ -180,18 +186,20 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
   }
 
   void _playVideo() async {
-    String valueString = parseDurationString(_exercisesList[0].exerciseTime);
-    int valueInt = parseDurationInt(_exercisesList[0].exerciseTime);
+    print("Position$listCurrentPosition");
+    String valueString =
+        parseDurationString(_exercisesList[listCurrentPosition].exerciseTime);
+    int valueInt =
+        parseDurationInt(_exercisesList[listCurrentPosition].exerciseTime);
     _timing = valueInt;
     debugPrint('timing -- $valueString    $valueInt');
 
     if (!startedPlaying) {
-      _videoPlayerController =
-          VideoPlayerController.network(_baseUrl + videoListUrl)
-            ..initialize().then((_) {
-              _videoPlayerController.play();
-              setState(() {});
-            });
+      _videoPlayerController = VideoPlayerController.file(File(videoListUrl))
+        ..initialize().then((_) {
+          _videoPlayerController.play();
+          setState(() {});
+        });
       startedPlaying = true;
       startTimer();
     }
@@ -249,22 +257,57 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
       oneSec,
       (Timer timer) => setState(
         () {
+          print("CheckTime$_timing " + "Start $_start");
           if (_start == _timing) {
             timer.cancel();
-            if (listCurrentPosition + 1 < _exercisesList.length) {
-              listCurrentPosition = listCurrentPosition + 1;
-              videoListUrl = _exercisesList[listCurrentPosition].videoPath;
+            if (listCurrentPosition + 1 < localVideoPaths.length) {
+              if (_exercisesList.length - 1 == listCurrentPosition) {
+                listCurrentPosition = 0;
+              } else {
+                listCurrentPosition = listCurrentPosition + 1;
+              }
+
+              videoListUrl = localVideoPaths[listCurrentPosition];
               _videoPlayerController =
-                  VideoPlayerController.network(_baseUrl + videoListUrl)
-                    ..initialize();
+                  VideoPlayerController.file(File(videoListUrl))..initialize();
               startedPlaying = false;
               _start = 0;
+              _textEditingController.text = "00:00:00";
               _videoPlayerController.pause();
+
+              print("Position$listCurrentPosition");
+              String valueString = parseDurationString(
+                  _exercisesList[listCurrentPosition].exerciseTime);
+              int valueInt = parseDurationInt(
+                  _exercisesList[listCurrentPosition].exerciseTime);
+              _timing = valueInt;
+              print("PositionTiming> $_timing");
+            } else {
+              if (_exercisesList.length - 1 == listCurrentPosition) {
+                listCurrentPosition = 0;
+                videoListUrl = localVideoPaths[listCurrentPosition];
+                _videoPlayerController =
+                    VideoPlayerController.file(File(videoListUrl))
+                      ..initialize();
+                startedPlaying = false;
+                _start = 0;
+                _textEditingController.text = "00:00:00";
+                _videoPlayerController.pause();
+
+                print("Position$listCurrentPosition");
+                String valueString = parseDurationString(
+                    _exercisesList[listCurrentPosition].exerciseTime);
+                int valueInt = parseDurationInt(
+                    _exercisesList[listCurrentPosition].exerciseTime);
+                _timing = valueInt;
+                print("PositionTiming> $_timing");
+              }
             }
           } else {
             _start = _start + 1;
 
-            _textEditingController.text = splitToComponentTimes(Duration(seconds: _start));
+            _textEditingController.text =
+                splitToComponentTimes(Duration(seconds: _start));
           }
         },
       ),
@@ -282,16 +325,15 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
     if (twoDigitMinutes == 0) {
       twoDigitMinutes = "00:";
     }
-    if (twoDigitMinutes.length == 0||twoDigitMinutes.length==1) {
-      if(twoDigitMinutes==0)
-        twoDigitMinutes = "00";
-      if(twoDigitMinutes.length==1){
+    if (twoDigitMinutes.length == 0 || twoDigitMinutes.length == 1) {
+      if (twoDigitMinutes == 0) twoDigitMinutes = "00";
+      if (twoDigitMinutes.length == 1) {
         twoDigitMinutes = "0$twoDigitMinutes";
       }
-    } if (twoDigitHours.length == 0||twoDigitHours.length==1) {
-      if(twoDigitHours==0)
-        twoDigitHours = "00";
-      if(twoDigitHours.length==1){
+    }
+    if (twoDigitHours.length == 0 || twoDigitHours.length == 1) {
+      if (twoDigitHours == 0) twoDigitHours = "00";
+      if (twoDigitHours.length == 1) {
         twoDigitHours = "0$twoDigitHours:";
       }
     }
