@@ -228,13 +228,12 @@ class _HistoryWidgetState extends State<HistoryWidget> {
             )).then((value) {
       debugPrint('back value is ----> $value');
       if (value != null) {
-
         _weekNameList(pos: value);
         setState(() {});
-
+        var trainingWeek = value++;
         _historyBloc.getMotivationActivation(
             userId: userId,
-            trainingWeek: value.toString(),
+            trainingWeek: trainingWeek.toString(),
             accessToken: accessToken,
             context: context);
       }

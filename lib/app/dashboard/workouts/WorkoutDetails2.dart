@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+//import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -528,7 +528,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
 
   Future<Directory> _getDownloadDirectory() async {
     if (Platform.isAndroid) {
-      return await DownloadsPathProvider.downloadsDirectory;
+//      return await DownloadsPathProvider.downloadsDirectory;
     }
 
     // in this example we are using only Android and iOS so I can assume
