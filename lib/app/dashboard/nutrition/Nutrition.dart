@@ -310,7 +310,7 @@ class _NutritionState extends State<Nutrition> {
         },
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.78,
+          childAspectRatio: 0.76,
         ),
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
@@ -337,8 +337,6 @@ class _NutritionState extends State<Nutrition> {
         elevation: Dimens.five,
         child: Column(
           children: <Widget>[
-
-
             CachedNetworkImage(
               width: MediaQuery.of(context).size.width,
               height: Dimens.ONE_TWO_FIVE,

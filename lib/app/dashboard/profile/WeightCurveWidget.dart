@@ -180,7 +180,7 @@ class _WeightCurveWidget extends State<WeightCurveWidget> {
             ),
             Expanded(
               child: Text(
-                item.weight != null ? item.weight : "",
+                item.weight != null ?  "${item.weight} KG": "",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.light_text,
