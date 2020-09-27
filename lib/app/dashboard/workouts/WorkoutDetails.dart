@@ -177,31 +177,32 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                                 Expanded(
                                   child: Align(
                                     alignment: Alignment.centerLeft,
-                                    child:Container(
+                                    child: Container(
                                       width: 30,
                                       height: 30,
-
                                       child: Container(
                                         alignment: Alignment.topLeft,
                                         decoration: BoxDecoration(
                                           color: Colors.transparent,
-                                          borderRadius: BorderRadius.all(Radius.circular(Dimens.THIRTY)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(Dimens.THIRTY)),
                                         ),
                                         child: Center(
                                             child: FlatButton(
-                                              padding: EdgeInsets.zero,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.all(Radius.circular(Dimens.THIRTY)),
-                                              ),
-                                              onPressed: () {
-                                                _backPressed();
-                                              },
-                                              child: Image.asset(Images.ArrowBackWhite,
-                                                  height: Dimens.fifteen,
-                                                  width: Dimens.twenty,
-                                                  color: AppColors.white),
-                                            )),
+                                          padding: EdgeInsets.zero,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(Dimens.THIRTY)),
+                                          ),
+                                          onPressed: () {
+                                            _backPressed();
+                                          },
+                                          child: Image.asset(
+                                              Images.ArrowBackWhite,
+                                              height: Dimens.fifteen,
+                                              width: Dimens.twenty,
+                                              color: AppColors.white),
+                                        )),
                                       ),
                                     ),
                                   ),
@@ -602,12 +603,11 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                           image: imageProvider, fit: BoxFit.cover),
                     ),
                   ),
-                  placeholder: (context, url) =>
-                      Utils.getImagePlaceHolderWidgetProfile(
-                          context: context,
-                          img: Images.DUMMY_WORKOUT,
-                          height: MediaQuery.of(context).size.height,
-                          width: MediaQuery.of(context).size.width),
+                  placeholder: (context, url) => Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: Utils.getAssetImage(90, 90),
+                  ),
                   errorWidget: (context, url, error) =>
                       Utils.getImagePlaceHolderWidgetProfile(
                           context: context,

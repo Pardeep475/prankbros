@@ -366,12 +366,9 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                               image: imageProvider, fit: BoxFit.cover),
                         ),
                       ),
-                      placeholder: (context, url) =>
-                          Utils.getImagePlaceHolderWidgetProfile(
-                        context: context,
-                        img: Images.DUMMY_WORKOUT,
-                        width: Dimens.ninety,
-                        height: Dimens.ninety,
+                      placeholder: (context, url) => Utils.getAssetImage(
+                        Dimens.ninety,
+                        Dimens.ninety,
                       ),
                       errorWidget: (context, url, error) =>
                           Utils.getImagePlaceHolderWidgetProfile(
