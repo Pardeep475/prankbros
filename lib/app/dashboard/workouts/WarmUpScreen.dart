@@ -35,7 +35,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
   String _baseUrl = "";
   String videoListUrl = "";
   List<Exercises> _exercisesList = new List();
-  var currentVideoDuration = 0;
+  int currentVideoDuration = 0;
   VideoPlayerController _videoPlayerController;
   bool startedPlaying = false;
   VideoScreenBloc _videoScreenBloc;
@@ -75,12 +75,16 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
       _videoPlayerController.setLooping(true);
       _initializeVideoPlayerFuture =
           _videoPlayerController.initialize().then((value) {
-            currentVideoDuration =
-                _videoPlayerController.value.duration.inMilliseconds;
-            print(("currentVideoDuration${currentVideoDuration * 0.001}"));
-            currentVideoDuration = currentVideoDuration * 0.001.toInt();
-            _playVideo();
-          });
+        currentVideoDuration =
+            _videoPlayerController.value.duration.inMilliseconds;
+
+        currentVideoDuration = int.parse(
+            Duration(seconds: (currentVideoDuration * 0.001).toInt())
+                .format()
+                .split(":")[0]);
+        print(("InitcurrentVideoDuration${currentVideoDuration}"));
+        _playVideo();
+      });
 
       int timeValue = 0;
       // _workoutDetail2Models = ModalRoute.of(context).settings.arguments;
@@ -121,14 +125,8 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
         child: Stack(
           children: <Widget>[
             SizedBox(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
               child: Material(
                 elevation: 0,
                 child: Center(
@@ -139,9 +137,9 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                         return Stack(
                           children: <Widget>[
                             AspectRatio(
-                               aspectRatio: _videoPlayerController.value.aspectRatio,
+                                aspectRatio:
+                                    _videoPlayerController.value.aspectRatio,
                                 child: VideoPlayer(_videoPlayerController)),
-
                             Visibility(
                               visible: false,
                               child: _PlayPauseOverlay(
@@ -179,22 +177,22 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                   minChildSize: 0.30,
                   builder: (BuildContext context, myscrollController) {
                     return widget.workoutDetail2Models != null &&
-                        widget.workoutDetail2Models.isHomeWorkout != null &&
-                        widget.workoutDetail2Models.isHomeWorkout
+                            widget.workoutDetail2Models.isHomeWorkout != null &&
+                            widget.workoutDetail2Models.isHomeWorkout
                         ? HomeSheetWorkout(
-                      contentList: _contentList,
-                      myscrollController: myscrollController,
-                      time_start: _textEditingController.text,
-                      playVideo: () {
-                        _playVideo();
-                      },
-                    )
+                            contentList: _contentList,
+                            myscrollController: myscrollController,
+                            time_start: _textEditingController.text,
+                            playVideo: () {
+                              _playVideo();
+                            },
+                          )
                         : GymWorkoutBottomSheet(
-                      exercises:
-                      widget.workoutDetail2Models.trainings.exercises,
-                      contentList: _contentList,
-                      myscrollController: myscrollController,
-                    );
+                            exercises:
+                                widget.workoutDetail2Models.trainings.exercises,
+                            contentList: _contentList,
+                            myscrollController: myscrollController,
+                          );
                   },
                 ),
               ),
@@ -209,9 +207,9 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
   void _playVideo() async {
     print("Position$listCurrentPosition$startedPlaying");
     String valueString =
-    parseDurationString(_exercisesList[listCurrentPosition].exerciseTime);
+        parseDurationString(_exercisesList[listCurrentPosition].exerciseTime);
     int valueInt =
-    parseDurationInt(_exercisesList[listCurrentPosition].exerciseTime);
+        parseDurationInt(_exercisesList[listCurrentPosition].exerciseTime);
     _timing = valueInt;
     debugPrint('timing -- $valueString    $valueInt');
 
@@ -273,8 +271,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
     seconds = int.parse(parts[parts.length - 1]);
     debugPrint("hours   $hours  minutes   $minutes   seconds  $seconds");
     debugPrint(
-        "seconds ${Duration(hours: hours, minutes: minutes, seconds: seconds)
-            .inSeconds}");
+        "seconds ${Duration(hours: hours, minutes: minutes, seconds: seconds).inSeconds}");
     return Duration(hours: hours, minutes: minutes, seconds: seconds).inSeconds;
   }
 
@@ -282,49 +279,77 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
     const oneSec = const Duration(seconds: 1);
     _timer = new Timer.periodic(
       oneSec,
-          (Timer timer) =>
-          setState(
-                () {
-              print("CheckTime$_timing " +
-                  "Start $_start currentVideoDuration$currentVideoDuration");
+      (Timer timer) {
+        print("CheckTime$_timing " +
+            "Start $_start currentVideoDuration$currentVideoDuration");
 
-              if (_start == _timing) {
-                if (_exercisesList.length - 1 == listCurrentPosition) {
-                  timer.cancel();
-                  _start = 0;
-                  _timing=0;
-                  //last Vieo
-                  print("LastVideo");
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              WorkOutCompleted()));
-                } else {
-                  // next Video
-                  print("NextVieo");
-                  _start = 0;
-                  listCurrentPosition = listCurrentPosition + 1;
-                  startedPlaying = false;
-                  videoListUrl = localVideoPaths[listCurrentPosition];
-                  _playVideo();
-                }
-              } else {
-                _start = _start + 1;
+        if (_start == _timing) {
+          if (_exercisesList.length - 1 == listCurrentPosition) {
+            timer.cancel();
 
-                _textEditingController.text =
-                    splitToComponentTimes(Duration(seconds: _start));
-              }
-            },
-          ),
+
+            //last Vieo
+            print("LastVideo");
+            Future.delayed(Duration(seconds: 0)).then((value) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => WorkOutCompleted()));
+
+              
+            });
+          } else {
+            // next Video
+            print(
+                "NextVieo$_timing currentVideoDuration$currentVideoDuration _start$_start");
+            if (_start == _timing) {
+              _start = 0;
+              listCurrentPosition = listCurrentPosition + 1;
+              startedPlaying = false;
+              videoListUrl = localVideoPaths[listCurrentPosition];
+
+              _videoPlayerController =
+              VideoPlayerController.file(File(videoListUrl))
+                ..initialize();
+              startedPlaying = false;
+              _start = 0;
+              _textEditingController.text = "00:00:00";
+              _videoPlayerController.play();
+              _videoPlayerController.setLooping(true);
+              print("Position$listCurrentPosition");
+              String valueString = parseDurationString(
+                  _exercisesList[listCurrentPosition].exerciseTime);
+              int valueInt = parseDurationInt(
+                  _exercisesList[listCurrentPosition].exerciseTime);
+
+              _timing = valueInt;
+              print("PositionTiming> $_timing");
+              
+
+
+
+            } else {
+              _videoPlayerController.setLooping(true);
+              print("LoopingOldVieo");
+            }
+          }
+        } else {
+          _start = _start + 1;
+
+          _textEditingController.text =
+              splitToComponentTimes(Duration(seconds: _start));
+          setState(() {
+            
+          });
+        }
+      },
     );
   }
 
   String splitToComponentTimes(Duration duration) {
     print("duration.inHours${duration.inHours}");
     String sDuration =
-        "${duration.inHours}:${duration.inMinutes.remainder(60)}:${(duration
-        .inSeconds.remainder(60))}";
+        "${duration.inHours}:${duration.inMinutes.remainder(60)}:${(duration.inSeconds.remainder(60))}";
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     String twoDigitHours = twoDigits(duration.inHours.remainder(60));
@@ -373,15 +398,15 @@ class _PlayPauseOverlay extends StatelessWidget {
                 return controller.value.isPlaying
                     ? SizedBox.shrink()
                     : Container(
-                  color: Colors.black26,
-                  child: Center(
-                    child: Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                      size: 100.0,
-                    ),
-                  ),
-                );
+                        color: Colors.black26,
+                        child: Center(
+                          child: Icon(
+                            Icons.play_arrow,
+                            color: Colors.white,
+                            size: 100.0,
+                          ),
+                        ),
+                      );
               }),
         ),
         GestureDetector(
