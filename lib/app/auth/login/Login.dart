@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prankbros2/app/auth/login/LoginBloc.dart';
+import 'package:prankbros2/app/auth/login/login_questionmark_screen.dart';
 import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/customviews/CommonProgressIndicator.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
@@ -140,10 +141,19 @@ class _LoginState extends State<Login> {
                       Container(
                         margin: EdgeInsets.only(right: Dimens.TWELVE),
                         child: Center(
-                            child: Image.asset(
-                          Images.CircleCropped,
-                          height: Dimens.sixty,
-                          width: Dimens.sixty,
+                            child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        LoginQuestionMarkScreen()));
+                          },
+                          child: Image.asset(
+                            Images.CircleCropped,
+                            height: Dimens.sixty,
+                            width: Dimens.sixty,
+                          ),
                         )),
                       ),
                     ],

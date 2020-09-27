@@ -23,11 +23,16 @@ class LoginQuestionMarkScreen extends StatelessWidget {
                 child: Align(
               child: Container(
                 padding: EdgeInsets.all(20),
-                child: Image.asset(
-                  Images.ICON_CROSS,
-                  color: Colors.white,
-                  height: 24,
-                  width: 24,
+                child: InkWell(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Image.asset(
+                    Images.ICON_CROSS,
+                    color: Colors.white,
+                    height: 24,
+                    width: 24,
+                  ),
                 ),
               ),
               alignment: Alignment.centerRight,
