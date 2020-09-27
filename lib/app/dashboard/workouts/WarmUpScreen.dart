@@ -130,18 +130,21 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                         return Stack(
                           children: <Widget>[
                             VideoPlayer(_videoPlayerController),
-                            _PlayPauseOverlay(
-                              controller: _videoPlayerController,
-                              videoScreenBloc: _videoScreenBloc,
-                              playCLick: (value) {
-                                if (value == 0) {
-                                  _videoPlayerController.pause();
-                                  startedPlaying = false;
-                                  setState(() {});
-                                } else {
-                                  _playVideo();
-                                }
-                              },
+                            Visibility(
+                              visible: false,
+                              child: _PlayPauseOverlay(
+                                controller: _videoPlayerController,
+                                videoScreenBloc: _videoScreenBloc,
+                                playCLick: (value) {
+                                  if (value == 0) {
+                                    _videoPlayerController.pause();
+                                    startedPlaying = false;
+                                    setState(() {});
+                                  } else {
+                                    _playVideo();
+                                  }
+                                },
+                              ),
                             ),
                           ],
                         );

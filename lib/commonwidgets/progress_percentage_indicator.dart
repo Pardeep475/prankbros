@@ -16,10 +16,14 @@ class ProgressIndicatorDownloadFiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spinkit = Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16))),
+      elevation: 2.0,
+      shadowColor: Colors.white.withOpacity(0.7),
       child: Container(
         height: 110.0,
         alignment: Alignment.center,
-        margin: EdgeInsets.only(left: 24, right: 24),
         decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.6),
             borderRadius: BorderRadius.all(Radius.circular(15))),

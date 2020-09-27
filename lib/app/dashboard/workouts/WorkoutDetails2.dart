@@ -227,7 +227,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
               Wrap(
                 children: <Widget>[
                   Text(
-                    '${_workoutDetail2Models.trainings.workoutTime} min',
+                    '${_workoutDetail2Models.trainings.workoutTime}',
                     style: TextStyle(
                       fontSize: Dimens.forteen,
                       fontWeight: FontWeight.w700,
@@ -643,14 +643,11 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
           backgroundColor: AppColors.transparent,
           body: _WorkoutDetails2Widget(),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ProgressIndicatorDownloadFiles(
-            isLoading: _isLoading,
-            currentFile: currentDownloadingPos,
-            progressvalue: _progress,
-            totalFiles: totalLength,
-          ),
+        ProgressIndicatorDownloadFiles(
+          isLoading: _isLoading,
+          currentFile: currentDownloadingPos,
+          progressvalue: _progress,
+          totalFiles: totalLength,
         )
       ],
     );
