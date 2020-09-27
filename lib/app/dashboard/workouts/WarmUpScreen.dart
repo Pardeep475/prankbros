@@ -12,6 +12,8 @@ import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:video_player/video_player.dart';
 
+import 'WorkOutCompleted.dart';
+
 var isHomeWorkOutDownloaded = false;
 
 class WarmUpScreen extends StatefulWidget {
@@ -70,9 +72,13 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
       videoListUrl = localVideoPaths[listCurrentPosition];
 
       _videoPlayerController = VideoPlayerController.file(File(videoListUrl));
-      _initializeVideoPlayerFuture = _videoPlayerController.initialize();
-
       _videoPlayerController.setLooping(true);
+      _initializeVideoPlayerFuture = _videoPlayerController.initialize().then((value) {
+
+        _playVideo();
+      });
+
+
       int timeValue = 0;
       // _workoutDetail2Models = ModalRoute.of(context).settings.arguments;
 
@@ -262,14 +268,21 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
             timer.cancel();
             if (listCurrentPosition + 1 < localVideoPaths.length) {
               if (_exercisesList.length - 1 == listCurrentPosition) {
-                listCurrentPosition = 0;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => WorkOutCompleted()));
               } else {
                 listCurrentPosition = listCurrentPosition + 1;
               }
 
               videoListUrl = localVideoPaths[listCurrentPosition];
               _videoPlayerController =
-                  VideoPlayerController.file(File(videoListUrl))..initialize();
+                  VideoPlayerController.file(File(videoListUrl))..initialize().then((value){
+
+                    _videoPlayerController.play();
+                    setState(() {});
+                  });
               startedPlaying = false;
               _start = 0;
               _textEditingController.text = "00:00:00";
@@ -284,7 +297,11 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
               print("PositionTiming> $_timing");
             } else {
               if (_exercisesList.length - 1 == listCurrentPosition) {
-                listCurrentPosition = 0;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => WorkOutCompleted()));
+               /* listCurrentPosition = 0;
                 videoListUrl = localVideoPaths[listCurrentPosition];
                 _videoPlayerController =
                     VideoPlayerController.file(File(videoListUrl))
@@ -300,7 +317,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                 int valueInt = parseDurationInt(
                     _exercisesList[listCurrentPosition].exerciseTime);
                 _timing = valueInt;
-                print("PositionTiming> $_timing");
+                print("PositionTiming> $_timing");*/
               }
             }
           } else {
