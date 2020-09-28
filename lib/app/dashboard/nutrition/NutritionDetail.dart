@@ -14,6 +14,8 @@ import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
 
+import 'Nutrition.dart';
+
 class NutritionDetail extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _NutritionDetail();
@@ -51,17 +53,16 @@ class _NutritionDetail extends State<NutritionDetail> {
     });
   }
 
-  void _onLikeClicked(int nutritionId, BuildContext context,bool isFav) {
+  void _onLikeClicked(int nutritionId, BuildContext context, bool isFav) {
     if (userId != null && userId.isNotEmpty) {
-      _nutritionActionModel(
-          int.parse(userId), nutritionId, !fav, context);
+      _nutritionActionModel(int.parse(userId), nutritionId, !fav, context);
     } else {
       Utils.showSnackBar('Something went wrong', context);
     }
   }
 
-  void _onBackPressed() {
-    Navigator.pop(context);
+  void _onBackPressed() async {
+    await Navigator.pop(context, needRefresh);
   }
 
   NavigatorState getRootNavigator(BuildContext context) {
@@ -132,17 +133,18 @@ class _NutritionDetail extends State<NutritionDetail> {
                   builder: (BuildContext context) {
                     return GestureDetector(
                         onTap: () {
-                          fav=args.favorite;
-                          fav=!fav;
-                          args.favorite=fav;
-                          _onLikeClicked(args.id, context,fav);
+                          needRefresh = true;
+                          fav = args.favorite;
+                          fav = !fav;
+                          args.favorite = fav;
+                          _onLikeClicked(args.id, context, fav);
                         },
                         child: StreamBuilder<bool>(
                             initialData: false,
                             stream: _nutritionDetailBloc.nutritionStream,
                             builder: (context, snapshot) {
-                              if(args.favorite!=null&&fav==false)
-                                fav=args.favorite;
+                              if (args.favorite != null && fav == false)
+                                fav = args.favorite;
                               print("IsFav${fav}");
                               if (snapshot.data != null) {
                                 if (snapshot.data) {
@@ -358,7 +360,10 @@ class _NutritionDetail extends State<NutritionDetail> {
         ),
         Scaffold(
           backgroundColor: AppColors.transparent,
-          body: _nutritionDetailWidget(args),
+          body: WillPopScope(
+              onWillPop: ()async{
+               await Navigator.pop(context,needRefresh);
+              }, child: _nutritionDetailWidget(args)),
         )
       ],
     );

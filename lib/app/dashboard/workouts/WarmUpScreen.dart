@@ -136,10 +136,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return Stack(
                           children: <Widget>[
-                            AspectRatio(
-                                aspectRatio:
-                                    _videoPlayerController.value.aspectRatio,
-                                child: VideoPlayer(_videoPlayerController)),
+                            VideoPlayer(_videoPlayerController),
                             Visibility(
                               visible: false,
                               child: _PlayPauseOverlay(
