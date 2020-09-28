@@ -52,4 +52,15 @@ class SessionManager {
       setInstalledFirstTime(true);
     });
   }
+
+
+  Future<bool> setProfilePic(String profilepic) {
+    pref.then((value) {
+      value.setString(Keys.PROFILE_PIC, profilepic);
+    });
+  }
+
+  Future<String> getProfilePic() {
+    return pref.then((value) => value.getString(Keys.PROFILE_PIC))??'';
+  }
 }

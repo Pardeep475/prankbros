@@ -196,11 +196,9 @@ class _MotivationWidgetState extends State<MotivationWidget> {
                 image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
               ),
             ),
-            placeholder: (context, url) =>
-                Utils.getImagePlaceHolderWidgetProfile(
-                    context: context,
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width),
+            placeholder: (context, url) => Utils.getAssetImage(
+                MediaQuery.of(context).size.height,
+                MediaQuery.of(context).size.width),
             errorWidget: (context, url, error) =>
                 Utils.getImagePlaceHolderWidgetProfile(
                     context: context,

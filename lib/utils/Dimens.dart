@@ -13,7 +13,9 @@ class Dimens {
   static final EIGHT = 0.9 * SizeConfig.heightMultiplier;
   static final NINE = 1 * SizeConfig.heightMultiplier;
   static final TEN = 1.11 * SizeConfig.heightMultiplier;
-
+  static final LOGIN_FORTEEN = 2 * SizeConfig.heightMultiplier;
+  static final LOGIN_TWENTY_SEVEN = 3.5 * SizeConfig.heightMultiplier;
+  static final LOGIN_TWENTY_SEVEN2 = 4 * SizeConfig.heightMultiplier;
   static final ELEVEN = 1.22 * SizeConfig.heightMultiplier;
   static final TWELVE = 1.34 * SizeConfig.heightMultiplier;
   static final THRTEEN = 1.45 * SizeConfig.heightMultiplier;

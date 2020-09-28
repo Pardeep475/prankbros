@@ -1,20 +1,27 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prankbros2/app/dashboard/profile/PictureWidget.dart';
 import 'package:prankbros2/app/dashboard/profile/ProfileWidget.dart';
 import 'package:prankbros2/app/dashboard/profile/SettingsWidget.dart';
+import 'package:prankbros2/app/dashboard/profile/picturewidget/PictureWidgetBloc.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
 import 'package:prankbros2/utils/AppColors.dart';
 import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
+import 'package:prankbros2/utils/network/ApiRepository.dart';
+import 'package:rxdart/rxdart.dart';
 import '../../../utils/AppColors.dart';
 import 'PictureWidget.dart';
 import 'SettingsWidget.dart';
 import 'WeightCurveWidget.dart';
+
+var profilepic = "";
 
 class Profile extends StatefulWidget {
   @override
@@ -24,6 +31,12 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   int itemPos = 0;
   List<String> _titleList = new List();
+  SessionManager _sessionManager;
+  var name = "";
+  var userId = "";
+  var accessToken = "";
+
+  var email = "";
 
   @override
   void didChangeDependencies() {
@@ -31,11 +44,44 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     _titleListInit();
   }
 
+  ApiRepository apiRepository;
+  BehaviorSubject<int> toggleProfilePicsink = BehaviorSubject<int>();
+
+  Stream<int> get streamProfilePic => toggleProfilePicsink.stream;
+
+  @override
+  void initState() {
+    super.initState();
+
+    super.initState();
+  }
+
   void _titleListInit() {
     _titleList.add(AppLocalizations.of(context).translate(Strings.Profile));
     _titleList.add(AppLocalizations.of(context).translate(Strings.Pictures));
     _titleList.add(AppLocalizations.of(context).translate(Strings.WeightCurve));
     _titleList.add(AppLocalizations.of(context).translate(Strings.Settings));
+    _sessionManager = SessionManager();
+    _sessionManager.getUserModel().then((value) {
+      debugPrint("userdataPPP   :        $value");
+      if (value != null) {
+        UserDetails userData = UserDetails.fromJson(value);
+        debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
+        name = userData.firstName;
+        email = userData.email;
+        userId = userData.id.toString();
+        accessToken = userData.accessToken.toString();
+        apiRepository = new ApiRepository();
+        _sessionManager.getProfilePic().then((value) {
+          profilepic = value;
+          print("profilepic${profilepic}");
+          toggleProfilePicsink.sink.add(1);
+          if (profilepic == "") {
+           // getProfilePic();
+          }
+        });
+      }
+    });
   }
 
   @override
@@ -45,10 +91,10 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       statusBarBrightness: Brightness.dark,
     ));
 
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: AppColors.white,
       resizeToAvoidBottomPadding: false,
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
@@ -81,11 +127,14 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     height: Dimens.twentyFive,
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: Dimens.twentyFive,right: 0,),
+                    padding: EdgeInsets.only(
+                      left: Dimens.twentyFive,
+                      right: 0,
+                    ),
                     width: MediaQuery.of(context).size.width,
                     height: Dimens.forty,
                     child: ListView.builder(
-                      padding: EdgeInsets.zero,
+                        padding: EdgeInsets.zero,
                         scrollDirection: Axis.horizontal,
                         itemCount: _titleList.length,
                         itemBuilder: (BuildContext conntext, int pos) {
@@ -98,13 +147,12 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                 ],
               ),
             ),
-
           ],
         ),
       ),
     )
 
-    /*Stack(
+        /*Stack(
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
@@ -156,7 +204,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         ),
       ],
     )*/
-    ;
+        ;
   }
 
   Widget openSpecificTab(int pos) {
@@ -238,42 +286,71 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-            margin: EdgeInsets.only(left: Dimens.TWENTY_FIVE, right: Dimens.TWENTY),
-            width: Dimens.sixty,
-            height: Dimens.sixty,
-            decoration: new BoxDecoration(
-                shape: BoxShape.circle,
-                image: new DecorationImage(
-                  fit: BoxFit.fill,
-                  image: new AssetImage(Images.DummyFood),
-                ))),
+          margin:
+              EdgeInsets.only(left: Dimens.TWENTY_FIVE, right: Dimens.TWENTY),
+          width: Dimens.sixty,
+          height: Dimens.sixty,
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(
+              Dimens.sixty,
+            )),
+            child: StreamBuilder<int>(
+                stream: streamProfilePic,
+                initialData: -1,
+                builder: (context, snapshot) {
+                  return snapshot.data == -1
+                      ? Utils.getAssetImage(
+                          Dimens.sixty,
+                          Dimens.sixty,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: profilepic!=null?profilepic:"",
+                          fit: BoxFit.fill,
+                          width: Dimens.sixty,
+                          height: Dimens.sixty,
+                          placeholder: (context, url) => Utils.getAssetImage(
+                                Dimens.sixty,
+                                Dimens.sixty,
+                              ),
+                          errorWidget: (context, url, error) =>
+                              Utils.getFailedImage(
+                                Dimens.sixty,
+                                Dimens.sixty,
+                              ));
+                }),
+          ),
+        ),
         SizedBox(
           height: Dimens.TWENTY,
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'PrankBros',
-              style: TextStyle(
-                  fontFamily: Strings.EXO_FONT,
-                  color: AppColors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: Dimens.TWENTY_SEVEN),
-            ),
-            SizedBox(
-              height: Dimens.FIVE,
-            ),
-            Text(
-              'prankbros@app.de',
-              style: TextStyle(
-                  fontFamily: Strings.EXO_FONT,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.white,
-                  fontSize: Dimens.FORTEEN),
-            ),
-          ],
-        )
+        StreamBuilder<Object>(
+            stream: null,
+            builder: (context, snapshot) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '$name',
+                    style: TextStyle(
+                        fontFamily: Strings.EXO_FONT,
+                        color: AppColors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: Dimens.TWENTY_SEVEN),
+                  ),
+                  SizedBox(
+                    height: Dimens.FIVE,
+                  ),
+                  Text(
+                    '$email',
+                    style: TextStyle(
+                        fontFamily: Strings.EXO_FONT,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.white,
+                        fontSize: Dimens.FORTEEN),
+                  ),
+                ],
+              );
+            })
       ],
     );
   }
@@ -286,14 +363,14 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         });
       },
       child: Container(
-
         decoration: BoxDecoration(
             border: Border.all(
                 color: itemPos == pos
                     ? AppColors.pink_stroke
                     : AppColors.transparent),
             borderRadius: BorderRadius.all(Radius.circular(Dimens.twenty))),
-        padding: EdgeInsets.symmetric(vertical: Dimens.ten,horizontal: Dimens.twenty),
+        padding: EdgeInsets.symmetric(
+            vertical: Dimens.ten, horizontal: Dimens.twenty),
         child: Center(
           child: Text(
             title,
@@ -350,4 +427,13 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       ],
     );
   }
+
+
+}
+
+class NameEmailData {
+  String name;
+  String email;
+
+  NameEmailData({this.name, this.email});
 }

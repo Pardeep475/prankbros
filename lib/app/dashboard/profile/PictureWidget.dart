@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prankbros2/app/dashboard/profile/Profile.dart';
 import 'package:prankbros2/app/dashboard/profile/picturewidget/PictureWidgetBloc.dart';
 import 'package:prankbros2/app/dashboard/profile/shimmer_layout.dart';
 import 'package:prankbros2/models/login/LoginResponse.dart';
@@ -101,6 +102,11 @@ class _PictureWidgetState extends State<PictureWidget> {
                                         children: <Widget>[
                                           snapshot.data.length <= 0
                                               ? Container(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.62,
+                                                  alignment: Alignment.center,
                                                   child: Center(
                                                     child: Material(
                                                       color: Colors.transparent,
@@ -304,7 +310,8 @@ class _PictureWidgetState extends State<PictureWidget> {
             }
           } else {
             return ProfilePictureShimmer();
-          };
+          }
+          ;
         });
   }
 
@@ -344,7 +351,9 @@ class _PictureWidgetState extends State<PictureWidget> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Dimens.twenty),
       child: Text(
-        Utils.checkCurrentDate2(item) ? "Today" : item,
+        Utils.checkCurrentDate2(item)
+            ? "Today"
+            : Utils.parsePictureDateFormat(item),
         style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: Dimens.twenty,
@@ -354,8 +363,15 @@ class _PictureWidgetState extends State<PictureWidget> {
     );
   }
 
+  var count = 0;
+
   Widget _mainItem(UserProfileImages item) {
-    debugPrint('imageitem:--->   $item');
+    count = count + 1;
+    if (count == 1) {
+      debugPrint('imageitem:--->   $item');
+      profilepic = item.imagePath;
+      _sessionManager.setProfilePic(profilepic);
+    }
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -386,15 +402,9 @@ class _PictureWidgetState extends State<PictureWidget> {
                 ),
               ),
               placeholder: (context, url) =>
-                  Utils.getImagePlaceHolderWidgetProfile(
-                      context: context,
-                      height: Dimens.fifty,
-                      width: Dimens.seventy),
+                  Utils.getAssetImage(Dimens.fifty, Dimens.seventy),
               errorWidget: (context, url, error) =>
-                  Utils.getImagePlaceHolderWidgetProfile(
-                      context: context,
-                      height: Dimens.fifty,
-                      width: Dimens.seventy),
+                  Utils.getFailedImage(Dimens.fifty, Dimens.seventy),
             ),
           ),
         ),

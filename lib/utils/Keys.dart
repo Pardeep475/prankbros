@@ -28,4 +28,5 @@ class Keys {
   static const String IS_LOGIN = "is_login";
   static const String INSTALLED_FIRST_TIME = "installed_first_time";
   static const String USER_MODEL = "user_model";
+  static const String PROFILE_PIC = "PROFILE_PIC";
 }

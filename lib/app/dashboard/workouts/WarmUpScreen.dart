@@ -12,6 +12,8 @@ import 'package:prankbros2/models/workout/GetUserTrainingResponseApi.dart';
 import 'package:prankbros2/models/workout/WorkoutDetail2Models.dart';
 import 'package:video_player/video_player.dart';
 
+import 'WorkOutCompleted.dart';
+
 var isHomeWorkOutDownloaded = false;
 
 class WarmUpScreen extends StatefulWidget {
@@ -33,7 +35,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
   String _baseUrl = "";
   String videoListUrl = "";
   List<Exercises> _exercisesList = new List();
-
+  int currentVideoDuration = 0;
   VideoPlayerController _videoPlayerController;
   bool startedPlaying = false;
   VideoScreenBloc _videoScreenBloc;
@@ -70,9 +72,20 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
       videoListUrl = localVideoPaths[listCurrentPosition];
 
       _videoPlayerController = VideoPlayerController.file(File(videoListUrl));
-      _initializeVideoPlayerFuture = _videoPlayerController.initialize();
-
       _videoPlayerController.setLooping(true);
+      _initializeVideoPlayerFuture =
+          _videoPlayerController.initialize().then((value) {
+        currentVideoDuration =
+            _videoPlayerController.value.duration.inMilliseconds;
+
+        currentVideoDuration = int.parse(
+            Duration(seconds: (currentVideoDuration * 0.001).toInt())
+                .format()
+                .split(":")[0]);
+        print(("InitcurrentVideoDuration${currentVideoDuration}"));
+        _playVideo();
+      });
+
       int timeValue = 0;
       // _workoutDetail2Models = ModalRoute.of(context).settings.arguments;
 
@@ -123,19 +136,25 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return Stack(
                           children: <Widget>[
-                            VideoPlayer(_videoPlayerController),
-                            _PlayPauseOverlay(
-                              controller: _videoPlayerController,
-                              videoScreenBloc: _videoScreenBloc,
-                              playCLick: (value) {
-                                if (value == 0) {
-                                  _videoPlayerController.pause();
-                                  startedPlaying = false;
-                                  setState(() {});
-                                } else {
-                                  _playVideo();
-                                }
-                              },
+                            AspectRatio(
+                                aspectRatio:
+                                    _videoPlayerController.value.aspectRatio,
+                                child: VideoPlayer(_videoPlayerController)),
+                            Visibility(
+                              visible: false,
+                              child: _PlayPauseOverlay(
+                                controller: _videoPlayerController,
+                                videoScreenBloc: _videoScreenBloc,
+                                playCLick: (value) {
+                                  if (value == 0) {
+                                    _videoPlayerController.pause();
+                                    startedPlaying = false;
+                                    setState(() {});
+                                  } else {
+                                    _playVideo();
+                                  }
+                                },
+                              ),
                             ),
                           ],
                         );
@@ -186,7 +205,7 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
   }
 
   void _playVideo() async {
-    print("Position$listCurrentPosition");
+    print("Position$listCurrentPosition$startedPlaying");
     String valueString =
         parseDurationString(_exercisesList[listCurrentPosition].exerciseTime);
     int valueInt =
@@ -195,8 +214,13 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
     debugPrint('timing -- $valueString    $valueInt');
 
     if (!startedPlaying) {
+      _videoPlayerController.setLooping(true);
       _videoPlayerController = VideoPlayerController.file(File(videoListUrl))
         ..initialize().then((_) {
+          currentVideoDuration =
+              _videoPlayerController.value.duration.inMilliseconds;
+          print(("currentVideoDuration${currentVideoDuration * 0.001}"));
+          currentVideoDuration = currentVideoDuration * 0.001.toInt();
           _videoPlayerController.play();
           setState(() {});
         });
@@ -255,62 +279,70 @@ class _WarmUpScreenState extends State<WarmUpScreen> {
     const oneSec = const Duration(seconds: 1);
     _timer = new Timer.periodic(
       oneSec,
-      (Timer timer) => setState(
-        () {
-          print("CheckTime$_timing " + "Start $_start");
-          if (_start == _timing) {
-            timer.cancel();
-            if (listCurrentPosition + 1 < localVideoPaths.length) {
-              if (_exercisesList.length - 1 == listCurrentPosition) {
-                listCurrentPosition = 0;
-              } else {
-                listCurrentPosition = listCurrentPosition + 1;
-              }
+      (Timer timer) {
+        print("CheckTime$_timing " +
+            "Start $_start currentVideoDuration$currentVideoDuration");
 
+        if (_start == _timing) {
+          if (_exercisesList.length - 1 == listCurrentPosition) {
+            timer.cancel();
+
+
+            //last Vieo
+            print("LastVideo");
+            Future.delayed(Duration(seconds: 0)).then((value) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => WorkOutCompleted()));
+
+              
+            });
+          } else {
+            // next Video
+            print(
+                "NextVieo$_timing currentVideoDuration$currentVideoDuration _start$_start");
+            if (_start == _timing) {
+              _start = 0;
+              listCurrentPosition = listCurrentPosition + 1;
+              startedPlaying = false;
               videoListUrl = localVideoPaths[listCurrentPosition];
+
               _videoPlayerController =
-                  VideoPlayerController.file(File(videoListUrl))..initialize();
+              VideoPlayerController.file(File(videoListUrl))
+                ..initialize();
               startedPlaying = false;
               _start = 0;
               _textEditingController.text = "00:00:00";
-              _videoPlayerController.pause();
-
+              _videoPlayerController.play();
+              _videoPlayerController.setLooping(true);
               print("Position$listCurrentPosition");
               String valueString = parseDurationString(
                   _exercisesList[listCurrentPosition].exerciseTime);
               int valueInt = parseDurationInt(
                   _exercisesList[listCurrentPosition].exerciseTime);
+
               _timing = valueInt;
               print("PositionTiming> $_timing");
+              
+
+
+
             } else {
-              if (_exercisesList.length - 1 == listCurrentPosition) {
-                listCurrentPosition = 0;
-                videoListUrl = localVideoPaths[listCurrentPosition];
-                _videoPlayerController =
-                    VideoPlayerController.file(File(videoListUrl))
-                      ..initialize();
-                startedPlaying = false;
-                _start = 0;
-                _textEditingController.text = "00:00:00";
-                _videoPlayerController.pause();
-
-                print("Position$listCurrentPosition");
-                String valueString = parseDurationString(
-                    _exercisesList[listCurrentPosition].exerciseTime);
-                int valueInt = parseDurationInt(
-                    _exercisesList[listCurrentPosition].exerciseTime);
-                _timing = valueInt;
-                print("PositionTiming> $_timing");
-              }
+              _videoPlayerController.setLooping(true);
+              print("LoopingOldVieo");
             }
-          } else {
-            _start = _start + 1;
-
-            _textEditingController.text =
-                splitToComponentTimes(Duration(seconds: _start));
           }
-        },
-      ),
+        } else {
+          _start = _start + 1;
+
+          _textEditingController.text =
+              splitToComponentTimes(Duration(seconds: _start));
+          setState(() {
+            
+          });
+        }
+      },
     );
   }
 
@@ -390,4 +422,8 @@ class _PlayPauseOverlay extends StatelessWidget {
       ],
     );
   }
+}
+
+extension on Duration {
+  String format() => '$this'.split('.')[0].padLeft(8, '0');
 }

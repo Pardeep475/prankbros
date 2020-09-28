@@ -27,6 +27,49 @@ class Utils {
     return _isConnected;
   }
 
+  static Container getFailedImage(double height, double width) {
+    return Container(
+        color: Color.fromRGBO(241, 241, 243, 1.0),
+        height: height,
+        width: width,
+        child: Container(
+          decoration: new BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            image: new DecorationImage(
+              fit: BoxFit.fill,
+              image: AssetImage("assets/images/ic_image_failed.png"),
+              // Center is a layout widget. It takes a single child and positions it
+              // in the middle of the parent.
+            ),
+          ),
+        ));
+  }
+  static String parsePictureDateFormat(String date) {
+    final DateFormat dateformat = DateFormat('yyyy-MM-d');
+    final DateFormat convertdateformat = DateFormat('MMM d');
+    var datenew = dateformat.parse(date);
+    convertdateformat.format(datenew);
+    return convertdateformat.format(datenew).toString();
+  }
+  static Container getAssetImage(double height, double width) {
+    return Container(
+        color: Color.fromRGBO(241, 241, 243, 1.0),
+        width: width,
+        height: height,
+        child: Container(
+          width: width,
+          height: height,
+          alignment: Alignment.center,
+          child: Image.asset(
+            "assets/images/image_load_gif.gif",
+            height: 50,
+            width: 50,
+            fit: BoxFit.cover,
+          ),
+        ));
+  }
+
+
   static showToast(String message, BuildContext context) {
     Toast.show(
       message,

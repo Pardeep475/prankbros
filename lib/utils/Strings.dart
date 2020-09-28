@@ -1,4 +1,9 @@
 class Strings {
+  static String login_question_mark_text2="www.strongbyprankbros.de.";
+  static String login_question_mark_text3="Um einen Zugang für 12 Monate zu erhalten, für unsere Fitness App, besucht bitte unsere Homepage  Solltet ihr noch andere Fragen haben, ist unser Support jederzeit für euch erreichbar und hilft schnell.";
+
+  static var login_question_mark_text1="Um einen Zugang für 12 Monate zu erhalten, für unsere Fitness App, besucht bitte unsere Homepage ";
+  static String login_question_mark_text4="\n\nBy Prankbross!";
   Strings._();
 
   static const String BASE_URL = 'http://18.158.190.59/admin/api/';

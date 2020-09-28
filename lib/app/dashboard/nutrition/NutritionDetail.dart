@@ -22,6 +22,7 @@ class NutritionDetail extends StatefulWidget {
 class _NutritionDetail extends State<NutritionDetail> {
   int _buttonClick = 0;
   bool _likeClick = false;
+  bool fav = false;
   NutritionDetailBloc _nutritionDetailBloc;
   SessionManager _sessionManager;
   String userId = '';
@@ -50,10 +51,10 @@ class _NutritionDetail extends State<NutritionDetail> {
     });
   }
 
-  void _onLikeClicked(int nutritionId, BuildContext context) {
+  void _onLikeClicked(int nutritionId, BuildContext context,bool isFav) {
     if (userId != null && userId.isNotEmpty) {
       _nutritionActionModel(
-          int.parse(userId), nutritionId, _likeClick ? false : true, context);
+          int.parse(userId), nutritionId, !fav, context);
     } else {
       Utils.showSnackBar('Something went wrong', context);
     }
@@ -131,18 +132,24 @@ class _NutritionDetail extends State<NutritionDetail> {
                   builder: (BuildContext context) {
                     return GestureDetector(
                         onTap: () {
-                          _onLikeClicked(args.id, context);
+                          fav=args.favorite;
+                          fav=!fav;
+                          args.favorite=fav;
+                          _onLikeClicked(args.id, context,fav);
                         },
                         child: StreamBuilder<bool>(
                             initialData: false,
                             stream: _nutritionDetailBloc.nutritionStream,
                             builder: (context, snapshot) {
+                              if(args.favorite!=null&&fav==false)
+                                fav=args.favorite;
+                              print("IsFav${fav}");
                               if (snapshot.data != null) {
                                 if (snapshot.data) {
                                   _likeClick = _likeClick ? false : true;
                                 }
                               }
-                              return Image.asset(_likeClick
+                              return Image.asset(fav
                                   ? Images.ICON_LIKE_ACTIVE
                                   : Images.ICON_LIKE_INACTIVE);
                             }));

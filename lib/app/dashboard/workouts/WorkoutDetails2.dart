@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 //import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
@@ -12,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:prankbros2/app/dashboard/workouts/WarmUpScreen.dart';
 import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
+import 'package:prankbros2/commonwidgets/progress_percentage_indicator.dart';
 import 'package:prankbros2/customviews/BackgroundWidgetWithImage.dart';
 import 'package:prankbros2/customviews/CustomViews.dart';
 import 'package:prankbros2/models/DailyWorkoutModel.dart';
@@ -227,7 +227,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
               Wrap(
                 children: <Widget>[
                   Text(
-                    '${_workoutDetail2Models.trainings.workoutTime} min',
+                    '${_workoutDetail2Models.trainings.workoutTime}',
                     style: TextStyle(
                       fontSize: Dimens.forteen,
                       fontWeight: FontWeight.w700,
@@ -366,12 +366,9 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
                               image: imageProvider, fit: BoxFit.cover),
                         ),
                       ),
-                      placeholder: (context, url) =>
-                          Utils.getImagePlaceHolderWidgetProfile(
-                        context: context,
-                        img: Images.DUMMY_WORKOUT,
-                        width: Dimens.ninety,
-                        height: Dimens.ninety,
+                      placeholder: (context, url) => Utils.getAssetImage(
+                        Dimens.ninety,
+                        Dimens.ninety,
                       ),
                       errorWidget: (context, url, error) =>
                           Utils.getImagePlaceHolderWidgetProfile(
@@ -575,6 +572,8 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
     }
   }
 
+  var progressVal = "0";
+
   void _onReceiveProgress(int received, int total) {
     if (total != -1) {
       setState(() {
@@ -606,7 +605,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
             _workoutDetail2Models.localPaths = localPaths;
             print(
                 "_workoutDetail2Models.localPaths${_workoutDetail2Models.localPaths.length}");
-           navigateToNextScreen();
+            navigateToNextScreen();
           } else {
             print("NextUrl$currentDownloadingPos");
 
@@ -630,6 +629,7 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
 
   @override
   Widget build(BuildContext context) {
+    //pr = ProgressDialog(context);
     return Stack(
       children: <Widget>[
         BackgroundWidgetWithImage(
@@ -640,6 +640,12 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
           backgroundColor: AppColors.transparent,
           body: _WorkoutDetails2Widget(),
         ),
+        ProgressIndicatorDownloadFiles(
+          isLoading: _isLoading,
+          currentFile: currentDownloadingPos,
+          progressvalue: _progress,
+          totalFiles: totalLength,
+        )
       ],
     );
   }
@@ -682,9 +688,8 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
           context,
           MaterialPageRoute(
               builder: (context) => WarmUpScreen(
-                workoutDetail2Models: _workoutDetail2Models,
-              )));
-
+                    workoutDetail2Models: _workoutDetail2Models,
+                  )));
     }
   }
 }
