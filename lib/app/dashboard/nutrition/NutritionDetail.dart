@@ -370,14 +370,14 @@ class _NutritionDetail extends State<NutritionDetail> {
   }
 
   void _nutritionActionModel(
-      int userId, int nutritionId, bool !action, BuildContext context) {
+      int userId, int nutritionId, bool action, BuildContext context) {
     Utils.checkConnectivity().then((value) {
       if (value) {
         debugPrint(
             'userid----->  $userId   nutritionId----->$nutritionId  nutritionId----->$action');
         _nutritionDetailBloc.nutritionActionModel(
             nutritionActionModel: NutritionActionModel(
-                userId: userId, nutritionId: nutritionId, favorite: action),
+                userId: userId, nutritionId: nutritionId, favorite: !action),
             accessToken: accessToken,
             context: context);
       } else {
