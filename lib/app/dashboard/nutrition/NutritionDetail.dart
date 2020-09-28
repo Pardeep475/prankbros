@@ -370,7 +370,7 @@ class _NutritionDetail extends State<NutritionDetail> {
   }
 
   void _nutritionActionModel(
-      int userId, int nutritionId, bool action, BuildContext context) {
+      int userId, int nutritionId, bool !action, BuildContext context) {
     Utils.checkConnectivity().then((value) {
       if (value) {
         debugPrint(
