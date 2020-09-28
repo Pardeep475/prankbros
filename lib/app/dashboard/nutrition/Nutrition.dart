@@ -13,7 +13,7 @@ import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 import 'package:shimmer/shimmer.dart';
-
+var needRefresh=false;
 class Nutrition extends StatefulWidget {
   Nutrition({this.onPush});
 
@@ -318,16 +318,21 @@ class _NutritionState extends State<Nutrition> {
     );
   }
 
-  void _onItemClick(NutritionData item) {
+  void _onItemClick(NutritionData item) async {
+    needRefresh=false;
 //    Navigator.push(context, MaterialPageRoute(builder: (context) => NutritionDetail()));
-    Navigator.pushNamed(context, Strings.NUTRITION_DETAIL_ROUTE,
+   var isClicked= await Navigator.pushNamed<dynamic>(context, Strings.NUTRITION_DETAIL_ROUTE,
         arguments: item);
+   print("isClicked$isClicked");
+   if(isClicked){
+     _getNutrition(context);
+   }
 //    onPush(0);
   }
 
   Widget _verticalGridView(int index, NutritionData item) {
     return InkWell(
-      onTap: () => _onItemClick(item),
+      onTap: () { _onItemClick(item);},
       child: Card(
         margin: EdgeInsets.all(Dimens.seven),
         clipBehavior: Clip.antiAliasWithSaveLayer,

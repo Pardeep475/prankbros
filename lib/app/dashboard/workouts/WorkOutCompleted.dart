@@ -6,6 +6,7 @@ import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
 
 class WorkOutCompleted extends StatefulWidget {
   @override
@@ -103,8 +104,7 @@ class _WorkOutCompletedState extends State<WorkOutCompleted> {
   }
 
   void _gradientLoadingClick(BuildContext context) {
-    setState(() {
-      gradientLoading = gradientLoading ? false : true;
-    });
+    Navigator.pushNamedAndRemoveUntil(
+        context, Strings.DASHBOARD_ROUTE, (route) => false);
   }
 }

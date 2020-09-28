@@ -32,15 +32,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     String _videoPath = ModalRoute.of(context).settings.arguments;
 
     _videoPlayerController = VideoPlayerController.network(_videoPath);
-    _videoPlayerController.addListener(() {
-//      if (startedPlaying && !_videoPlayerController.value.isPlaying) {
-//        Navigator.pop(context);
-//      }
-    });
+
   }
 
   @override
   void dispose() {
+    print("_videoPlayerControllerDispose");
     _videoPlayerController.dispose();
     super.dispose();
   }

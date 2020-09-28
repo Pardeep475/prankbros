@@ -70,6 +70,9 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         name = userData.firstName;
         email = userData.email;
         userId = userData.id.toString();
+        setState(() {
+
+        });
         accessToken = userData.accessToken.toString();
         apiRepository = new ApiRepository();
         _sessionManager.getProfilePic().then((value) {
