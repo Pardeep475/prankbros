@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:prankbros2/app/dashboard/workouts/ComingUp.dart';
 import 'package:prankbros2/app/dashboard/workouts/WarmUpScreen.dart';
 import 'package:prankbros2/commonwidgets/ease_in_widget.dart';
 import 'package:prankbros2/commonwidgets/progress_percentage_indicator.dart';
@@ -308,10 +309,15 @@ class _WorkoutDetails2State extends State<WorkoutDetails2> {
   }
 
   void _mainItemClick(Exercises item) {
-    Navigator.pushNamed(context, Strings.COMING_UP_ROUTE,
-        arguments: CommingUpMainModel(baseUrl: _baseUrl, exercises: item));
-//    Navigator.push(
-//        context, MaterialPageRoute(builder: (context) => ComingUp()));
+//    Navigator.pushNamed(context, Strings.COMING_UP_ROUTE,
+//        arguments: CommingUpMainModel(baseUrl: _baseUrl, exercises: item));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ComingUp(
+                  commingUpMainModel:
+                      CommingUpMainModel(baseUrl: _baseUrl, exercises: item),
+                )));
   }
 
   Widget _mainItemBuilder(Exercises item, int size, int index) {

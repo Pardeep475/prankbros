@@ -11,6 +11,8 @@ import 'package:prankbros2/utils/Strings.dart';
 import 'package:video_player/video_player.dart';
 
 class ComingUp extends StatefulWidget {
+  CommingUpMainModel commingUpMainModel;
+  ComingUp({this.commingUpMainModel});
   @override
   State<StatefulWidget> createState() => _ComingUpState();
 }
@@ -36,13 +38,8 @@ var onCreate=false;
     super.initState();
     onCreate=true;
     _videoScreenBloc = new VideoScreenBloc();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _commingUpMainModel = ModalRoute.of(context).settings.arguments;
+    _commingUpMainModel=widget.commingUpMainModel;
+//    _commingUpMainModel = ModalRoute.of(context).settings.arguments;
 
     try {
       if (_commingUpMainModel != null &&
@@ -58,6 +55,13 @@ var onCreate=false;
     } catch (e) {
       debugPrint('${e.toString()}');
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+
 
 //    _workoutListInit();
   }
