@@ -377,7 +377,7 @@ class _NutritionDetail extends State<NutritionDetail> {
             'userid----->  $userId   nutritionId----->$nutritionId  nutritionId----->$action');
         _nutritionDetailBloc.nutritionActionModel(
             nutritionActionModel: NutritionActionModel(
-                userId: userId, nutritionId: nutritionId, favorite: action),
+                userId: userId, nutritionId: nutritionId, favorite: !action),
             accessToken: accessToken,
             context: context);
       } else {
