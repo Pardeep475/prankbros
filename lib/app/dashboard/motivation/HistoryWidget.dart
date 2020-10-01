@@ -24,6 +24,7 @@ class HistoryWidget extends StatefulWidget {
 
 class _HistoryWidgetState extends State<HistoryWidget> {
   final MotivationApiResponse motivationData;
+  String accessToken = '';
 
   _HistoryWidgetState({this.motivationData});
 
@@ -44,26 +45,11 @@ class _HistoryWidgetState extends State<HistoryWidget> {
         UserDetails userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         userId = userData.id.toString();
+        accessToken = userData.accessToken;
 //        getMotivation();
       }
     });
   }
-
-//  void getMotivation() {
-//    if (userId == null || userId.isEmpty) {
-//      Utils.showSnackBar('Something went wrong.', context);
-//      return;
-//    }
-//    Utils.checkConnectivity().then((value) {
-//      if (value) {
-//        _historyBloc.getMotivationActivation(userId, '1', context);
-//      } else {
-//        Navigator.pop(context);
-//        Utils.showSnackBar(
-//            Strings.please_check_your_internet_connection, context);
-//      }
-//    });
-//  }
 
   @override
   void didChangeDependencies() {
@@ -71,23 +57,6 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     Future.delayed(Duration(milliseconds: 100), () {
       _historyBloc.getMotivationActivationStart(motivationData, context);
     });
-  }
-
-  void _motivationHistoryListInit() {
-    _motivationHistoryList.add(MotivationHistoryItem(
-        date: '01', weekDay: 'MO', title: '', isSelected: false));
-    _motivationHistoryList.add(MotivationHistoryItem(
-        date: '02', weekDay: 'DI', title: '', isSelected: false));
-    _motivationHistoryList.add(MotivationHistoryItem(
-        date: '03', weekDay: 'MI', title: 'Abs & Arms', isSelected: true));
-    _motivationHistoryList.add(MotivationHistoryItem(
-        date: '04', weekDay: 'DO', title: '', isSelected: false));
-    _motivationHistoryList.add(MotivationHistoryItem(
-        date: '05', weekDay: 'FR', title: '', isSelected: false));
-    _motivationHistoryList.add(MotivationHistoryItem(
-        date: '06', weekDay: 'SA', title: '', isSelected: false));
-    _motivationHistoryList.add(MotivationHistoryItem(
-        date: '07', weekDay: 'SO', title: '', isSelected: false));
   }
 
   @override
@@ -137,8 +106,9 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                 }
               }),
         ),
-
-        SizedBox(height:  Dimens.ten,)
+        SizedBox(
+          height: Dimens.ten,
+        )
       ],
     );
   }
@@ -202,7 +172,7 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                       child: Row(
                         children: <Widget>[
                           Text(
-                            _weekNameList(),
+                            _weekNameList(pos: 0),
                             style: TextStyle(
                                 fontSize: Dimens.sixteen,
                                 fontFamily: Strings.EXO_FONT,
@@ -255,7 +225,19 @@ class _HistoryWidgetState extends State<HistoryWidget> {
         barrierDismissible: true,
         builder: (context) => CustomChangeWeekDialog(
               list: motivationData.weekNameList,
-            ));
+            )).then((value) {
+      debugPrint('back value is ----> $value');
+      if (value != null) {
+        _weekNameList(pos: value);
+        setState(() {});
+        var trainingWeek = value++;
+        _historyBloc.getMotivationActivation(
+            userId: userId,
+            trainingWeek: trainingWeek.toString(),
+            accessToken: accessToken,
+            context: context);
+      }
+    });
   }
 
   Widget _selectedListItem(
@@ -494,13 +476,14 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     );
   }
 
-  String _weekNameList() {
+  String _weekNameList({int pos}) {
+    debugPrint('posissomething--->$pos');
     if (motivationData == null) return "";
 
     if (motivationData.weekNameList == null) return "";
 
-    if (motivationData.weekNameList.length <= 0) return "";
+    if (motivationData.weekNameList.length < pos) return "";
 
-    return motivationData.weekNameList[0];
+    return motivationData.weekNameList[pos];
   }
 }

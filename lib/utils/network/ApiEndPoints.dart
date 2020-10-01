@@ -15,5 +15,6 @@ class ApiEndPoints {
   static const String updateProfile = "users/update-profile-data";
   static const String deleteUserImage = "users/delete-user-profile-image";
   static const String getUserTraining = "users/get-user-trainings";
+ // static const String reset_my_program = "users/reset-user-trainings";
 
 }

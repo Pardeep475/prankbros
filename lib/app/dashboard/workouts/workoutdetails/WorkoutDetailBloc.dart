@@ -24,6 +24,38 @@ class WorkoutDetailBloc {
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
 
+  void resetYourProgram(
+      {String userId,
+        String trainingWeek,
+        String accessToken,Function(int) callback,
+        BuildContext context}) {
+    progressSink.add(0);
+    debugPrint('Reset userId  :-- $userId    trainingWeek:--   $trainingWeek');
+    apiRepository
+        .resetYourProgram(
+        userId: userId,
+        trainingWeek: trainingWeek,
+        accessToken: accessToken)
+        .then((onResponse) {
+      progressSink.add(1);
+      if (onResponse.status == 1) {
+        callback(1);
+        debugPrint("Here is user email   :        ${onResponse.message}");
+       // Utils.showSnackBar(onResponse.message, context);
+      } else {
+        progressSink.add(2);
+        callback(2);
+        Utils.showSnackBar(onResponse.message, context);
+      }
+
+    }).catchError((onError) {
+      progressSink.add(2);
+      callback(2);
+      print("On_Error" + onError.toString());
+      Utils.showSnackBar(onError.toString(), context);
+
+    });
+  }
   void getWorkoutDetail(
       {String screenType,
       String trainingWeek,

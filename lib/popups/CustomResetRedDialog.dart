@@ -10,10 +10,17 @@ import 'package:prankbros2/utils/Dimens.dart';
 import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/Keys.dart';
 import 'package:prankbros2/utils/Strings.dart';
+import 'package:prankbros2/utils/Utils.dart';
+import 'package:prankbros2/utils/network/ApiRepository.dart';
 
 class CustomResetRedDialog extends StatefulWidget {
   int endRange;
-  CustomResetRedDialog({this.endRange});
+  String accessToken;
+  String userId;
+  String currenctWeek;
+  Function(String) resetValueCallback;
+  CustomResetRedDialog(
+      {this.endRange, this.currenctWeek, this.resetValueCallback,this.accessToken, this.userId});
 
   @override
   State<StatefulWidget> createState() =>
@@ -24,8 +31,16 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
   static const Key resetMyProgramKey = Key(Keys.resetMyProgramKey);
   bool isLoading = false;
   int endRange = 1;
+  String selected = "";
+
 
   _CustomResetRedDialogState({this.endRange});
+
+  @override
+  void initState() {
+    selected = widget.currenctWeek;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +180,17 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
         width: MediaQuery.of(context).size.width,
         borderRadius: Dimens.THIRTY,
         onPressed: () {
-          _resetMyProgramClick(context);
+          if (selected == widget.currenctWeek) {
+            Navigator.pop(context);
+          } else {
+            widget.resetValueCallback(selected);
+            Navigator.pop(context);
+           /* resetYourProgram(
+                context: context,
+                accessToken: widget.accessToken,
+                trainingWeek: selected,
+                userId: widget.userId);*/
+          }
         },
         isGradient: true,
         loading: isLoading,
@@ -180,20 +205,15 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
     );
   }
 
-  void _resetMyProgramClick(BuildContext context) {
-    print('clicked   $isLoading');
-    setState(() {
-      isLoading = isLoading ? false : true;
-    });
-  }
+
 
   Widget showPickerNumberFormatValue(BuildContext context) {
     return Picker(
         adapter: NumberPickerAdapter(data: [
           NumberPickerColumn(
-            begin: 1,
-            end: endRange,
-          )
+              begin: 1,
+              end: endRange,
+              initValue: int.parse(widget.currenctWeek))
         ]),
         columnPadding: EdgeInsets.symmetric(horizontal: Dimens.TWENTY_FIVE),
         selectedTextStyle: TextStyle(
@@ -209,12 +229,16 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
             fontWeight: FontWeight.w700,
             fontSize: Dimens.EIGHTEEN),
         onConfirm: (Picker picker, List value) {
-          print(value.toString());
+          print("SDDDD" + value.toString());
           print(picker.getSelectedValues());
         },
         onSelect: (Picker picker, int index, List<int> selecteds) {
-          print(selecteds.toString());
+          selected = (selecteds[index] + 1).toString();
           print(picker.getSelectedValues());
         }).makePicker();
+  }
+
+  void notify() {
+    setState(() {});
   }
 }

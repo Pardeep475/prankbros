@@ -22,7 +22,7 @@ class CustomChangeWeekDialog extends StatefulWidget {
 class _CustomChangeWeekDialogState extends State<CustomChangeWeekDialog> {
   static const Key doneChangeWeekKey = Key(Keys.doneChangeWeekKey);
   bool isLoading = false;
-
+  int _seletedItem = 0;
   List<String> list;
 
   _CustomChangeWeekDialogState({this.list});
@@ -186,19 +186,12 @@ class _CustomChangeWeekDialogState extends State<CustomChangeWeekDialog> {
     setState(() {
       isLoading = isLoading ? false : true;
     });
+    print(_seletedItem);
+    Navigator.pop<int>(context, _seletedItem);
   }
 
   Widget showPickerNumberFormatValue(BuildContext context) {
     return Picker(
-
-//            adapter: NumberPickerAdapter(data: [
-//              NumberPickerColumn(
-//                begin: 1,
-//                end: 3,
-//              )
-//
-//            ]),
-
         adapter: PickerDataAdapter<String>(pickerdata: list),
         columnPadding: EdgeInsets.symmetric(horizontal: Dimens.TWENTY_FIVE),
         selectedTextStyle: TextStyle(
@@ -214,12 +207,26 @@ class _CustomChangeWeekDialogState extends State<CustomChangeWeekDialog> {
             fontWeight: FontWeight.w700,
             fontSize: Dimens.EIGHTEEN),
         onConfirm: (Picker picker, List value) {
-          print(value.toString());
-          print(picker.getSelectedValues());
+          try {
+            print(value.toString());
+
+              _seletedItem = value[0];
+
+            print(_seletedItem);
+          } catch (e) {
+            debugPrint(e.toString());
+          }
         },
         onSelect: (Picker picker, int index, List<int> selecteds) {
-          print(selecteds.toString());
-          print(picker.getSelectedValues());
+          debugPrint('$index  $selecteds');
+          try {
+
+              _seletedItem = selecteds[0];
+
+            print(_seletedItem);
+          } catch (e) {
+            debugPrint(e.toString());
+          }
         }).makePicker();
   }
 }
