@@ -43,7 +43,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   WorkoutDetailBloc _workoutDetailBloc;
   String _baseUrl = "";
   GetUserTrainingResponseApi _getUserTrainingResponseApi;
-
+  UserDetails userData;
   @override
   void initState() {
     super.initState();
@@ -83,7 +83,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     _sessionManager.getUserModel().then((value) {
       debugPrint("userdata   :        $value");
       if (value != null) {
-        UserDetails userData = UserDetails.fromJson(value);
+        userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         _accessToken = userData.accessToken.toString();
         userId = userData.id.toString();
@@ -124,6 +124,8 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
             callback: (value) {
               print("callbackvalue$value");
               if (value == 1) {
+                userData.trainingWeek=int.parse(_traingWeek);
+                _sessionManager.setUserModel(userData);
                 _getUserTraining();
               }
             },

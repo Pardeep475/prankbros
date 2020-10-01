@@ -36,6 +36,9 @@ class WorkOutDetailShimmer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
                         splashColor: AppColors.light_gray,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
