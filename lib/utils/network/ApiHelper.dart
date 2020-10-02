@@ -31,7 +31,7 @@ class ApiHelper {
     _sessionManager = new SessionManager();
     options.baseUrl = Strings.BASE_URL;
     _dio.options.headers['content-Type'] = 'application/json';
-    _dio.options.headers["accessToken"] = 'uSFnprTQMxQyi5LqM5dg9A==';
+    _dio.options.headers["accessToken"] = '/6yUKiHWEuHjBizAdH5IHw==';
     if (authTOKEN != null) {
       _dio.options.headers["accessToken"] = "$authTOKEN";
     }

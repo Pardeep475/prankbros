@@ -138,6 +138,7 @@ class ApiRepository {
       "weight": weight,
       "createdOn": createdOn,
     };
+    print("jsonweight${jsonEncode(json)}");
     var response = await apiHelper.postJson(
         apiUrl: Strings.BASE_URL + ApiEndPoints.addUserWeight,
         formData: json,

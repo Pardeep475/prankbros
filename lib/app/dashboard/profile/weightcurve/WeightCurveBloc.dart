@@ -51,7 +51,7 @@ class WeightCurveBloc {
   }
 
   void addWeightCurve({String userId, String widget,String createdOn,String accessToken, BuildContext context}) {
-    debugPrint('userID  :-- $userId');
+    debugPrint('userID  :-- $widget');
     apiRepository
         .addUserWeight(userId: userId, weight: widget,createdOn :createdOn,accessToken: accessToken)
         .then((onResponse) {

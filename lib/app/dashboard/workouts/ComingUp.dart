@@ -11,6 +11,8 @@ import 'package:prankbros2/utils/Strings.dart';
 import 'package:video_player/video_player.dart';
 
 class ComingUp extends StatefulWidget {
+  CommingUpMainModel commingUpMainModel;
+  ComingUp({this.commingUpMainModel});
   @override
   State<StatefulWidget> createState() => _ComingUpState();
 }
@@ -21,7 +23,8 @@ class _ComingUpState extends State<ComingUp> {
   String _baseUrl = "";
   VideoPlayerController _videoPlayerController;
   bool startedPlaying = false;
-
+var onCreate=false;
+  GlobalKey key = GlobalKey();
   VideoScreenBloc _videoScreenBloc;
 
 //  @override
@@ -33,13 +36,10 @@ class _ComingUpState extends State<ComingUp> {
   @override
   void initState() {
     super.initState();
+    onCreate=true;
     _videoScreenBloc = new VideoScreenBloc();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _commingUpMainModel = ModalRoute.of(context).settings.arguments;
+    _commingUpMainModel=widget.commingUpMainModel;
+//    _commingUpMainModel = ModalRoute.of(context).settings.arguments;
 
     try {
       if (_commingUpMainModel != null &&
@@ -47,16 +47,21 @@ class _ComingUpState extends State<ComingUp> {
           _commingUpMainModel.exercises.descriptionEN != null)
         _methodList.add(_commingUpMainModel.exercises.descriptionEN);
       _baseUrl = _commingUpMainModel.baseUrl;
-      _videoPlayerController = VideoPlayerController.network(
-          '$_baseUrl${_commingUpMainModel.exercises.videoPath}');
-      _videoPlayerController.addListener(() {
-//      if (startedPlaying && !_videoPlayerController.value.isPlaying) {
-//        Navigator.pop(context);
-//      }
-      });
+      if(onCreate) {
+        _videoPlayerController = VideoPlayerController.network(
+            '$_baseUrl${_commingUpMainModel.exercises.videoPath}');
+      }
+
     } catch (e) {
       debugPrint('${e.toString()}');
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+
 
 //    _workoutListInit();
   }
@@ -68,11 +73,14 @@ class _ComingUpState extends State<ComingUp> {
   }
 
   Future<bool> started() async {
-    await _videoPlayerController.setLooping(true);
-    await _videoPlayerController.initialize();
-    await _videoPlayerController.play();
-    startedPlaying = true;
-    debugPrint('started----------------');
+    if(onCreate) {
+      await _videoPlayerController.setLooping(true);
+      await _videoPlayerController.initialize();
+      await _videoPlayerController.play();
+      startedPlaying = true;
+      onCreate=false;
+      debugPrint('started----------------');
+    }
     return true;
   }
 
@@ -241,7 +249,7 @@ class _ComingUpState extends State<ComingUp> {
             elevation: 0,
             child: Center(
               child: FutureBuilder<bool>(
-                future: started(),
+                future: started(),key: GlobalKey(),
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.data == true) {
                     return Stack(

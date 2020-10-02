@@ -186,8 +186,8 @@ class _CustomChangeWeekDialogState extends State<CustomChangeWeekDialog> {
     setState(() {
       isLoading = isLoading ? false : true;
     });
-    print(_seletedItem);
-    Navigator.pop<int>(context, _seletedItem);
+    print("${_seletedItem++}");
+    Navigator.pop<int>(context, _seletedItem++);
   }
 
   Widget showPickerNumberFormatValue(BuildContext context) {

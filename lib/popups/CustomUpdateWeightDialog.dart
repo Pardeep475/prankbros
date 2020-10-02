@@ -46,6 +46,7 @@ class _CustomUpdateWeightDialog extends State<CustomUpdateWeightDialog> {
   void initState() {
     super.initState();
     weight = item.weight!=null&&item.weight!=''?item.weight:"50,0";
+    print("weight$weight");
     _weightCurveBloc = new WeightCurveBloc();
     _sessionManager = new SessionManager();
     _sessionManager.getUserModel().then((value) {

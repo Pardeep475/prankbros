@@ -16,6 +16,7 @@ import 'package:prankbros2/utils/Images.dart';
 import 'package:prankbros2/utils/SessionManager.dart';
 import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/Utils.dart';
+import 'package:prankbros2/utils/network/ApiRepository.dart';
 
 class WorkoutDetails extends StatefulWidget {
   WorkoutDetails({this.onPush});
@@ -35,11 +36,14 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   String _screenName = "Gym";
   bool isHomeWorkout = false;
   String _accessToken = "";
+  String userId = "";
   String _traingWeek = "";
+  ApiRepository apiRepository = ApiRepository();
   String _influencerId = "";
   WorkoutDetailBloc _workoutDetailBloc;
   String _baseUrl = "";
   GetUserTrainingResponseApi _getUserTrainingResponseApi;
+  UserDetails userData;
 
   @override
   void initState() {
@@ -49,20 +53,9 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   }
 
   void _backPressed() {
-    print('back button pressed');
-    getRootNavigator(context).maybePop();
+    Navigator.pop(context);
   }
 
-  NavigatorState getRootNavigator(BuildContext context) {
-    final NavigatorState state = Navigator.of(context);
-    try {
-      print('navigator ' + state.toString());
-      return getRootNavigator(state.context);
-    } catch (e) {
-      print('navigator catch   ' + e.toString());
-      return state;
-    }
-  }
 
   @override
   void didChangeDependencies() {
@@ -80,12 +73,13 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     _sessionManager.getUserModel().then((value) {
       debugPrint("userdata   :        $value");
       if (value != null) {
-        UserDetails userData = UserDetails.fromJson(value);
+        userData = UserDetails.fromJson(value);
         debugPrint('userdata:   :-  ${userData.id}     ${userData.email}');
         _accessToken = userData.accessToken.toString();
+        userId = userData.id.toString();
         _influencerId = userData.influencerId.toString();
         _traingWeek = userData.trainingWeek.toString();
-        _traingWeek = 1.toString();
+        _traingWeek = _traingWeek.toString();
         debugPrint('screen name --->   $_screenName');
         debugPrint('training week --->   $_traingWeek');
         debugPrint('influencer id --->   $_influencerId');
@@ -113,30 +107,69 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     });
   }
 
+  void _ResetnAndgetUserTraining() {
+    Utils.checkConnectivity().then((value) {
+      if (value) {
+        _workoutDetailBloc.resetYourProgram(
+            callback: (value) {
+              print("callbackvalue$value");
+              if (value == 1) {
+                userData.trainingWeek = int.parse(_traingWeek);
+                _sessionManager.setUserModel(userData);
+                _getUserTraining();
+              }
+            },
+            userId: userId,
+            trainingWeek: _traingWeek,
+            accessToken: _accessToken,
+            context: context);
+      } else {
+        Navigator.pop(context);
+        Utils.showSnackBar(
+            Strings.please_check_your_internet_connection, context);
+      }
+    });
+  }
+
   void _editButtonPressed() {
     if (_getUserTrainingResponseApi == null) return;
-    if (_getUserTrainingResponseApi.weekNameList == null) return;
-    if (_getUserTrainingResponseApi.weekNameList.length <= 0) return;
+
     showDialog(
         context: context,
         builder: (_) => CustomResetRedDialog(
-              endRange: _getUserTrainingResponseApi.weekNameList.length,
+              endRange: _getUserTrainingResponseApi.trainingWeek,
+              accessToken: _accessToken,
+              currenctWeek: _traingWeek,
+              userId: userId,
+              resetValueCallback: (resetValue) {
+                if (resetValue != _traingWeek) {
+                  _traingWeek = resetValue;
+
+                  _ResetnAndgetUserTraining();
+                }
+              },
             ));
   }
 
   void _selectWeeksPressed() {
     if (_getUserTrainingResponseApi == null) return;
-    if (_getUserTrainingResponseApi.weekNameList == null) return;
-    if (_getUserTrainingResponseApi.weekNameList.length <= 0) return;
+
     List<String> _list = new List();
-    for (int i = 0; i < _list.length; i++) {
+    for (int i = 0; i < _getUserTrainingResponseApi.trainingWeek; i++) {
       _list.add('${i + 1}');
+      debugPrint("------->   ${_list[i]}");
     }
     showDialog(
         context: context,
         builder: (_) => CustomChangeWeekDialog(
               list: _list,
-            ));
+            )).then((value) {
+      if (value != null) {
+        debugPrint("value is ${value}");
+        _traingWeek = value.toString();
+        _getUserTraining();
+      }
+    });
   }
 
   @override
@@ -178,8 +211,8 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Container(
-                                      width: 30,
-                                      height: 30,
+                                      width: 35,
+                                      height: 35,
                                       child: Container(
                                         alignment: Alignment.topLeft,
                                         decoration: BoxDecoration(
@@ -284,10 +317,8 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                           if (snapshot.data != null) {
                             _getUserTrainingResponseApi = snapshot.data;
                             _baseUrl = snapshot.data.awsEndpointUrl;
-
                             List<MotivationHistoryItem> _list =
                                 _calanderData(snapshot.data.workoutActivities);
-
                             return Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,18 +344,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                                                 _list[position].date);
                                           }
                                         }),
-//                                    child: ListView(
-//                                      scrollDirection: Axis.horizontal,
-//                                      children: <Widget>[
-//                                        calendarItemUnselected('MO', '01'),
-//                                        calendarItemUnselected('DI', '02'),
-//                                        calendarItemUnselected('MI', '03'),
-//                                        calendarItemSelected('DO', '04'),
-//                                        calendarItemUnselected('FR', '05'),
-//                                        calendarItemUnselected('SA', '06'),
-//                                        calendarItemUnselected('SO', '07'),
-//                                      ],
-//                                    ),
                                   ),
                                   SizedBox(
                                     height: Dimens.eight,
@@ -341,6 +360,20 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                                           fontFamily: Strings.EXO_FONT),
                                     ),
                                   ),
+                                  if (snapshot.data.trainings == null ||
+                                      snapshot.data.trainings.length == 0)
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'No training found',
+                                          style: TextStyle(
+                                              color: AppColors.black_text,
+                                              fontFamily: Strings.EXO_FONT,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: Dimens.thirty),
+                                        ),
+                                      ),
+                                    ),
                                   if (snapshot.data.trainings != null &&
                                       snapshot.data.trainings.length > 0)
                                     Expanded(
@@ -369,7 +402,8 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                               ),
                             );
                           } else {
-                            return SizedBox();
+                            return SizedBox(
+                            );
                           }
                         })
                   ],
@@ -703,7 +737,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
 
     for (int i = 0; i < _workoutActivitiesList.length; i++) {
       debugPrint("date   :        ${_workoutActivitiesList[i].createdOnStr}");
-
       _list.add(MotivationHistoryItem(
           date: Utils.getMonthFromDate(_workoutActivitiesList[i].createdOnStr),
           weekDay:
@@ -711,8 +744,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
           title: _workoutActivitiesList[i].workoutName,
           isSelected:
               Utils.checkCurrentDate(_workoutActivitiesList[i].createdOnStr)));
-      debugPrint(
-          'date  :   ${_list[i].date}   week  :   ${_list[i].weekDay}   name:   ${_list[i].title}    isselected:   ${_list[i].isSelected}');
     }
     return _list;
   }
