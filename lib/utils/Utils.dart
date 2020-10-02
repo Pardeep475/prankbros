@@ -195,6 +195,16 @@ class Utils {
         : formattedDay.substring(0, 2);
   }
 
+  static String getCurrentDate(){
+    final DateFormat dateFormat = DateFormat('dd');
+    final DateFormat monthFormat = DateFormat('MMM');
+    String date = dateFormat.format(DateTime.now());
+    String month = monthFormat.format(DateTime.now());
+    debugPrint("$date $month");
+    return "$date $month";
+  }
+
+
   static bool checkCurrentDate(String value) {
     final DateFormat oldFormatter = DateFormat('dd.MM.yyyy');
 

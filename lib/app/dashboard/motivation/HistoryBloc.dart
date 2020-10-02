@@ -23,6 +23,12 @@ class HistoryBloc {
   PublishSubject<List<MotivationHistoryItem>> weightSink =
       PublishSubject<List<MotivationHistoryItem>>();
 
+  final BehaviorSubject titleController = BehaviorSubject<String>();
+
+  Stream get titleStream => titleController.stream;
+
+  StreamSink get titleSink => titleController.sink;
+
   ApiRepository apiRepository = ApiRepository();
   AppConstantHelper helper = AppConstantHelper();
 
@@ -83,9 +89,6 @@ class HistoryBloc {
         Utils.showSnackBar("Something went wrong", context);
       } else {
         for (int i = 0; i < motivationData.workoutActivities.length; i++) {
-          debugPrint(
-              "date   :        ${motivationData.workoutActivities[i].createdOnStr}");
-
           _list.add(MotivationHistoryItem(
               date: Utils.getMonthFromDate(
                   motivationData.workoutActivities[i].createdOnStr),
@@ -94,8 +97,6 @@ class HistoryBloc {
               title: motivationData.workoutActivities[i].workoutName,
               isSelected: Utils.checkCurrentDate(
                   motivationData.workoutActivities[i].createdOnStr)));
-          debugPrint(
-              'date  :   ${_list[i].date}   week  :   ${_list[i].weekDay}   name:   ${_list[i].title}    isselected:   ${_list[i].isSelected}');
         }
         progressSink.add(1);
         Weightlist.addAll(_list);
@@ -106,5 +107,18 @@ class HistoryBloc {
       print("On_Error" + e.toString());
       Utils.showSnackBar(e.toString(), context);
     }
+  }
+
+  void getWorkoutHistoryStuff(List<String> weekNameList) {
+    String value = Utils.getCurrentDate();
+    var pos = 0;
+    for (int i = 0; i < weekNameList.length; i++) {
+      debugPrint('------>    ${weekNameList[i]}');
+      if (weekNameList[i].toLowerCase().contains(value.toLowerCase())) {
+        pos = i;
+      }
+    }
+    debugPrint('position is ---->$pos');
+    titleSink.add(weekNameList[pos]);
   }
 }

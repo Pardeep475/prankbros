@@ -29,10 +29,10 @@ class _HistoryWidgetState extends State<HistoryWidget> {
   _HistoryWidgetState({this.motivationData});
 
   List<MotivationHistoryItem> _motivationHistoryList = new List();
-
   HistoryBloc _historyBloc;
   SessionManager _sessionManager;
   String userId = '';
+  String _weekTitle = "";
 
   @override
   void initState() {
@@ -84,6 +84,9 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                       initialData: _historyBloc.Weightlist,
                       builder: (context, snapshot) {
                         print("DataList${snapshot.data}");
+                        if (_weekTitle.isEmpty)
+                          _historyBloc.getWorkoutHistoryStuff(
+                              motivationData.weekNameList);
                         if (_historyBloc.Weightlist != null) {
                           return ListView.builder(
                             itemBuilder: (BuildContext context, int index) {
@@ -169,26 +172,35 @@ class _HistoryWidgetState extends State<HistoryWidget> {
                       onTap: () {
                         _openChangeWeekDialog();
                       },
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            _weekNameList(pos: 0),
-                            style: TextStyle(
-                                fontSize: Dimens.sixteen,
-                                fontFamily: Strings.EXO_FONT,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.light_text),
-                          ),
-                          SizedBox(
-                            width: Dimens.fifteen,
-                          ),
-                          Image.asset(
-                            Images.ICON_DOWN_ARROW,
-                            height: Dimens.sixteen,
-                            width: Dimens.sixteen,
-                          ),
-                        ],
-                      ),
+                      child: StreamBuilder<String>(
+                          initialData: "",
+                          stream: _historyBloc.titleStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                              return Row(
+                                children: <Widget>[
+                                  Text(
+                                    snapshot.data,
+                                    style: TextStyle(
+                                        fontSize: Dimens.sixteen,
+                                        fontFamily: Strings.EXO_FONT,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.light_text),
+                                  ),
+                                  SizedBox(
+                                    width: Dimens.fifteen,
+                                  ),
+                                  Image.asset(
+                                    Images.ICON_DOWN_ARROW,
+                                    height: Dimens.sixteen,
+                                    width: Dimens.sixteen,
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return SizedBox();
+                            }
+                          }),
                     ),
                   ),
                 ],
@@ -226,16 +238,13 @@ class _HistoryWidgetState extends State<HistoryWidget> {
         builder: (context) => CustomChangeWeekDialog(
               list: motivationData.weekNameList,
             )).then((value) {
-      debugPrint('back value is ----> $value');
       if (value != null) {
-        _weekNameList(pos: value);
-        setState(() {});
-        var trainingWeek = value++;
         _historyBloc.getMotivationActivation(
             userId: userId,
-            trainingWeek: trainingWeek.toString(),
+            trainingWeek: value.toString(),
             accessToken: accessToken,
             context: context);
+        _weekNameList(pos: value - 1);
       }
     });
   }
@@ -476,14 +485,13 @@ class _HistoryWidgetState extends State<HistoryWidget> {
     );
   }
 
-  String _weekNameList({int pos}) {
-    debugPrint('posissomething--->$pos');
-    if (motivationData == null) return "";
-
-    if (motivationData.weekNameList == null) return "";
-
-    if (motivationData.weekNameList.length < pos) return "";
-
-    return motivationData.weekNameList[pos];
+  void _weekNameList({int pos}) {
+    debugPrint('posissomething--->${pos}');
+    if (motivationData == null) return;
+    if (motivationData.weekNameList == null) return;
+    if (motivationData.weekNameList.length < pos) return;
+    _weekTitle = motivationData.weekNameList[pos];
+    debugPrint('weekTitle is ----> ${motivationData.weekNameList[pos]}');
+    _historyBloc.titleSink.add(motivationData.weekNameList[pos]);
   }
 }

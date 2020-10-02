@@ -210,7 +210,7 @@ class _CustomChangeWeekDialogState extends State<CustomChangeWeekDialog> {
           try {
             print(value.toString());
 
-              _seletedItem = value[0];
+            _seletedItem = value[0];
 
             print(_seletedItem);
           } catch (e) {
@@ -220,8 +220,7 @@ class _CustomChangeWeekDialogState extends State<CustomChangeWeekDialog> {
         onSelect: (Picker picker, int index, List<int> selecteds) {
           debugPrint('$index  $selecteds');
           try {
-
-              _seletedItem = selecteds[0];
+            _seletedItem = selecteds[0];
 
             print(_seletedItem);
           } catch (e) {
