@@ -41,18 +41,18 @@ class WorkoutDetailBloc {
       if (onResponse.status == 1) {
         callback(1);
         debugPrint("Here is user email   :        ${onResponse.message}");
-       // Utils.showSnackBar(onResponse.message, context);
+       // Utils.showToast(onResponse.message, context);
       } else {
         progressSink.add(2);
         callback(2);
-        Utils.showSnackBar(onResponse.message, context);
+        Utils.showToast(onResponse.message, context);
       }
 
     }).catchError((onError) {
       progressSink.add(2);
       callback(2);
       print("On_Error" + onError.toString());
-      Utils.showSnackBar(onError.toString(), context);
+      Utils.showToast(onError.toString(), context);
 
     });
   }
@@ -77,12 +77,12 @@ class WorkoutDetailBloc {
       } else {
         print("Error From Server  " + onResponse.message);
         progressSink.add(2);
-        Utils.showSnackBar(onResponse.message, context);
+        Utils.showToast(onResponse.message, context);
       }
     }).catchError((onError) {
       progressSink.add(2);
-      print("On_Error" + onError.toString());
-      Utils.showSnackBar(onError.toString(), context);
+      print("On_Error                               " + onError.toString());
+      Utils.showToast(onError.toString(), context);
     });
   }
 }

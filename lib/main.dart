@@ -6,7 +6,6 @@ import 'package:prankbros2/app/auth/forgotpassword/SendEmail.dart';
 import 'package:prankbros2/app/auth/intro/Intro.dart';
 import 'package:prankbros2/app/auth/login/Login.dart';
 import 'package:prankbros2/app/dashboard/Dashboard.dart';
-import 'package:prankbros2/app/dashboard/custom_bottom_navigation_bar/CustomDashboardBottomNestedBar.dart';
 import 'package:prankbros2/app/dashboard/fullimageview/FullImageViewScreen.dart';
 import 'package:prankbros2/app/dashboard/nutrition/NutritionDetail.dart';
 import 'package:prankbros2/app/dashboard/videoplayer/VideoPlayerScreen.dart';
@@ -96,8 +95,7 @@ class MyApp extends StatelessWidget {
     new ForgotPassword(),
     Strings.SEND_EMAIL_ROUTE: (BuildContext context) => new SendEmail(),
     Strings.DASHBOARD_ROUTE: (BuildContext context) => new Dashboard(),
-    Strings.CUSTOM_DASHBOARD_ROUTE: (BuildContext context) =>
-    new CustomDashboardBottomNestedBar(),
+
     Strings.WARM_UP_ROUTE: (BuildContext context) => new WarmUpScreen(),
     Strings.NUTRITION_DETAIL_ROUTE: (BuildContext context) => new NutritionDetail(),
     Strings.VIDEO_PLAYER_ROUTE: (BuildContext context) =>
@@ -158,13 +156,7 @@ class MyApp extends StatelessWidget {
           settings: settings,
         );
         break;
-      case Strings.CUSTOM_DASHBOARD_ROUTE:
-        return PageTransition(
-          child: CustomDashboardBottomNestedBar(),
-          type: PageTransitionType.rightToLeft,
-          settings: settings,
-        );
-        break;
+
       case Strings.WARM_UP_ROUTE:
         return PageTransition(
           child: WarmUpScreen(),

@@ -19,6 +19,7 @@ class CustomResetRedDialog extends StatefulWidget {
   String userId;
   String currenctWeek;
   Function(String) resetValueCallback;
+
   CustomResetRedDialog(
       {this.endRange, this.currenctWeek, this.resetValueCallback,this.accessToken, this.userId});
 
@@ -31,7 +32,7 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
   static const Key resetMyProgramKey = Key(Keys.resetMyProgramKey);
   bool isLoading = false;
   int endRange = 1;
-  String selected = "";
+  String selected = "1";
 
 
   _CustomResetRedDialogState({this.endRange});
@@ -180,17 +181,18 @@ class _CustomResetRedDialogState extends State<CustomResetRedDialog> {
         width: MediaQuery.of(context).size.width,
         borderRadius: Dimens.THIRTY,
         onPressed: () {
-          if (selected == widget.currenctWeek) {
-            Navigator.pop(context);
-          } else {
-            widget.resetValueCallback(selected);
-            Navigator.pop(context);
-           /* resetYourProgram(
-                context: context,
-                accessToken: widget.accessToken,
-                trainingWeek: selected,
-                userId: widget.userId);*/
-          }
+          // if (selected == widget.currenctWeek) {
+          //   Navigator.pop(context);
+          // } else {
+          //
+          //  /* resetYourProgram(
+          //       context: context,
+          //       accessToken: widget.accessToken,
+          //       trainingWeek: selected,
+          //       userId: widget.userId);*/
+          // }
+          widget.resetValueCallback(selected);
+          Navigator.pop(context);
         },
         isGradient: true,
         loading: isLoading,

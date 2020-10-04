@@ -1,5 +1,4 @@
 class GetUserTrainingResponseApi {
-  List<String> weekNameList;
   List<WorkoutActivities> workoutActivities;
   String awsEndpointUrl;
   List<Trainings> trainings;
@@ -8,7 +7,7 @@ class GetUserTrainingResponseApi {
   int status;
 
   GetUserTrainingResponseApi(
-      {this.weekNameList,
+      {
         this.workoutActivities,
         this.awsEndpointUrl,
         this.trainings,
@@ -17,7 +16,6 @@ class GetUserTrainingResponseApi {
         this.status});
 
   GetUserTrainingResponseApi.fromJson(Map<String, dynamic> json) {
-    weekNameList = json['weekNameList'].cast<String>();
     if (json['workoutActivities'] != null) {
       workoutActivities = new List<WorkoutActivities>();
       json['workoutActivities'].forEach((v) {
@@ -38,7 +36,6 @@ class GetUserTrainingResponseApi {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['weekNameList'] = this.weekNameList;
     if (this.workoutActivities != null) {
       data['workoutActivities'] =
           this.workoutActivities.map((v) => v.toJson()).toList();

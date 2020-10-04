@@ -19,19 +19,17 @@ import 'package:prankbros2/utils/Utils.dart';
 import 'package:prankbros2/utils/network/ApiRepository.dart';
 
 class WorkoutDetails extends StatefulWidget {
-  WorkoutDetails({this.onPush});
 
-  final ValueChanged<int> onPush;
+
 
   @override
   State<StatefulWidget> createState() =>
-      _WorkoutDetailsState(onPush: this.onPush);
+      _WorkoutDetailsState();
 }
 
 class _WorkoutDetailsState extends State<WorkoutDetails> {
-  _WorkoutDetailsState({this.onPush});
 
-  final ValueChanged<int> onPush;
+
   SessionManager _sessionManager;
   String _screenName = "Gym";
   bool isHomeWorkout = false;
@@ -60,10 +58,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    debugPrint('size/7    ${MediaQuery.of(context).size.width}');
-    debugPrint('size/7    ${MediaQuery.of(context).size.width / 8}');
-    debugPrint('size/7    ${MediaQuery.of(context).size.width / 6}');
     _screenName = ModalRoute.of(context).settings.arguments;
     if (_screenName == "Gym") {
       isHomeWorkout = false;
@@ -142,11 +136,14 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
               currenctWeek: _traingWeek,
               userId: userId,
               resetValueCallback: (resetValue) {
-                if (resetValue != _traingWeek) {
+                debugPrint("reset value  -- $resetValue");
+                if(resetValue != null){
                   _traingWeek = resetValue;
-
                   _ResetnAndgetUserTraining();
                 }
+                // if (resetValue != _traingWeek) {
+
+                // }
               },
             ));
   }
@@ -190,12 +187,12 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                     Container(
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
-                        colors: [
-                          AppColors.blueGradientColor,
-                          AppColors.pinkGradientColor
-                        ],
-                        begin: Alignment.bottomLeft,
-                      )),
+                            colors: [
+                              AppColors.blueGradientColor,
+                              AppColors.pinkGradientColor
+                            ],
+                            begin: Alignment.bottomLeft,
+                          )),
                       child: Column(
                         children: <Widget>[
                           SizedBox(
@@ -222,20 +219,20 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                                         ),
                                         child: Center(
                                             child: FlatButton(
-                                          padding: EdgeInsets.zero,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(Dimens.THIRTY)),
-                                          ),
-                                          onPressed: () {
-                                            _backPressed();
-                                          },
-                                          child: Image.asset(
-                                              Images.ArrowBackWhite,
-                                              height: Dimens.fifteen,
-                                              width: Dimens.twenty,
-                                              color: AppColors.white),
-                                        )),
+                                              padding: EdgeInsets.zero,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(Dimens.THIRTY)),
+                                              ),
+                                              onPressed: () {
+                                                _backPressed();
+                                              },
+                                              child: Image.asset(
+                                                  Images.ArrowBackWhite,
+                                                  height: Dimens.fifteen,
+                                                  width: Dimens.twenty,
+                                                  color: AppColors.white),
+                                            )),
                                       ),
                                     ),
                                   ),
@@ -318,7 +315,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                             _getUserTrainingResponseApi = snapshot.data;
                             _baseUrl = snapshot.data.awsEndpointUrl;
                             List<MotivationHistoryItem> _list =
-                                _calanderData(snapshot.data.workoutActivities);
+                            _calanderData(snapshot.data.workoutActivities);
                             return Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,7 +381,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                                             padding: EdgeInsets.only(
                                                 top: Dimens.fifteen),
                                             itemCount:
-                                                snapshot.data.trainings.length,
+                                            snapshot.data.trainings.length,
                                             itemBuilder: (context, index) {
                                               return EaseInWidget(
                                                   onTap: () {

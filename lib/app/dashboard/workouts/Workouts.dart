@@ -9,9 +9,7 @@ import 'package:prankbros2/utils/Strings.dart';
 import 'package:prankbros2/utils/locale/AppLocalizations.dart';
 
 class Workouts extends StatelessWidget {
-  Workouts({this.onPush});
 
-  final ValueChanged<String> onPush;
 
   @override
   Widget build(BuildContext context) {
